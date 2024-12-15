@@ -1,0 +1,254 @@
+# Define histograms
+# This file has the essential histograms for ggf analysis workflow.
+# It is used for the TestAnalysis
+
+#number
+TH1F('njet',    '', 11, 0,11) << ( [njet]     : 'n_{jet}' );
+TH1F('nSRjet',    '', 11, 0,11) << ( [nSRjet]     : 'n_{SRjet}' );
+TH1F('nmuon',    '', 11, 0,11) << ( [nmuon]     : 'n_{muon}' );
+TH1F('nele',    '', 11, 0,11) << ( [nele]     : 'n_{ele}' );
+TH1F('nmuon_p',    '', 11, 0,11) << ( [nmuon_p]     : 'n_{up}' );
+TH1F('nmuon_m',    '', 11, 0,11) << ( [nmuon_m]     : 'n_{um}' );
+TH1F('nele_p',    '', 11, 0,11) << ( [nele_p]     : 'n_{ep}' );
+TH1F('nele_m',    '', 11, 0,11) << ( [nele_m]     : 'n_{em}' );
+TH1F('nlep',    '', 11, 0,11) << ( [nlep]     : 'n_{lep}' );
+TH1F('sumPt_SRjet',    '', 50, 0,1500) << ( [sumPt_SRjet]    : 'sumPt_SRjet [GeV]' );
+TH1F('sumPt_lep',    '', 50, 0,1500) << ( [sumPt_lep]    : 'sumPt_lep [GeV]' );
+TH1F('sumPt_ZHl',    '', 50, 0,1500) << ( [sumPt_ZHl]    : 'sumPt_ZHl [GeV]' );
+TH1F('sumPt_VH',    '', 50, 0,1500) << ( [sumPt_VH]    : 'sumPt_VH [GeV]' );
+TH1F('swap_flag',    '', 2, 0,2) << ( [swap_flag]     : 'swap_flag' );
+
+TH1F('MET',    '', 50, 0,500) << ( [MET]       : 'MET [GeV]' );
+
+TH1F('lep1_pt',    '', 50, 0,500) << ( [lep1_pt]    : 'lep1_pt [GeV]' );
+TH1F('lep1_eta',    '', 40, -4,4) << ( [lep1_eta]    : 'lep1_eta' );
+TH1F('lep1_e',    '', 50, 0,500) << ( [lep1_e]       : 'lep1_e [GeV]' );
+TH1F('lep2_pt',    '', 50, 0,500) << ( [lep2_pt]    : 'lep2_pt [GeV]' );
+TH1F('lep2_eta',    '', 40, -4,4) << ( [lep2_eta]    : 'lep2_eta' );
+TH1F('lep2_e',    '', 50, 0,500) << ( [lep2_e]       : 'lep2_e [GeV]' );
+TH1F('lep3_pt',    '', 50, 0,500) << ( [lep3_pt]    : 'lep3_pt [GeV]' );
+TH1F('lep3_eta',    '', 40, -4,4) << ( [lep3_eta]    : 'lep3_eta' );
+TH1F('lep3_e',    '', 50, 0,500) << ( [lep3_e]       : 'lep3_e [GeV]' );
+
+TH1F('SRjet1_pt',    '', 50, 0,500) << ( [SRjet1_pt]    : 'SRjet1_pt [GeV]' );
+TH1F('SRjet1_eta',    '', 40, -4,4) << ( [SRjet1_eta]    : 'SRjet1_eta' );
+TH1F('SRjet1_e',    '', 50, 0,1000) << ( [SRjet1_e]       : 'SRjet1_e [GeV]' );
+TH1F('SRjet1_m',    '', 50, 0,500) << ( [SRjet1_m]       : 'SRjet1_m [GeV]' );
+TH1F('SRjet2_pt',    '', 50, 0,500) << ( [SRjet2_pt]    : 'SRjet2_pt [GeV]' );
+TH1F('SRjet2_eta',    '', 40, -4,4) << ( [SRjet2_eta]    : 'SRjet2_eta' );
+TH1F('SRjet2_e',    '', 50, 0,1000) << ( [SRjet2_e]       : 'SRjet2_e [GeV]' );
+TH1F('SRjet2_m',    '', 50, 0,500) << ( [SRjet2_m]       : 'SRjet2_m [GeV]' );
+TH1F('SRjet3_pt',    '', 50, 0,500) << ( [SRjet3_pt]    : 'SRjet3_pt [GeV]' );
+TH1F('SRjet3_eta',    '', 40, -4,4) << ( [SRjet3_eta]    : 'SRjet3_eta' );
+TH1F('SRjet3_e',    '', 50, 0,1000) << ( [SRjet3_e]       : 'SRjet3_e [GeV]' );
+TH1F('SRjet3_m',    '', 50, 0,500) << ( [SRjet3_m]       : 'SRjet3_m [GeV]' );
+
+TH1F('jet1_pt',    '', 50, 0,500) << ( [jet1_pt]    : 'jet1_pt [GeV]' );
+TH1F('jet1_eta',    '', 40, -4,4) << ( [jet1_eta]    : 'jet1_eta' );
+TH1F('jet1_e',    '', 50, 0,1000) << ( [jet1_e]       : 'jet1_e [GeV]' );
+TH1F('jet1_m',    '', 50, 0,500) << ( [jet1_m]       : 'jet1_m [GeV]' );
+
+TH1F('Hlep_pt',    '', 50, 0,500) << ( [Hlep_pt]    : 'Hlep_pt [GeV]' );
+TH1F('Hlep_eta',    '', 40, -4,4) << ( [Hlep_eta]    : 'Hlep_eta' );
+TH1F('Hlep_e',    '', 50, 0,500) << ( [Hlep_e]       : 'Hlep_e [GeV]' );
+
+TH1F('Vlep_pt',    '', 50, 0,500) << ( [Vlep_pt]    : 'Vlep_pt [GeV]' );
+TH1F('Vlep_eta',    '', 40, -4,4) << ( [Vlep_eta]    : 'Vlep_eta' );
+TH1F('Vlep_e',    '', 50, 0,500) << ( [Vlep_e]       : 'Vlep_e [GeV]' );
+
+TH1F('Zlep1_pt',    '', 50, 0,500) << ( [Zlep1_pt]    : 'Zlep1_pt [GeV]' );
+TH1F('Zlep1_eta',    '', 40, -4,4) << ( [Zlep1_eta]    : 'Zlep1_eta' );
+TH1F('Zlep1_e',    '', 50, 0,500) << ( [Zlep1_e]       : 'Zlep1_e [GeV]' );
+
+TH1F('Zlep2_pt',    '', 50, 0,500) << ( [Zlep2_pt]    : 'Zlep2_pt [GeV]' );
+TH1F('Zlep2_eta',    '', 40, -4,4) << ( [Zlep2_eta]    : 'Zlep2_eta' );
+TH1F('Zlep2_e',    '', 50, 0,500) << ( [Zlep2_e]       : 'Zlep2_e [GeV]' );
+
+TH1F('ZBoson_pt',    '', 50, 0,500) << ( [ZBoson_pt]    : 'ZBoson_pt [GeV]' );
+TH1F('ZBoson_eta',    '', 40, -4,4) << ( [ZBoson_eta]    : 'ZBoson_eta' );
+TH1F('ZBoson_e',    '', 50, 0,1000) << ( [ZBoson_e]       : 'ZBoson_e [GeV]' );
+TH1F('ZBoson_m',    '', 50, 0,500) << ( [ZBoson_m]       : 'ZBoson_m [GeV]' );
+
+TH1F('ZBoson_cand_pt',    '', 50, 0,500) << ( [ZBoson_cand_pt]    : 'ZBoson_cand_pt [GeV]' );
+TH1F('ZBoson_cand_eta',    '', 40, -4,4) << ( [ZBoson_cand_eta]    : 'ZBoson_cand_eta' );
+TH1F('ZBoson_cand_e',    '', 50, 0,1000) << ( [ZBoson_cand_e]       : 'ZBoson_cand_e [GeV]' );
+TH1F('ZBoson_cand_m',    '', 50, 0,500) << ( [ZBoson_cand_m]       : 'ZBoson_cand_m [GeV]' );
+
+TH1F('HBoson_pt',    '', 50, 0,500) << ( [HBoson_pt]    : 'HBoson_pt [GeV]' );
+TH1F('HBoson_eta',    '', 40, -4,4) << ( [HBoson_eta]    : 'HBoson_eta' );
+TH1F('HBoson_e',    '', 50, 0,1000) << ( [HBoson_e]       : 'HBoson_e [GeV]' );
+TH1F('HBoson_m',    '', 50, 0,500) << ( [HBoson_m]       : 'HBoson_m [GeV]' );
+
+TH1F('all_vis_pt',    '', 50, 0,500) << ( [all_vis_pt]    : 'all_vis_pt [GeV]' );
+TH1F('all_vis_eta',    '', 40, -4,4) << ( [all_vis_eta]    : 'all_vis_eta' );
+TH1F('all_vis_e',    '', 50, 0,1000) << ( [all_vis_e]       : 'all_vis_e [GeV]' );
+TH1F('all_vis_m',    '', 50, 0,1000) << ( [all_vis_m]       : 'all_vis_m [GeV]' );
+
+TH1F('Hlep_mT',    '', 50, 0,500) << ( [Hlep_mT]       : 'Hlep_mT [GeV]' );
+TH1F('HBoson_mT',    '', 50, 0,500) << ( [HBoson_mT]       : 'HBoson_mT [GeV]' );
+
+TH1F('dR_HlVl',    '', 20, 0,4) << ( [dR_HlVl]       : 'dR_HlVl' );
+TH1F('dR_HfHl',    '', 20, 0,4) << ( [dR_HfHl]       : 'dR_HfHl' );
+TH1F('dR_HfVl',    '', 20, 0,4) << ( [dR_HfVl]       : 'dR_HfVl' );
+TH1F('dR_HjjHl',    '', 20, 0,4) << ( [dR_HjjHl]       : 'dR_HjjHl' );
+TH1F('dR_HjjVl',    '', 20, 0,4) << ( [dR_HjjVl]       : 'dR_HjjVl' );
+TH1F('dR_HjjHf',    '', 20, 0,4) << ( [dR_HjjHf]       : 'dR_HjjHf' );
+TH1F('dR_HbVl',    '', 20, 0,4) << ( [dR_HbVl]       : 'dR_HbVl' );
+TH1F('dR_AvMiss',    '', 20, 0,4) << ( [dR_AvMiss]       : 'dR_AvMiss' );
+
+TH1F('dR_Zl12',    '', 20, 0,4) << ( [dR_Zl12]       : 'dR_Zl12' );
+TH1F('dR_HlZl1',    '', 20, 0,4) << ( [dR_HlZl1]       : 'dR_HlZl1' );
+TH1F('dR_HlZl2',    '', 20, 0,4) << ( [dR_HlZl2]       : 'dR_HlZl2' );
+TH1F('dR_HfZl1',    '', 20, 0,4) << ( [dR_HfZl1]       : 'dR_HfZl1' );
+TH1F('dR_HfZl2',    '', 20, 0,4) << ( [dR_HfZl2]       : 'dR_HfZl2' );
+TH1F('dR_HjjZl1',    '', 20, 0,4) << ( [dR_HjjZl1]       : 'dR_HjjZl1' );
+TH1F('dR_HjjZl2',    '', 20, 0,4) << ( [dR_HjjZl2]       : 'dR_HjjZl2' );
+
+TH1F('dR_cand_Zl12',    '', 20, 0,4) << ( [dR_cand_Zl12]       : 'dR_cand_Zl12' );
+TH1F('dR_cand_HlZl1',    '', 20, 0,4) << ( [dR_cand_HlZl1]       : 'dR_cand_HlZl1' );
+TH1F('dR_cand_HlZl2',    '', 20, 0,4) << ( [dR_cand_HlZl2]       : 'dR_cand_HlZl2' );
+TH1F('dR_cand_HfZl1',    '', 20, 0,4) << ( [dR_cand_HfZl1]       : 'dR_cand_HfZl1' );
+TH1F('dR_cand_HfZl2',    '', 20, 0,4) << ( [dR_cand_HfZl2]       : 'dR_cand_HfZl2' );
+TH1F('dR_cand_HfHl',    '', 20, 0,4) << ( [dR_cand_HfHl]       : 'dR_cand_HfHl' );
+
+
+TH1F('dR_Hl_SRjet1_Hl',    '', 20, 0,4) << ( [dR_Hl_SRjet1_Hl]       : 'dR_Hl_SRjet1_Hl' );
+TH1F('dR_Hl_SRjet2_Hl',    '', 20, 0,4) << ( [dR_Hl_SRjet2_Hl]       : 'dR_Hl_SRjet2_Hl' );
+TH1F('dR_SRjet12_Hl',    '', 20, 0,4) << ( [dR_SRjet12_Hl]       : 'dR_SRjet12_Hl' );
+TH1F('dR_Vl_SRjet1_Vl',    '', 20, 0,4) << ( [dR_Vl_SRjet1_Vl]       : 'dR_Vl_SRjet1_Vl' );
+TH1F('dR_Vl_SRjet2_Vl',    '', 20, 0,4) << ( [dR_Vl_SRjet2_Vl]       : 'dR_Vl_SRjet2_Vl' );
+TH1F('dR_SRjet12_Vl',    '', 20, 0,4) << ( [dR_SRjet12_Vl]       : 'dR_SRjet12_Vl' );
+
+TH1F('dR_Hl_SRjet1_Vl',    '', 20, 0,4) << ( [dR_Hl_SRjet1_Vl]       : 'dR_Hl_SRjet1_Vl' );
+TH1F('dR_Hl_SRjet2_Vl',    '', 20, 0,4) << ( [dR_Hl_SRjet2_Vl]       : 'dR_Hl_SRjet2_Vl' );
+TH1F('dR_Vl_SRjet1_Hl',    '', 20, 0,4) << ( [dR_Vl_SRjet1_Hl]       : 'dR_Vl_SRjet1_Hl' );
+TH1F('dR_Vl_SRjet2_Hl',    '', 20, 0,4) << ( [dR_Vl_SRjet2_Hl]       : 'dR_Vl_SRjet2_Hl' );
+
+TH1F('VWjj_pt',    '', 50, 0,500) << ( [VWjj_pt]    : 'VWjj_pt [GeV]' );
+TH1F('VWjj_eta',    '', 40, -4,4) << ( [VWjj_eta]    : 'VWjj_eta' );
+TH1F('VWjj_e',    '', 50, 0,1000) << ( [VWjj_e]       : 'VWjj_e [GeV]' );
+TH1F('VWjj_m',    '', 50, 0,500) << ( [VWjj_m]       : 'VWjj_m [GeV]' );
+
+TH1F('HWjj_pt',    '', 50, 0,500) << ( [HWjj_pt]    : 'HWjj_pt [GeV]' );
+TH1F('HWjj_eta',    '', 40, -4,4) << ( [HWjj_eta]    : 'HWjj_eta' );
+TH1F('HWjj_e',    '', 50, 0,1000) << ( [HWjj_e]       : 'HWjj_e [GeV]' );
+TH1F('HWjj_m',    '', 50, 0,500) << ( [HWjj_m]       : 'HWjj_m [GeV]' );
+
+TH1F('SRjet1_Vl_pt',    '', 50, 0,500) << ( [SRjet1_Vl_pt]    : 'SRjet1_Vl_pt [GeV]' );
+TH1F('SRjet1_Vl_eta',    '', 40, -4,4) << ( [SRjet1_Vl_eta]    : 'SRjet1_Vl_eta' );
+TH1F('SRjet1_Vl_e',    '', 50, 0,1000) << ( [SRjet1_Vl_e]       : 'SRjet1_Vl_e [GeV]' );
+TH1F('SRjet1_Vl_m',    '', 50, 0,500) << ( [SRjet1_Vl_m]       : 'SRjet1_Vl_m [GeV]' );
+
+TH1F('SRjet2_Vl_pt',    '', 50, 0,500) << ( [SRjet2_Vl_pt]    : 'SRjet2_Vl_pt [GeV]' );
+TH1F('SRjet2_Vl_eta',    '', 40, -4,4) << ( [SRjet2_Vl_eta]    : 'SRjet2_Vl_eta' );
+TH1F('SRjet2_Vl_e',    '', 50, 0,1000) << ( [SRjet2_Vl_e]       : 'SRjet2_Vl_e [GeV]' );
+TH1F('SRjet2_Vl_m',    '', 50, 0,500) << ( [SRjet2_Vl_m]       : 'SRjet2_Vl_m [GeV]' );
+
+TH1F('SRjet1_Hl_pt',    '', 50, 0,500) << ( [SRjet1_Hl_pt]    : 'SRjet1_Hl_pt [GeV]' );
+TH1F('SRjet1_Hl_eta',    '', 40, -4,4) << ( [SRjet1_Hl_eta]    : 'SRjet1_Hl_eta' );
+TH1F('SRjet1_Hl_e',    '', 50, 0,1000) << ( [SRjet1_Hl_e]       : 'SRjet1_Hl_e [GeV]' );
+TH1F('SRjet1_Hl_m',    '', 50, 0,500) << ( [SRjet1_Hl_m]       : 'SRjet1_Hl_m [GeV]' );
+
+TH1F('SRjet2_Hl_pt',    '', 50, 0,500) << ( [SRjet2_Hl_pt]    : 'SRjet2_Hl_pt [GeV]' );
+TH1F('SRjet2_Hl_eta',    '', 40, -4,4) << ( [SRjet2_Hl_eta]    : 'SRjet2_Hl_eta' );
+TH1F('SRjet2_Hl_e',    '', 50, 0,1000) << ( [SRjet2_Hl_e]       : 'SRjet2_Hl_e [GeV]' );
+TH1F('SRjet2_Hl_m',    '', 50, 0,500) << ( [SRjet2_Hl_m]       : 'SRjet2_Hl_m [GeV]' );
+
+TH1F('BDTG_1u1e',    '', 50, -1,1) << ( $(BDTG_1u1e)       : 'BDTG_1u1e' );
+TH1F('BDTG_2u0e',    '', 50, -1,1) << ( $(BDTG_2u0e)      : 'BDTG_2u0e' );
+TH1F('BDTG_3u',      '', 50, -1,1) << ( $(BDTG_3u)        : 'BDTG_3u' );
+TH1F('BDTG_2u1e',    '', 50, -1,1) << ( $(BDTG_2u1e)       : 'BDTG_2u1e' );
+TH1F('BDTG_1u2e',    '', 50, -1,1) << ( $(BDTG_1u2e)     : 'BDTG_1u2e' );
+
+TH1F('DNN_CPU_1u1e',    '', 50, 0,1) << ( $(DNN_CPU_1u1e)       : 'DNN_CPU_1u1e' );
+TH1F('DNN_CPU_2u0e',    '', 50, 0,1) << ( $(DNN_CPU_2u0e)      : 'DNN_CPU_2u0e' );
+TH1F('DNN_CPU_3u',      '', 50, 0,1) << ( $(DNN_CPU_3u)        : 'DNN_CPU_3u' );
+TH1F('DNN_CPU_2u1e',    '', 50, 0,1) << ( $(DNN_CPU_2u1e)       : 'DNN_CPU_2u1e' );
+TH1F('DNN_CPU_1u2e',    '', 50, 0,1) << ( $(DNN_CPU_1u2e)     : 'DNN_CPU_1u2e' );
+
+
+#_______________________________________________________________________________
+# Assign histograms to cuts
+#_______________________________________________________________________________
+
+#@CutChannels:njet,nSRjet
+#swap_flag,MET,nSRjet,sumPt_SRjet,sumPt_lep,sumPt_ZHl,sumPt_VH, lep1_pt,lep1_eta,lep1_e, lep2_pt,lep2_eta,lep2_e, lep3_pt,lep3_eta,lep3_e, SRjet1_pt,SRjet1_eta,SRjet1_e,SRjet1_m, SRjet2_pt,SRjet2_eta,SRjet2_e,SRjet2_m, SRjet3_pt,SRjet3_eta,SRjet3_e,SRjet3_m, jet1_pt,jet1_eta,jet1_e,jet1_m, Hlep_pt,Hlep_eta,Hlep_e, Vlep_pt,Vlep_eta,Vlep_e, HWjj_pt,HWjj_eta,HWjj_e,HWjj_m, SRjet1_Hl_pt,SRjet1_Hl_eta,SRjet1_Hl_e,SRjet1_Hl_m, SRjet2_Hl_pt,SRjet2_Hl_eta,SRjet2_Hl_e,SRjet2_Hl_m, VWjj_pt,VWjj_eta,VWjj_e,VWjj_m, SRjet1_Vl_pt,SRjet1_Vl_eta,SRjet1_Vl_e,SRjet1_Vl_m, SRjet2_Vl_pt,SRjet2_Vl_eta,SRjet2_Vl_e,SRjet2_Vl_m, HBoson_pt,HBoson_eta,HBoson_e,HBoson_m, all_vis_pt,all_vis_eta,all_vis_e,all_vis_m, dR_HlVl,dR_HfHl,dR_HfVl,dR_HjjHl,dR_HjjVl,dR_HjjHf,dR_HbVl,dR_AvMiss, dR_Hl_SRjet1_Hl,dR_Hl_SRjet2_Hl,dR_SRjet12_Hl,dR_Vl_SRjet1_Vl,dR_Vl_SRjet2_Vl,dR_SRjet12_Vl, dR_Hl_SRjet1_Vl,dR_Hl_SRjet2_Vl,dR_Vl_SRjet1_Hl,dR_Vl_SRjet2_Hl
+
+#MET,nSRjet,sumPt_SRjet,sumPt_lep,sumPt_ZHl,sumPt_VH, lep1_pt,lep1_eta,lep1_e, lep2_pt,lep2_eta,lep2_e, lep3_pt,lep3_eta,lep3_e, SRjet1_pt,SRjet1_eta,SRjet1_e,SRjet1_m, SRjet2_pt,SRjet2_eta,SRjet2_e,SRjet2_m, SRjet3_pt,SRjet3_eta,SRjet3_e,SRjet3_m, jet1_pt,jet1_eta,jet1_e,jet1_m, Hlep_pt,Hlep_eta,Hlep_e, Zlep1_pt,Zlep1_eta,Zlep1_e, Zlep2_pt,Zlep2_eta,Zlep2_e, ZBoson_pt,ZBoson_eta,ZBoson_e,ZBoson_m, HWjj_pt,HWjj_eta,HWjj_e,HWjj_m, SRjet1_Hl_pt,SRjet1_Hl_eta,SRjet1_Hl_e,SRjet1_Hl_m, SRjet2_Hl_pt,SRjet2_Hl_eta,SRjet2_Hl_e,SRjet2_Hl_m, VWjj_pt,VWjj_eta,VWjj_e,VWjj_m, SRjet1_Vl_pt,SRjet1_Vl_eta,SRjet1_Vl_e,SRjet1_Vl_m, SRjet2_Vl_pt,SRjet2_Vl_eta,SRjet2_Vl_e,SRjet2_Vl_m, HBoson_pt,HBoson_eta,HBoson_e,HBoson_m, all_vis_pt,all_vis_eta,all_vis_e,all_vis_m, Hlep_mT,HBoson_mT, dR_HlVl,dR_HfHl,dR_HfVl,dR_HjjHl,dR_HjjVl,dR_HjjHf,dR_HbVl,dR_AvMiss, dR_Zl12,dR_HlZl1,dR_HlZl2,dR_HfZl1,dR_HfZl2,dR_HjjZl1,dR_HjjZl2, dR_cand_Zl12,dR_cand_HlZl1,dR_cand_HlZl2,dR_cand_HfZl1,dR_cand_HfZl2,dR_cand_HfHl, dR_Hl_SRjet1_Hl,dR_Hl_SRjet2_Hl,dR_SRjet12_Hl,dR_Vl_SRjet1_Vl,dR_Vl_SRjet2_Vl,dR_SRjet12_Vl, dR_Hl_SRjet1_Vl,dR_Hl_SRjet2_Vl,dR_Vl_SRjet1_Hl,dR_Vl_SRjet2_Hl, ZBoson_cand_pt,ZBoson_cand_eta,ZBoson_cand_e,ZBoson_cand_m,
+
+
+
+@Cut_1u1e_Same_Charge_ML:MET,nSRjet,sumPt_SRjet,sumPt_lep,sumPt_ZHl,sumPt_VH, lep1_pt,lep1_eta,lep1_e, lep2_pt,lep2_eta,lep2_e, lep3_pt,lep3_eta,lep3_e, SRjet1_pt,SRjet1_eta,SRjet1_e,SRjet1_m, SRjet2_pt,SRjet2_eta,SRjet2_e,SRjet2_m, SRjet3_pt,SRjet3_eta,SRjet3_e,SRjet3_m, jet1_pt,jet1_eta,jet1_e,jet1_m, Hlep_pt,Hlep_eta,Hlep_e, Vlep_pt,Vlep_eta,Vlep_e, HWjj_pt,HWjj_eta,HWjj_e,HWjj_m, SRjet1_Hl_pt,SRjet1_Hl_eta,SRjet1_Hl_e,SRjet1_Hl_m, SRjet2_Hl_pt,SRjet2_Hl_eta,SRjet2_Hl_e,SRjet2_Hl_m, VWjj_pt,VWjj_eta,VWjj_e,VWjj_m, SRjet1_Vl_pt,SRjet1_Vl_eta,SRjet1_Vl_e,SRjet1_Vl_m, SRjet2_Vl_pt,SRjet2_Vl_eta,SRjet2_Vl_e,SRjet2_Vl_m, HBoson_pt,HBoson_eta,HBoson_e,HBoson_m, all_vis_pt,all_vis_eta,all_vis_e,all_vis_m, dR_HlVl,dR_HfHl,dR_HfVl,dR_HjjHl,dR_HjjVl,dR_HjjHf,dR_HbVl,dR_AvMiss, dR_Hl_SRjet1_Hl,dR_Hl_SRjet2_Hl,dR_SRjet12_Hl,dR_Vl_SRjet1_Vl,dR_Vl_SRjet2_Vl,dR_SRjet12_Vl, dR_Hl_SRjet1_Vl,dR_Hl_SRjet2_Vl,dR_Vl_SRjet1_Hl,dR_Vl_SRjet2_Hl,BDTG_1u1e,DNN_CPU_1u1e
+
+@Cut_2u0e_Same_Charge:MET,nSRjet,sumPt_SRjet,sumPt_lep,sumPt_ZHl,sumPt_VH, lep1_pt,lep1_eta,lep1_e, lep2_pt,lep2_eta,lep2_e, lep3_pt,lep3_eta,lep3_e, SRjet1_pt,SRjet1_eta,SRjet1_e,SRjet1_m, SRjet2_pt,SRjet2_eta,SRjet2_e,SRjet2_m, SRjet3_pt,SRjet3_eta,SRjet3_e,SRjet3_m, jet1_pt,jet1_eta,jet1_e,jet1_m, Hlep_pt,Hlep_eta,Hlep_e, Vlep_pt,Vlep_eta,Vlep_e, HWjj_pt,HWjj_eta,HWjj_e,HWjj_m, SRjet1_Hl_pt,SRjet1_Hl_eta,SRjet1_Hl_e,SRjet1_Hl_m, SRjet2_Hl_pt,SRjet2_Hl_eta,SRjet2_Hl_e,SRjet2_Hl_m, VWjj_pt,VWjj_eta,VWjj_e,VWjj_m, SRjet1_Vl_pt,SRjet1_Vl_eta,SRjet1_Vl_e,SRjet1_Vl_m, SRjet2_Vl_pt,SRjet2_Vl_eta,SRjet2_Vl_e,SRjet2_Vl_m, HBoson_pt,HBoson_eta,HBoson_e,HBoson_m, all_vis_pt,all_vis_eta,all_vis_e,all_vis_m, dR_HlVl,dR_HfHl,dR_HfVl,dR_HjjHl,dR_HjjVl,dR_HjjHf,dR_HbVl,dR_AvMiss, dR_Hl_SRjet1_Hl,dR_Hl_SRjet2_Hl,dR_SRjet12_Hl,dR_Vl_SRjet1_Vl,dR_Vl_SRjet2_Vl,dR_SRjet12_Vl, dR_Hl_SRjet1_Vl,dR_Hl_SRjet2_Vl,dR_Vl_SRjet1_Hl,dR_Vl_SRjet2_Hl,BDTG_2u0e,DNN_CPU_2u0e
+
+
+@Cut_3u_Muon2ID:MET,nSRjet,sumPt_SRjet,sumPt_lep,sumPt_ZHl,sumPt_VH, lep1_pt,lep1_eta,lep1_e, lep2_pt,lep2_eta,lep2_e, lep3_pt,lep3_eta,lep3_e, SRjet1_pt,SRjet1_eta,SRjet1_e,SRjet1_m, SRjet2_pt,SRjet2_eta,SRjet2_e,SRjet2_m, SRjet3_pt,SRjet3_eta,SRjet3_e,SRjet3_m, jet1_pt,jet1_eta,jet1_e,jet1_m, Hlep_pt,Hlep_eta,Hlep_e, Zlep1_pt,Zlep1_eta,Zlep1_e, Zlep2_pt,Zlep2_eta,Zlep2_e, ZBoson_pt,ZBoson_eta,ZBoson_e,ZBoson_m, HWjj_pt,HWjj_eta,HWjj_e,HWjj_m, SRjet1_Hl_pt,SRjet1_Hl_eta,SRjet1_Hl_e,SRjet1_Hl_m, SRjet2_Hl_pt,SRjet2_Hl_eta,SRjet2_Hl_e,SRjet2_Hl_m, VWjj_pt,VWjj_eta,VWjj_e,VWjj_m, SRjet1_Vl_pt,SRjet1_Vl_eta,SRjet1_Vl_e,SRjet1_Vl_m, SRjet2_Vl_pt,SRjet2_Vl_eta,SRjet2_Vl_e,SRjet2_Vl_m, HBoson_pt,HBoson_eta,HBoson_e,HBoson_m, all_vis_pt,all_vis_eta,all_vis_e,all_vis_m, Hlep_mT,HBoson_mT, dR_HlVl,dR_HfHl,dR_HfVl,dR_HjjHl,dR_HjjVl,dR_HjjHf,dR_HbVl,dR_AvMiss, dR_Zl12,dR_HlZl1,dR_HlZl2,dR_HfZl1,dR_HfZl2,dR_HjjZl1,dR_HjjZl2, dR_cand_Zl12,dR_cand_HlZl1,dR_cand_HlZl2,dR_cand_HfZl1,dR_cand_HfZl2,dR_cand_HfHl, dR_Hl_SRjet1_Hl,dR_Hl_SRjet2_Hl,dR_SRjet12_Hl,dR_Vl_SRjet1_Vl,dR_Vl_SRjet2_Vl,dR_SRjet12_Vl, dR_Hl_SRjet1_Vl,dR_Hl_SRjet2_Vl,dR_Vl_SRjet1_Hl,dR_Vl_SRjet2_Hl, ZBoson_cand_pt,ZBoson_cand_eta,ZBoson_cand_e,ZBoson_cand_m,BDTG_3u,DNN_CPU_3u
+
+@Cut_2u1e_Ele1ID:MET,nSRjet,sumPt_SRjet,sumPt_lep,sumPt_ZHl,sumPt_VH, lep1_pt,lep1_eta,lep1_e, lep2_pt,lep2_eta,lep2_e, lep3_pt,lep3_eta,lep3_e, SRjet1_pt,SRjet1_eta,SRjet1_e,SRjet1_m, SRjet2_pt,SRjet2_eta,SRjet2_e,SRjet2_m, SRjet3_pt,SRjet3_eta,SRjet3_e,SRjet3_m, jet1_pt,jet1_eta,jet1_e,jet1_m, Hlep_pt,Hlep_eta,Hlep_e, Zlep1_pt,Zlep1_eta,Zlep1_e, Zlep2_pt,Zlep2_eta,Zlep2_e, ZBoson_pt,ZBoson_eta,ZBoson_e,ZBoson_m, HWjj_pt,HWjj_eta,HWjj_e,HWjj_m, SRjet1_Hl_pt,SRjet1_Hl_eta,SRjet1_Hl_e,SRjet1_Hl_m, SRjet2_Hl_pt,SRjet2_Hl_eta,SRjet2_Hl_e,SRjet2_Hl_m, VWjj_pt,VWjj_eta,VWjj_e,VWjj_m, SRjet1_Vl_pt,SRjet1_Vl_eta,SRjet1_Vl_e,SRjet1_Vl_m, SRjet2_Vl_pt,SRjet2_Vl_eta,SRjet2_Vl_e,SRjet2_Vl_m, HBoson_pt,HBoson_eta,HBoson_e,HBoson_m, all_vis_pt,all_vis_eta,all_vis_e,all_vis_m, Hlep_mT,HBoson_mT, dR_HlVl,dR_HfHl,dR_HfVl,dR_HjjHl,dR_HjjVl,dR_HjjHf,dR_HbVl,dR_AvMiss, dR_Zl12,dR_HlZl1,dR_HlZl2,dR_HfZl1,dR_HfZl2,dR_HjjZl1,dR_HjjZl2, dR_cand_Zl12,dR_cand_HlZl1,dR_cand_HlZl2,dR_cand_HfZl1,dR_cand_HfZl2,dR_cand_HfHl, dR_Hl_SRjet1_Hl,dR_Hl_SRjet2_Hl,dR_SRjet12_Hl,dR_Vl_SRjet1_Vl,dR_Vl_SRjet2_Vl,dR_SRjet12_Vl, dR_Hl_SRjet1_Vl,dR_Hl_SRjet2_Vl,dR_Vl_SRjet1_Hl,dR_Vl_SRjet2_Hl, ZBoson_cand_pt,ZBoson_cand_eta,ZBoson_cand_e,ZBoson_cand_m,BDTG_2u1e,DNN_CPU_2u1e
+
+
+
+@Cut_1u2e_Muon1ID:MET,nSRjet,sumPt_SRjet,sumPt_lep,sumPt_ZHl,sumPt_VH, lep1_pt,lep1_eta,lep1_e, lep2_pt,lep2_eta,lep2_e, lep3_pt,lep3_eta,lep3_e, SRjet1_pt,SRjet1_eta,SRjet1_e,SRjet1_m, SRjet2_pt,SRjet2_eta,SRjet2_e,SRjet2_m, SRjet3_pt,SRjet3_eta,SRjet3_e,SRjet3_m, jet1_pt,jet1_eta,jet1_e,jet1_m, Hlep_pt,Hlep_eta,Hlep_e, Zlep1_pt,Zlep1_eta,Zlep1_e, Zlep2_pt,Zlep2_eta,Zlep2_e, ZBoson_pt,ZBoson_eta,ZBoson_e,ZBoson_m, HWjj_pt,HWjj_eta,HWjj_e,HWjj_m, SRjet1_Hl_pt,SRjet1_Hl_eta,SRjet1_Hl_e,SRjet1_Hl_m, SRjet2_Hl_pt,SRjet2_Hl_eta,SRjet2_Hl_e,SRjet2_Hl_m, VWjj_pt,VWjj_eta,VWjj_e,VWjj_m, SRjet1_Vl_pt,SRjet1_Vl_eta,SRjet1_Vl_e,SRjet1_Vl_m, SRjet2_Vl_pt,SRjet2_Vl_eta,SRjet2_Vl_e,SRjet2_Vl_m, HBoson_pt,HBoson_eta,HBoson_e,HBoson_m, all_vis_pt,all_vis_eta,all_vis_e,all_vis_m, Hlep_mT,HBoson_mT, dR_HlVl,dR_HfHl,dR_HfVl,dR_HjjHl,dR_HjjVl,dR_HjjHf,dR_HbVl,dR_AvMiss, dR_Zl12,dR_HlZl1,dR_HlZl2,dR_HfZl1,dR_HfZl2,dR_HjjZl1,dR_HjjZl2, dR_cand_Zl12,dR_cand_HlZl1,dR_cand_HlZl2,dR_cand_HfZl1,dR_cand_HfZl2,dR_cand_HfHl, dR_Hl_SRjet1_Hl,dR_Hl_SRjet2_Hl,dR_SRjet12_Hl,dR_Vl_SRjet1_Vl,dR_Vl_SRjet2_Vl,dR_SRjet12_Vl, dR_Hl_SRjet1_Vl,dR_Hl_SRjet2_Vl,dR_Vl_SRjet1_Hl,dR_Vl_SRjet2_Hl, ZBoson_cand_pt,ZBoson_cand_eta,ZBoson_cand_e,ZBoson_cand_m,BDTG_1u2e,DNN_CPU_1u2e
+
+
+
+# MET,nSRjet,sumPt_SRjet,sumPt_lep,sumPt_ZHl,sumPt_VH,
+# lep1_pt,lep1_eta,lep1_e,
+# lep2_pt,lep2_eta,lep2_e,
+# lep3_pt,lep3_eta,lep3_e,
+# SRjet1_pt,SRjet1_eta,SRjet1_e,SRjet1_m,
+# SRjet2_pt,SRjet2_eta,SRjet2_e,SRjet2_m,
+# SRjet3_pt,SRjet3_eta,SRjet3_e,SRjet3_m,
+# jet1_pt,jet1_eta,jet1_e,jet1_m,
+# Hlep_pt,Hlep_eta,Hlep_e,
+# Zlep1_pt,Zlep1_eta,Zlep1_e,
+# Zlep2_pt,Zlep2_eta,Zlep2_e,
+# ZBoson_pt,ZBoson_eta,ZBoson_e,ZBoson_m,
+# HWjj_pt,HWjj_eta,HWjj_e,HWjj_m,
+# SRjet1_Hl_pt,SRjet1_Hl_eta,SRjet1_Hl_e,SRjet1_Hl_m,
+# SRjet2_Hl_pt,SRjet2_Hl_eta,SRjet2_Hl_e,SRjet2_Hl_m,
+# VWjj_pt,VWjj_eta,VWjj_e,VWjj_m,
+# SRjet1_Vl_pt,SRjet1_Vl_eta,SRjet1_Vl_e,SRjet1_Vl_m,
+# SRjet2_Vl_pt,SRjet2_Vl_eta,SRjet2_Vl_e,SRjet2_Vl_m,
+# HBoson_pt,HBoson_eta,HBoson_e,HBoson_m,
+# all_vis_pt,all_vis_eta,all_vis_e,all_vis_m,
+# Hlep_mT,HBoson_mT,
+# dR_HlVl,dR_HfHl,dR_HfVl,dR_HjjHl,dR_HjjVl,dR_HjjHf,dR_HbVl,dR_AvMiss,
+# dR_Zl12,dR_HlZl1,dR_HlZl2,dR_HfZl1,dR_HfZl2,dR_HjjZl1,dR_HjjZl2,
+# dR_cand_Zl12,dR_cand_HlZl1,dR_cand_HlZl2,dR_cand_HfZl1,dR_cand_HfZl2,dR_cand_HfHl,
+# dR_Hl_SRjet1_Hl,dR_Hl_SRjet2_Hl,dR_SRjet12_Hl,dR_Vl_SRjet1_Vl,dR_Vl_SRjet2_Vl,dR_SRjet12_Vl,
+# dR_Hl_SRjet1_Vl,dR_Hl_SRjet2_Vl,dR_Vl_SRjet1_Hl,dR_Vl_SRjet2_Hl,
+# ZBoson_cand_pt,ZBoson_cand_eta,ZBoson_cand_e,ZBoson_cand_m,
+
+
+# swap_flag,MET,nSRjet,sumPt_SRjet,sumPt_lep,sumPt_VH,
+# lep1_pt,lep1_eta,lep1_e,
+# lep2_pt,lep2_eta,lep2_e,
+# SRjet1_pt,SRjet1_eta,SRjet1_e,SRjet1_m,
+# SRjet2_pt,SRjet2_eta,SRjet2_e,SRjet2_m,
+# SRjet3_pt,SRjet3_eta,SRjet3_e,SRjet3_m,
+# jet1_pt,jet1_eta,jet1_e,jet1_m,
+# Hlep_pt,Hlep_eta,Hlep_e,
+# Vlep_pt,Vlep_eta,Vlep_e,
+# HWjj_pt,HWjj_eta,HWjj_e,HWjj_m,
+# SRjet1_Hl_pt,SRjet1_Hl_eta,SRjet1_Hl_e,SRjet1_Hl_m,
+# SRjet2_Hl_pt,SRjet2_Hl_eta,SRjet2_Hl_e,SRjet2_Hl_m,
+# VWjj_pt,VWjj_eta,VWjj_e,VWjj_m,
+# SRjet1_Vl_pt,SRjet1_Vl_eta,SRjet1_Vl_e,SRjet1_Vl_m,
+# SRjet2_Vl_pt,SRjet2_Vl_eta,SRjet2_Vl_e,SRjet2_Vl_m,
+# HBoson_pt,HBoson_eta,HBoson_e,HBoson_m,
+# all_vis_pt,all_vis_eta,all_vis_e,all_vis_m,
+# dR_HlVl,dR_HfHl,dR_HfVl,dR_HjjHl,dR_HjjVl,dR_HjjHf,dR_HbVl,dR_AvMiss,
+# dR_Hl_SRjet1_Hl,dR_Hl_SRjet2_Hl,dR_SRjet12_Hl,dR_Vl_SRjet1_Vl,dR_Vl_SRjet2_Vl,dR_SRjet12_Vl,
+# dR_Hl_SRjet1_Vl,dR_Hl_SRjet2_Vl,dR_Vl_SRjet1_Hl,dR_Vl_SRjet2_Hl,
+
+
+
+
+
+
+
+
+
+

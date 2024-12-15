@@ -1,0 +1,119 @@
+# Define branches
+
+#skim: int run_number << EventInfo.runNumber(), unsigned long long int event_number << EventInfo.eventNumber(), float dPhi_lep1_lep2<<[VecAT(Zmass,65)], float dPhi_jet1_lep1<<[VecAT(Zmass,51)], float dPhi_jet1_lep2<<[VecAT(Zmass,52)];
+
+#skim: float lep0_pt << $(lep0).pt(), float lep0_phi <<$(lep0).phi(), float lep0_eta << $(lep0).eta();
+
+#skim_2u1j:
+#float dR_muon1_muon2 << [VecAT(Zmass,137)],
+#float dR_jet1_muon1 << [VecAT(Zmass,51)],
+#float dR_jet1_muon2 << [VecAT(Zmass,52)],
+#float nSRjet << [VecAT(Zmass,122)],
+#float sumPt_SRjet << [VecAT(Zmass,124)]*0.001 ,
+#float dR_RcSRjet_muon1 << [VecAT(Zmass,130)],
+#float dR_RcSRjet_muon2 <<[VecAT(Zmass,131)];
+
+skim_2u1j: float dR_muon1_muon2 << [VecAT(Zmass,137)], float dR_jet1_muon1 << [VecAT(Zmass,51)], float dR_jet1_muon2 << [VecAT(Zmass,52)], float nSRjet << [VecAT(Zmass,122)], float sumPt_SRjet << [VecAT(Zmass,124)]*0.001 , float dR_RcSRjet_muon1 << [VecAT(Zmass,130)], float dR_RcSRjet_muon2 <<[VecAT(Zmass,131)];
+
+#skim_2u2j:
+#float dR_muon1_muon2 << [VecAT(Zmass,137)],
+#float dR_jet1_muon1 << [VecAT(Zmass,51)],
+#float dR_jet1_muon2 << [VecAT(Zmass,52)],
+#float nSRjet << [VecAT(Zmass,122)],
+#float sumPt_SRjet << [VecAT(Zmass,124)]*0.001 ,
+#float dR_RcSRjet_muon1 << [VecAT(Zmass,130)],
+#float dR_RcSRjet_muon2 <<[VecAT(Zmass,131)];
+
+skim_2u2j: float dR_muon1_muon2 << [VecAT(Zmass,137)], float dR_jet1_muon1 << [VecAT(Zmass,51)], float dR_jet1_muon2 << [VecAT(Zmass,52)], float nSRjet << [VecAT(Zmass,122)], float sumPt_SRjet << [VecAT(Zmass,124)]*0.001 , float dR_RcSRjet_muon1 << [VecAT(Zmass,130)], float dR_RcSRjet_muon2 <<[VecAT(Zmass,131)];
+
+#skim_1u1e1j:
+#float dR_muon1_ele1 << [VecAT(Zmass,134)],
+#float dR_jet1_muon1 << [VecAT(Zmass,51)],
+#float dR_jet1_ele1 << [VecAT(Zmass,54)],
+#float nSRjet << [VecAT(Zmass,122)],
+#float sumPt_SRjet << [VecAT(Zmass,124)]*0.001 ,
+#float dR_RcSRjet_muon1 << [VecAT(Zmass,130)],
+#float dR_RcSRjet_ele1 << [VecAT(Zmass,132)];
+
+skim_1u1e1j: float dR_muon1_ele1 << [VecAT(Zmass,134)], float dR_jet1_muon1 << [VecAT(Zmass,51)], float dR_jet1_ele1 << [VecAT(Zmass,54)], float nSRjet << [VecAT(Zmass,122)], float sumPt_SRjet << [VecAT(Zmass,124)]*0.001 , float dR_RcSRjet_muon1 << [VecAT(Zmass,130)], float dR_RcSRjet_ele1 << [VecAT(Zmass,132)];
+
+#skim_1u1e2j:
+#float dR_muon1_ele1 << [VecAT(Zmass,134)],
+#float dR_jet1_muon1 << [VecAT(Zmass,51)],
+#float dR_jet1_ele1 << [VecAT(Zmass,54)],
+#float nSRjet << [VecAT(Zmass,122)],
+#float sumPt_SRjet << [VecAT(Zmass,124)]*0.001 ,
+#float dR_RcSRjet_muon1 << [VecAT(Zmass,130)],
+#float dR_RcSRjet_ele1 << [VecAT(Zmass,132)];
+
+skim_1u1e2j: float dR_muon1_ele1 << [VecAT(Zmass,134)], float dR_jet1_muon1 << [VecAT(Zmass,51)], float dR_jet1_ele1 << [VecAT(Zmass,54)], float nSRjet << [VecAT(Zmass,122)], float sumPt_SRjet << [VecAT(Zmass,124)]*0.001 , float dR_RcSRjet_muon1 << [VecAT(Zmass,130)], float dR_RcSRjet_ele1 << [VecAT(Zmass,132)];
+
+#skim_1u1up1um1j:
+#float dR_muon1_muon2 << [VecAT(Zmass,137)],
+#float dR_muon1_muon3 << [VecAT(Zmass,138)],
+#float dR_muon2_muon3 << [VecAT(Zmass,139)],
+#float dR_jet1_muon1 << [VecAT(Zmass,51)] ,
+#float dR_jet1_muon2 << [VecAT(Zmass,52)],
+#float dR_jet1_muon3 << [VecAT(Zmass,53)],
+#float M_up1um1 << [VecAT(Zmass,82)]*0.001,
+#float Zu1u2_pt << [VecAT(Zmass,140)]*0.001;
+
+skim_1u1up1um1j: float dR_muon1_muon2 << [VecAT(Zmass,137)], float dR_muon1_muon3 << [VecAT(Zmass,138)], float dR_muon2_muon3 << [VecAT(Zmass,139)], float dR_jet1_muon1 << [VecAT(Zmass,51)] , float dR_jet1_muon2 << [VecAT(Zmass,52)], float dR_jet1_muon3 << [VecAT(Zmass,53)], float M_up1um1 << [VecAT(Zmass,82)]*0.001, float Zu1u2_pt << [VecAT(Zmass,140)]*0.001;
+
+#skim_1u1up1um2j:
+#float dR_muon1_muon2 << [VecAT(Zmass,137)],
+#float dR_muon1_muon3 << [VecAT(Zmass,138)],
+#float dR_muon2_muon3 << [VecAT(Zmass,139)],
+#float dR_jet1_muon1 << [VecAT(Zmass,51)] ,
+#float dR_jet1_muon2 << [VecAT(Zmass,52)],
+#float dR_jet1_muon3 << [VecAT(Zmass,53)],
+#float M_up1um1 << [VecAT(Zmass,82)]*0.001,
+#float Zu1u2_pt << [VecAT(Zmass,140)]*0.001;
+
+skim_1u1up1um2j: float dR_muon1_muon2 << [VecAT(Zmass,137)], float dR_muon1_muon3 << [VecAT(Zmass,138)], float dR_muon2_muon3 << [VecAT(Zmass,139)], float dR_jet1_muon1 << [VecAT(Zmass,51)] , float dR_jet1_muon2 << [VecAT(Zmass,52)], float dR_jet1_muon3 << [VecAT(Zmass,53)], float M_up1um1 << [VecAT(Zmass,82)]*0.001, float Zu1u2_pt << [VecAT(Zmass,140)]*0.001;
+
+#skim_1u1ep1em1j:
+#float dR_muon1_ele1 << [VecAT(Zmass,134)],
+#float dR_muon1_ele2 << [VecAT(Zmass,135)],
+#float dR_ele1_ele2 << [VecAT(Zmass,136)],
+#float dR_jet1_muon1 << [VecAT(Zmass,51)] ,
+#float dR_jet1_ele1 << [VecAT(Zmass,54)],
+#float dR_jet1_ele2 << [VecAT(Zmass,55)],
+#float M_ep1em1 << [VecAT(Zmass,81)]*0.001,
+#float Zee_pt << [VecAT(Zmass,112)]*0.001;
+
+skim_1u1ep1em1j: float dR_muon1_ele1 << [VecAT(Zmass,134)], float dR_muon1_ele2 << [VecAT(Zmass,135)], float dR_ele1_ele2 << [VecAT(Zmass,136)], float dR_jet1_muon1 << [VecAT(Zmass,51)] , float dR_jet1_ele1 << [VecAT(Zmass,54)], float dR_jet1_ele2 << [VecAT(Zmass,55)], float M_ep1em1 << [VecAT(Zmass,81)]*0.001, float Zee_pt << [VecAT(Zmass,112)]*0.001;
+
+#skim_1u1ep1em2j:
+#float dR_muon1_ele1 << [VecAT(Zmass,134)],
+#float dR_muon1_ele2 << [VecAT(Zmass,135)],
+#float dR_ele1_ele2 << [VecAT(Zmass,136)],
+#float dR_jet1_muon1 << [VecAT(Zmass,51)] ,
+#float dR_jet1_ele1 << [VecAT(Zmass,54)],
+#float dR_jet1_ele2 << [VecAT(Zmass,55)],
+#float M_ep1em1 << [VecAT(Zmass,81)]*0.001,
+#float Zee_pt << [VecAT(Zmass,112)]*0.001;
+
+skim_1u1ep1em2j: float dR_muon1_ele1 << [VecAT(Zmass,134)], float dR_muon1_ele2 << [VecAT(Zmass,135)], float dR_ele1_ele2 << [VecAT(Zmass,136)], float dR_jet1_muon1 << [VecAT(Zmass,51)] , float dR_jet1_ele1 << [VecAT(Zmass,54)], float dR_jet1_ele2 << [VecAT(Zmass,55)], float M_ep1em1 << [VecAT(Zmass,81)]*0.001, float Zee_pt << [VecAT(Zmass,112)]*0.001;
+
+
+# Book at cut
+
+@Cut_2u1j_Same_Charge:skim_2u1j >> dump/ntuple_Cut_2u1j_Same_Charge_$(jobID).root:$(channel)
+
+@Cut_2u2j_Same_Charge:skim_2u2j >> dump/ntuple_Cut_2u2j_Same_Charge_$(jobID).root:$(channel)
+
+@Cut_1u1e1j_Same_Charge:skim_1u1e1j >> dump/ntuple_Cut_1u1e1j_Same_Charge_$(jobID).root:$(channel)
+
+@Cut_1u1e2j_Same_Charge:skim_1u1e2j >> dump/ntuple_Cut_1u1e2j_Same_Charge_$(jobID).root:$(channel)
+
+@Cut_1u1up1um1j_Muon3ID:skim_1u1up1um1j >> dump/ntuple_Cut_1u1up1um1j_Muon3ID_$(jobID).root:$(channel)
+
+@Cut_1u1up1um2j_Muon3ID:skim_1u1up1um2j >> dump/ntuple_Cut_1u1up1um2j_Muon3ID_$(jobID).root:$(channel)
+
+@Cut_1u1ep1em1j_Ele2ID:skim_1u1ep1em1j >> dump/ntuple_Cut_1u1ep1em1j_Ele2ID_$(jobID).root:$(channel)
+
+@Cut_1u1ep1em2j_Ele2ID:skim_1u1ep1em2j >> dump/ntuple_Cut_1u1ep1em2j_Ele2ID_$(jobID).root:$(channel)
+
+
+

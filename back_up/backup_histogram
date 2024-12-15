@@ -1,0 +1,572 @@
+# Define histograms
+# This file has the essential histograms for ggf analysis workflow.
+# It is used for the TestAnalysis
+
+#number
+TH1F('njet',    '', 11, 0,11) << ( [VecAT(Zmass,0)]     : 'n_{jet}' );
+TH1F('nmuon',    '', 11, 0,11) << ( [VecAT(Zmass,1)]     : 'n_{muon}' );
+TH1F('nele',    '', 11, 0,11) << ( [VecAT(Zmass,2)]     : 'n_{ele}' );
+TH1F('nmuon_p',    '', 11, 0,11) << ( [VecAT(Zmass,3)]     : 'n_{up}' );
+TH1F('nmuon_m',    '', 11, 0,11) << ( [VecAT(Zmass,4)]     : 'n_{um}' );
+TH1F('nele_p',    '', 11, 0,11) << ( [VecAT(Zmass,5)]     : 'n_{ep}' );
+TH1F('nele_m',    '', 11, 0,11) << ( [VecAT(Zmass,6)]     : 'n_{em}' );
+TH1F('nlep',    '', 11, 0,11) << ( [VecAT(Zmass,7)]     : 'n_{lep}' );
+
+#pt
+TH1F('jet1_pt',    '', 50, 0,500) << ( [VecAT(Zmass,8)]*0.001     : 'jet1_pt [GeV]' );
+TH1F('jet2_pt',    '', 50, 0,500) << ( [VecAT(Zmass,9)]*0.001     : 'jet2_pt [GeV]' );
+
+TH1F('muon1_pt',    '', 50, 0,500) << ( [VecAT(Zmass,10)]*0.001     : 'muon1_pt [GeV]' );
+TH1F('muon2_pt',    '', 50, 0,500) << ( [VecAT(Zmass,11)]*0.001     : 'muon2_pt [GeV]' );
+TH1F('muon3_pt',    '', 50, 0,500) << ( [VecAT(Zmass,12)]*0.001     : 'muon3_pt [GeV]' );
+
+TH1F('ele1_pt',    '', 50, 0,500) << ( [VecAT(Zmass,13)]*0.001     : 'ele1_pt [GeV]' );
+TH1F('ele2_pt',    '', 50, 0,500) << ( [VecAT(Zmass,14)]*0.001     : 'ele2_pt [GeV]' );
+
+TH1F('lep1_pt',    '', 50, 0,500) << ( [VecAT(Zmass,15)]*0.001     : 'lep1_pt [GeV]' );
+TH1F('lep2_pt',    '', 50, 0,500) << ( [VecAT(Zmass,16)]*0.001     : 'lep2_pt [GeV]' );
+TH1F('lep3_pt',    '', 50, 0,500) << ( [VecAT(Zmass,17)]*0.001     : 'lep3_pt [GeV]' );
+
+#eta
+TH1F('jet1_eta',    '', 40, -4,4) << ( [VecAT(Zmass,18)]     : 'jet1_eta' );
+TH1F('jet2_eta',    '', 40, -4,4) << ( [VecAT(Zmass,19)]     : 'jet2_eta' );
+
+TH1F('muon1_eta',    '', 40, -4,4) << ( [VecAT(Zmass,20)]     : 'muon1_eta' );
+TH1F('muon2_eta',    '', 40, -4,4) << ( [VecAT(Zmass,21)]     : 'muon2_eta' );
+TH1F('muon3_eta',    '', 40, -4,4) << ( [VecAT(Zmass,22)]     : 'muon3_eta' );
+
+TH1F('ele1_eta',    '', 40, -4,4) << ( [VecAT(Zmass,23)]     : 'ele1_eta' );
+TH1F('ele2_eta',    '', 40, -4,4) << ( [VecAT(Zmass,24)]     : 'ele2_eta' );
+
+TH1F('lep1_eta',    '', 40, -4,4) << ( [VecAT(Zmass,25)]     : 'lep1_eta' );
+TH1F('lep2_eta',    '', 40, -4,4) << ( [VecAT(Zmass,26)]     : 'lep2_eta' );
+TH1F('lep3_eta',    '', 40, -4,4) << ( [VecAT(Zmass,27)]     : 'lep3_eta' );
+
+#phi
+TH1F('jet1_phi',    '', 40, -4,4) << ( [VecAT(Zmass,28)]     : 'jet1_phi' );
+TH1F('jet2_phi',    '', 40, -4,4) << ( [VecAT(Zmass,29)]     : 'jet2_phi' );
+
+TH1F('muon1_phi',    '', 40, -4,4) << ( [VecAT(Zmass,30)]     : 'muon1_phi' );
+TH1F('muon2_phi',    '', 40, -4,4) << ( [VecAT(Zmass,31)]     : 'muon2_phi' );
+TH1F('muon3_phi',    '', 40, -4,4) << ( [VecAT(Zmass,32)]     : 'muon3_phi' );
+
+TH1F('ele1_phi',    '', 40, -4,4) << ( [VecAT(Zmass,33)]     : 'ele1_phi' );
+TH1F('ele2_phi',    '', 40, -4,4) << ( [VecAT(Zmass,34)]     : 'ele2_phi' );
+
+TH1F('lep1_phi',    '', 40, -4,4) << ( [VecAT(Zmass,35)]     : 'lep1_phi' );
+TH1F('lep2_phi',    '', 40, -4,4) << ( [VecAT(Zmass,36)]     : 'lep2_phi' );
+TH1F('lep3_phi',    '', 40, -4,4) << ( [VecAT(Zmass,37)]     : 'lep3_phi' );
+
+#m
+TH1F('jet1_mass',    '', 50, 0,500) << ( [VecAT(Zmass,38)]*0.001    : 'jet1_mass [GeV]' );
+TH1F('jet2_mass',    '', 50, 0,500) << ( [VecAT(Zmass,39)]*0.001    : 'jet2_mass [GeV]' );
+
+#flavor
+TH1F('lep1_flavor',    '', 3, 0,3) << ( [VecAT(Zmass,40)]    : 'lep1_flavor' );
+TH1F('lep2_flavor',    '', 3, 0,3) << ( [VecAT(Zmass,41)]    : 'lep2_flavor' );
+TH1F('lep3_flavor',    '', 3, 0,3) << ( [VecAT(Zmass,42)]    : 'lep3_flavor' );
+
+#charge
+TH1F('lep1_charge',    '', 5,-2,3) << ( [VecAT(Zmass,43)]    : 'lep1_charge' );
+TH1F('lep2_charge',    '', 5,-2,3) << ( [VecAT(Zmass,44)]    : 'lep2_charge' );
+TH1F('lep3_charge',    '', 5,-2,3) << ( [VecAT(Zmass,45)]    : 'lep3_charge' );
+
+TH1F('muon1_charge',    '', 5,-2,3) << ( [VecAT(Zmass,46)]    : 'muon1_charge' );
+TH1F('muon2_charge',    '', 5,-2,3) << ( [VecAT(Zmass,47)]    : 'muon2_charge' );
+TH1F('muon3_charge',    '', 5,-2,3) << ( [VecAT(Zmass,48)]    : 'muon3_charge' );
+
+TH1F('ele1_charge',    '', 5,-2,3) << ( [VecAT(Zmass,49)]    : 'ele1_charge' );
+TH1F('ele2_charge',    '', 5,-2,3) << ( [VecAT(Zmass,50)]    : 'ele2_charge' );
+
+
+
+#dR
+TH1F('dR_jet1_muon1',    '', 25, 0,5) << ( [VecAT(Zmass,51)]    : 'dR_jet1_muon1' );
+TH1F('dR_jet1_muon2',    '', 25, 0,5) << ( [VecAT(Zmass,52)]    : 'dR_jet1_muon2' );
+TH1F('dR_jet1_muon3',    '', 25, 0,5) << ( [VecAT(Zmass,53)]    : 'dR_jet1_muon3' );
+
+TH1F('dR_jet1_ele1',    '', 25, 0,5) << ( [VecAT(Zmass,54)]      : 'dR_jet1_ele1' );
+TH1F('dR_jet1_ele2',    '', 25, 0,5) << ( [VecAT(Zmass,55)]      : 'dR_jet1_ele2' );
+
+TH1F('dR_jet2_muon1',    '', 25, 0,5) << ( [VecAT(Zmass,56)]    : 'dR_jet2_muon1' );
+TH1F('dR_jet2_muon2',    '', 25, 0,5) << ( [VecAT(Zmass,57)]    : 'dR_jet2_muon2' );
+TH1F('dR_jet2_muon3',    '', 25, 0,5) << ( [VecAT(Zmass,58)]    : 'dR_jet2_muon3' );
+
+TH1F('dR_jet2_ele1',    '', 25, 0,5) << ( [VecAT(Zmass,59)]      : 'dR_jet2_ele1' );
+TH1F('dR_jet2_ele2',    '', 25, 0,5) << ( [VecAT(Zmass,60)]      : 'dR_jet2_ele2' );
+
+# M jet-lep
+TH1F('M_jet1_muon1',    '', 50, 0,500) << ( [VecAT(Zmass,61)]*0.001    : 'M_jet1_muon1[GeV]' );
+TH1F('M_jet1_muon2',    '', 50, 0,500) << ( [VecAT(Zmass,62)]*0.001    : 'M_jet1_muon2[GeV]' );
+TH1F('M_jet1_muon3',    '', 50, 0,500) << ( [VecAT(Zmass,63)]*0.001    : 'M_jet1_muon3[GeV]' );
+
+TH1F('M_jet1_ele1',    '', 50, 0,500) << ( [VecAT(Zmass,64)]*0.001    : 'M_jet1_ele1[GeV]' );
+TH1F('M_jet1_ele2',    '', 50, 0,500) << ( [VecAT(Zmass,65)]*0.001    : 'M_jet1_ele2[GeV]' );
+
+TH1F('M_jet2_muon1',    '', 50, 0,500) << ( [VecAT(Zmass,66)]*0.001    : 'M_jet2_muon1[GeV]' );
+TH1F('M_jet2_muon2',    '', 50, 0,500) << ( [VecAT(Zmass,67)]*0.001    : 'M_jet2_muon2[GeV]' );
+TH1F('M_jet2_muon3',    '', 50, 0,500) << ( [VecAT(Zmass,68)]*0.001    : 'M_jet2_muon3[GeV]' );
+
+TH1F('M_jet2_ele1',    '', 50, 0,500) << ( [VecAT(Zmass,69)]*0.001    : 'M_jet2_ele1[GeV]' );
+TH1F('M_jet2_ele2',    '', 50, 0,500) << ( [VecAT(Zmass,70)]*0.001    : 'M_jet2_ele2[GeV]' );
+
+# mT jet-lep
+TH1F('mT_jet1_muon1',    '', 50, 0,500) << ( [VecAT(Zmass,71)]*0.001    : 'mT_jet1_muon1[GeV]' );
+TH1F('mT_jet1_muon2',    '', 50, 0,500) << ( [VecAT(Zmass,72)]*0.001    : 'mT_jet1_muon2[GeV]' );
+TH1F('mT_jet1_muon3',    '', 50, 0,500) << ( [VecAT(Zmass,73)]*0.001    : 'mT_jet1_muon3[GeV]' );
+
+TH1F('mT_jet1_ele1',    '', 50, 0,500) << ( [VecAT(Zmass,74)]*0.001    : 'mT_jet1_ele1[GeV]' );
+TH1F('mT_jet1_ele2',    '', 50, 0,500) << ( [VecAT(Zmass,75)]*0.001    : 'mT_jet1_ele2[GeV]' );
+
+TH1F('mT_jet2_muon1',    '', 50, 0,500) << ( [VecAT(Zmass,76)]*0.001    : 'mT_jet2_muon1[GeV]' );
+TH1F('mT_jet2_muon2',    '', 50, 0,500) << ( [VecAT(Zmass,77)]*0.001    : 'mT_jet2_muon2[GeV]' );
+TH1F('mT_jet2_muon3',    '', 50, 0,500) << ( [VecAT(Zmass,78)]*0.001    : 'mT_jet2_muon3[GeV]' );
+
+TH1F('mT_jet2_ele1',    '', 50, 0,500) << ( [VecAT(Zmass,79)]*0.001    : 'mT_jet2_ele1[GeV]' );
+TH1F('mT_jet2_ele2',    '', 50, 0,500) << ( [VecAT(Zmass,80)]*0.001    : 'mT_jet2_ele2[GeV]' );
+
+#Z mass
+TH1F('M_ep1em1',    '', 50, 0,500) << ( [VecAT(Zmass,81)]*0.001  : 'M_ep1em1[GeV]' );
+TH1F('M_up1um1',    '', 50, 0,500) << ( [VecAT(Zmass,82)]*0.001  : 'M_up1um1[GeV]' );
+TH1F('M_l1l2',    '', 50, 0,500) << ( [VecAT(Zmass,83)]*0.001  : 'M_l1l2[GeV]' );
+
+#W mT
+TH1F('W_mT_muon1',    '', 50, 0,500) << ( [VecAT(Zmass,84)]*0.001  : 'W_mT_muon1[GeV]' );
+TH1F('W_mT_muon2',    '', 50, 0,500) << ( [VecAT(Zmass,85)]*0.001  : 'W_mT_muon2[GeV]' );
+TH1F('W_mT_muon3',    '', 50, 0,500) << ( [VecAT(Zmass,86)]*0.001  : 'W_mT_muon3[GeV]' );
+
+TH1F('W_mT_ele1',    '', 50, 0,500) << ( [VecAT(Zmass,87)]*0.001  : 'W_mT_ele1[GeV]' );
+TH1F('W_mT_ele2',    '', 50, 0,500) << ( [VecAT(Zmass,88)]*0.001  : 'W_mT_ele2[GeV]' );
+
+#dR
+TH1F('dPt_jet1_jet2',    '', 50, 0,500) << ( [VecAT(Zmass,89)]*0.001    : 'dPt_jet1_jet2' );
+TH1F('dEta_jet1_jet2',    '', 25, 0,5) << ( [VecAT(Zmass,90)]    : 'dEta_jet1_jet2' );
+TH1F('dPhi_jet1_jet2',    '', 20, 0,4) << ( [VecAT(Zmass,91)]    : 'dPhi_jet1_jet2' );
+
+#noZcUpair_Hlep
+TH1F('M_Zc_uPair',    '', 50, 0,500) << ( [VecAT(Zmass,92)]*0.001    : 'M_Zc_uPair' );
+TH1F('M_jet1_noZcUpair_Hlep',    '', 50, 0,500) << ( [VecAT(Zmass,93)]    : 'M_jet1_noZcUpair_Hlep' );
+TH1F('dR_jet1_noZcUpair_Hlep',    '', 25, 0,5) << ( [VecAT(Zmass,94)]    : 'dR_jet1_noZcUpair_Hlep' );
+TH1F('W_mT_noZcUpair_Hlep',    '', 50, 0,500) << ( [VecAT(Zmass,95)]*0.001  : 'W_mT_noZcUpair_Hlep[GeV]' );
+TH1F('mT_jet1_noZcUpair_Hlep',    '', 50, 0,500) << ( [VecAT(Zmass,96)]*0.001    : 'mT_jet1_noZcUpair_Hlep[GeV]' );
+
+#noZcEpair_Hlep
+TH1F('M_Zc_ePair',    '', 50, 0,500) << ( [VecAT(Zmass,97)]*0.001    : 'M_Zc_ePair' );
+TH1F('M_jet1_noZcEpair_Hlep',    '', 50, 0,500) << ( [VecAT(Zmass,98)]    : 'M_jet1_noZcEpair_Hlep' );
+TH1F('dR_jet1_noZcEpair_Hlep',    '', 25, 0,5) << ( [VecAT(Zmass,99)]    : 'dR_jet1_noZcEpair_Hlep' );
+TH1F('W_mT_noZcEpair_Hlep',    '', 50, 0,500) << ( [VecAT(Zmass,100)]*0.001  : 'W_mT_noZcEpair_Hlep[GeV]' );
+TH1F('mT_jet1_noZcEpair_Hlep',    '', 50, 0,500) << ( [VecAT(Zmass,101)]*0.001    : 'mT_jet1_noZcEpair_Hlep[GeV]' );
+
+#noZcUpair_Hlep jet2
+TH1F('dR_jet2_noZcUpair_Hlep',    '', 25, 0,5) << ( [VecAT(Zmass,102)]    : 'dR_jet2_noZcUpair_Hlep' );
+
+#method3
+TH1F('dR_pt200jet_up1',    '', 25, 0,5) << ( [VecAT(Zmass,103)]    : 'dR_pt200jet_up1' );
+TH1F('dR_pt200jet_up2',    '', 25, 0,5) << ( [VecAT(Zmass,104)]    : 'dR_pt200jet_up2' );
+TH1F('dR_pt200jet_um1',    '', 25, 0,5) << ( [VecAT(Zmass,105)]    : 'dR_pt200jet_um1' );
+TH1F('dR_pt200jet_um2',    '', 25, 0,5) << ( [VecAT(Zmass,106)]    : 'dR_pt200jet_um2' );
+TH1F('n_method3_match',    '', 5, 0,5) << ( [VecAT(Zmass,107)]    : 'n_method3_match' );
+TH1F('method3_H_pt',    '', 50, 0,500) << ( [VecAT(Zmass,108)]*0.001    : 'method3_H_pt' );
+TH1F('noZcEpair_Hmuon_pt',    '', 50, 0,500) << ( [VecAT(Zmass,109)]*0.001    : 'noZcEpair_Hmuon_pt' );
+TH1F('method3_Zmass',    '', 50, 0,500) << ( [VecAT(Zmass,110)]*0.001    : 'method3_Zmass' );
+TH1F('method3_Z_pt',    '', 50, 0,500) << ( [VecAT(Zmass,111)]*0.001    : 'method3_Z_pt' );
+TH1F('Zee_pt',    '', 50, 0,500) << ( [VecAT(Zmass,112)]*0.001    : 'Zee_pt' );
+
+TH1F('W_mT_method3',    '', 50, 0,500) << ( [VecAT(Zmass,113)]*0.001    : 'W_mT_method3' );
+TH1F('H_mT_method3',    '', 50, 0,500) << ( [VecAT(Zmass,114)]*0.001    : 'H_mT_method3' );
+
+TH1F('MET',    '', 50, 0,500) << ( [VecAT(Zmass,115)]*0.001    : 'MET' );
+
+TH1F('dEta_jet1_muon1',    '', 25, 0,5) << ( [VecAT(Zmass,116)]    : 'dEta_jet1_muon1' );
+TH1F('dEta_jet1_muon2',    '', 25, 0,5) << ( [VecAT(Zmass,117)]    : 'dEta_jet1_muon2' );
+TH1F('dEta_jet1_ele1',    '', 25, 0,5) << ( [VecAT(Zmass,118)]    : 'dEta_jet1_ele1' );
+TH1F('dPhi_jet1_muon1',    '', 25, 0,5) << ( [VecAT(Zmass,119)]    : 'dPhi_jet1_muon1' );
+TH1F('dPhi_jet1_muon2',    '', 25, 0,5) << ( [VecAT(Zmass,120)]    : 'dPhi_jet1_muon2' );
+TH1F('dPhi_jet1_ele1',    '', 25, 0,5) << ( [VecAT(Zmass,121)]    : 'dPhi_jet1_ele1' );
+
+TH1F('nSRjet',    '', 11, 0,11) << ( [VecAT(Zmass,122)]     : 'n_{SRjet}' );
+TH1F('SumPt_Charge_lep',    '', 40, 0,2000) << ( [VecAT(Zmass,123)]*0.001    : 'SumPt_Charge_lep' );
+TH1F('SumPt_SRjet',    '', 40, 0,2000) << ( [VecAT(Zmass,124)]*0.001    : 'SumPt_SRjet' );
+TH1F('SumPt_All',    '', 40, 0,2000) << ( [VecAT(Zmass,125)]*0.001    : 'SumPt_All' );
+
+TH1F('SRjet1_pt',    '', 50, 0,500) << ( [VecAT(Zmass,126)]*0.001    : 'SRjet1_pt' );
+TH1F('SRjet1_eta',    '', 40, -4,4) << ( [VecAT(Zmass,127)]     : 'SRjet1_eta' );
+TH1F('SRjetLast_pt',    '', 50, 0,500) << ( [VecAT(Zmass,128)]*0.001    : 'SRjetLast_pt' );
+TH1F('SRjetLast_eta',    '', 40, -4,4) << ( [VecAT(Zmass,129)]     : 'SRjetLast_eta' );
+
+TH1F('dR_RcSRjet_muon1',    '', 25, 0,5) << ( [VecAT(Zmass,130)]    : 'dR_RcSRjet_muon1' );
+TH1F('dR_RcSRjet_muon2',    '', 25, 0,5) << ( [VecAT(Zmass,131)]    : 'dR_RcSRjet_muon2' );
+TH1F('dR_RcSRjet_ele1',    '', 25, 0,5) << ( [VecAT(Zmass,132)]    : 'dR_RcSRjet_ele1' );
+TH1F('dR_RcSRjet_jet1',    '', 25, 0,5) << ( [VecAT(Zmass,133)]    : 'dR_RcSRjet_jet1' );
+
+TH1F('dR_muon1_ele1',    '', 25, 0,5) << ( [VecAT(Zmass,134)]    : 'dR_muon1_ele1' );
+TH1F('dR_muon1_ele2',    '', 25, 0,5) << ( [VecAT(Zmass,135)]    : 'dR_muon1_ele2' );
+TH1F('dR_ele1_ele2',    '', 25, 0,5) << ( [VecAT(Zmass,136)]    : 'dR_ele1_ele2' );
+TH1F('dR_muon1_muon2',    '', 25, 0,5) << ( [VecAT(Zmass,137)]    : 'dR_muon1_muon2' );
+TH1F('dR_muon1_muon3',    '', 25, 0,5) << ( [VecAT(Zmass,138)]    : 'dR_muon1_muon3' );
+TH1F('dR_muon2_muon3',    '', 25, 0,5) << ( [VecAT(Zmass,139)]    : 'dR_muon2_muon3' );
+
+TH1F('Zu1u2_pt',    '', 50, 0,500) << ( [VecAT(Zmass,140)]*0.001    : 'Zu1u2_pt' );
+
+TH1F('dR_method3_Hu_Zup',    '', 25, 0,5) << ( [VecAT(Zmass,141)]    : 'dR_method3_Hu_Zup' );
+TH1F('dR_method3_Hu_Zum',    '', 25, 0,5) << ( [VecAT(Zmass,142)]    : 'dR_method3_Hu_Zum' );
+TH1F('dR_method3_Zup_Zum',    '', 25, 0,5) << ( [VecAT(Zmass,143)]    : 'dR_method3_Zup_Zum' );
+TH1F('dR_method3_jet_Hu',    '', 25, 0,5) << ( [VecAT(Zmass,144)]    : 'dR_method3_jet_Hu' );
+TH1F('dR_method3_jet_Zup',    '', 25, 0,5) << ( [VecAT(Zmass,145)]    : 'dR_method3_jet_Zup' );
+TH1F('dR_method3_jet_Zum',    '', 25, 0,5) << ( [VecAT(Zmass,146)]    : 'dR_method3_jet_Zum' );
+
+TH1F('H_pt_muon1',    '', 50, 0,500) << ( [VecAT(Zmass,147)]*0.001    : 'H_pt_muon1' );
+TH1F('H_pt_method3_muon',    '', 50, 0,500) << ( [VecAT(Zmass,148)]*0.001    : 'H_pt_method3_muon' );
+TH1F('dpt_ZH_Zee',    '', 50, 0,500) << ( [VecAT(Zmass,149)]*0.001    : 'dpt_ZH_Zee' );
+TH1F('dpt_ZH_Zuu',    '', 50, 0,500) << ( [VecAT(Zmass,150)]*0.001    : 'dpt_ZH_Zuu' );
+
+TH1F('M_jet1_method3_muon',    '', 50, 0,500) << ( [VecAT(Zmass,151)]*0.001    : 'M_jet1_method3_muon[GeV]' );
+
+TH1F('H_pt_muon3',    '', 50, 0,500) << ( [VecAT(Zmass,152)]*0.001    : 'H_pt_muon3' );
+TH1F('dpt_ZH_muon3',    '', 50, 0,500) << ( [VecAT(Zmass,153)]*0.001    : 'dpt_ZH_muon3' );
+
+TH1F('WH_pt2',    '', 50, 0,500) << ( [VecAT(Zmass,154)]*0.001    : 'WH_pt2' );
+TH1F('H_px_miss_ratio',    '', 20, -1,1) << ( [VecAT(Zmass,155)]    : 'H_px_miss_ratio' );
+TH1F('H_py_miss_ratio',    '', 20, -1,1) << ( [VecAT(Zmass,156)]    : 'H_py_miss_ratio' );
+TH1F('H_pt_pt2Method',    '', 50, 0,500) << ( [VecAT(Zmass,157)]*0.001    : 'H_pt_pt2Method' );
+TH1F('W_pt_pt2Method',    '', 50, 0,500) << ( [VecAT(Zmass,158)]*0.001    : 'W_pt_pt2Method' );
+TH1F('dpt_WH_pt2Method',    '', 50, 0,500) << ( [VecAT(Zmass,159)]*0.001    : 'dpt_WH_pt2Method' );
+TH1F('mT_H_pt2Method',    '', 50, 0,500) << ( [VecAT(Zmass,160)]*0.001    : 'mT_H_pt2Method' );
+TH1F('mT_W_pt2Method',    '', 50, 0,500) << ( [VecAT(Zmass,161)]*0.001    : 'mT_W_pt2Method' );
+
+TH1F('SumPx_lep_jet',    '', 50, 0,500) << ( [VecAT(Zmass,162)]*0.001    : 'SumPx_lep_jet' );
+TH1F('SumPy_lep_jet',    '', 50, 0,500) << ( [VecAT(Zmass,163)]*0.001    : 'SumPy_lep_jet' );
+TH1F('SumPx_lep_SRjet',    '', 50, 0,500) << ( [VecAT(Zmass,164)]*0.001    : 'SumPx_lep_SRjet' );
+TH1F('SumPy_lep_SRjet',    '', 50, 0,500) << ( [VecAT(Zmass,165)]*0.001    : 'SumPy_lep_SRjet' );
+
+
+#_______________________________________________________________________________
+# Assign histograms to cuts
+#_______________________________________________________________________________
+
+#@CutChannels:njet ,nmuon ,nele ,nmuon_p ,nmuon_m ,nele_p ,nele_m ,nlep ,jet1_pt ,jet2_pt ,muon1_pt ,muon2_pt ,muon3_pt ,ele1_pt ,ele2_pt,method3_Z_pt,W_mT_method3,H_mT_method3
+
+#@Cut_1u1e1j_dr_muon1_ele1:SumPt_Charge_lep,SumPt_SRjet,SumPt_All,nSRjet,SRjet1_pt,SRjet1_eta,SRjetLast_pt,SRjetLast_eta,dR_RcSRjet_muon1,dR_RcSRjet_ele1,dR_RcSRjet_jet1
+#@Cut_1u1e1j_sumPt_SRjet:SumPt_Charge_lep,SumPt_SRjet,SumPt_All,nSRjet,SRjet1_pt,SRjet1_eta,SRjetLast_pt,SRjetLast_eta,dR_RcSRjet_muon1,dR_RcSRjet_ele1,dR_RcSRjet_jet1
+
+#@Cut_1u1e2j_dr_jet1_muon1:SumPt_Charge_lep,SumPt_SRjet,SumPt_All,nSRjet,SRjet1_pt,SRjet1_eta,SRjetLast_pt,SRjetLast_eta,dR_RcSRjet_muon1,dR_RcSRjet_ele1,dR_RcSRjet_jet1
+#@Cut_2u1j_dr_jet1_muon2:SumPt_Charge_lep,SumPt_SRjet,SumPt_All,nSRjet,SRjet1_pt,SRjet1_eta,SRjetLast_pt,SRjetLast_eta,dR_RcSRjet_muon1,dR_RcSRjet_muon2,dR_RcSRjet_jet1
+#@Cut_2u2j_Same_Charge:SumPt_Charge_lep,SumPt_SRjet,SumPt_All,nSRjet,SRjet1_pt,SRjet1_eta,SRjetLast_pt,SRjetLast_eta,dR_RcSRjet_muon1,dR_RcSRjet_muon2,dR_RcSRjet_jet1
+
+#method3_Z_pt,H_pt_method3_muon,dpt_ZH_Zuu,M_jet1_method3_muon,H_mT_method3,W_mT_method3
+
+@Cut_1u1up1um1j_Muon3ID:SumPx_lep_jet,SumPy_lep_jet,SumPx_lep_SRjet,SumPy_lep_SRjet,SumPt_Charge_lep,SumPt_SRjet,SumPt_All
+
+@Cut_1u1up1um2j_Muon3ID:SumPx_lep_jet,SumPy_lep_jet,SumPx_lep_SRjet,SumPy_lep_SRjet,SumPt_Charge_lep,SumPt_SRjet,SumPt_All
+
+@Cut_1u1ep1em1j_Zmass_window:SumPx_lep_jet,SumPy_lep_jet,SumPx_lep_SRjet,SumPy_lep_SRjet,SumPt_Charge_lep,SumPt_SRjet,SumPt_All
+
+@Cut_1u1ep1em2j_Zmass_window:SumPx_lep_jet,SumPy_lep_jet,SumPx_lep_SRjet,SumPy_lep_SRjet,SumPt_Charge_lep,SumPt_SRjet,SumPt_All
+
+
+
+@Cut_2u1j_Same_Charge:WH_pt2,H_px_miss_ratio,H_py_miss_ratio,H_pt_pt2Method,W_pt_pt2Method,dpt_WH_pt2Method,mT_H_pt2Method,mT_W_pt2Method,SumPx_lep_jet,SumPy_lep_jet,SumPx_lep_SRjet,SumPy_lep_SRjet,SumPt_Charge_lep,SumPt_SRjet,SumPt_All
+@Cut_2u2j_Same_Charge:WH_pt2,H_px_miss_ratio,H_py_miss_ratio,H_pt_pt2Method,W_pt_pt2Method,dpt_WH_pt2Method,mT_H_pt2Method,mT_W_pt2Method,SumPx_lep_jet,SumPy_lep_jet,SumPx_lep_SRjet,SumPy_lep_SRjet,SumPt_Charge_lep,SumPt_SRjet,SumPt_All
+@Cut_1u1e1j_Same_Charge:WH_pt2,H_px_miss_ratio,H_py_miss_ratio,H_pt_pt2Method,W_pt_pt2Method,dpt_WH_pt2Method,mT_H_pt2Method,mT_W_pt2Method,SumPx_lep_jet,SumPy_lep_jet,SumPx_lep_SRjet,SumPy_lep_SRjet,SumPt_Charge_lep,SumPt_SRjet,SumPt_All
+@Cut_1u1e2j_Same_Charge:WH_pt2,H_px_miss_ratio,H_py_miss_ratio,H_pt_pt2Method,W_pt_pt2Method,dpt_WH_pt2Method,mT_H_pt2Method,mT_W_pt2Method,SumPx_lep_jet,SumPy_lep_jet,SumPx_lep_SRjet,SumPy_lep_SRjet,SumPt_Charge_lep,SumPt_SRjet,SumPt_All
+
+
+#@Cut_1u1ep1em1j_Z_pt:H_pt_muon1
+#@Cut_1u1ep1em2j_Z_pt:H_pt_muon1
+
+
+
+
+# Define histograms
+# This file has the essential histograms for ggf analysis workflow.
+# It is used for the TestAnalysis
+
+#number
+TH1F('njet',    '', 11, 0,11) << ( [njet]     : 'n_{jet}' );
+TH1F('nSRjet',    '', 11, 0,11) << ( [nSRjet]     : 'n_{SRjet}' );
+TH1F('nmuon',    '', 11, 0,11) << ( [nmuon]     : 'n_{muon}' );
+TH1F('nele',    '', 11, 0,11) << ( [nele]     : 'n_{ele}' );
+TH1F('nmuon_p',    '', 11, 0,11) << ( [nmuon_p]     : 'n_{up}' );
+TH1F('nmuon_m',    '', 11, 0,11) << ( [nmuon_m]     : 'n_{ep}' );
+TH1F('nele_p',    '', 11, 0,11) << ( [nele_p]     : 'n_{em}' );
+TH1F('nele_m',    '', 11, 0,11) << ( [nele_m]     : 'n_{lep}' );
+
+TH1F('miss_phi',    '', 40, -4,4) << ( [miss_phi]   : 'miss_phi' );
+TH1F('MET',    '', 50, 0,500) << ( [MET]       : 'MET [GeV]' );
+
+TH1F('jet1_pt',    '', 50, 0,500) << ( [jet1_pt]    : 'jet1_pt [GeV]' );
+TH1F('jet1_eta',    '', 40, -4,4) << ( [jet1_eta]    : 'jet1_eta' );
+TH1F('jet1_phi',    '', 40, -4,4) << ( [jet1_phi]   : 'jet1_phi' );
+TH1F('jet1_e',    '', 50, 0,500) << ( [jet1_e]       : 'jet1_e [GeV]' );
+TH1F('jet1_m',    '', 40, 0,200) << ( [jet1_m]       : 'jet1_m [GeV]' );
+
+TH1F('jet2_pt',    '', 50, 0,500) << ( [jet2_pt]    : 'jet2_pt [GeV]' );
+TH1F('jet2_eta',    '', 40, -4,4) << ( [jet2_eta]    : 'jet2_eta' );
+TH1F('jet2_phi',    '', 40, -4,4) << ( [jet2_phi]   : 'jet2_phi' );
+TH1F('jet2_e',    '', 50, 0,500) << ( [jet2_e]       : 'jet2_e [GeV]' );
+TH1F('jet2_m',    '', 50, 0,500) << ( [jet2_m]       : 'jet2_m [GeV]' );
+
+TH1F('lep1_pt',    '', 50, 0,500) << ( [lep1_pt]    : 'lep1_pt [GeV]' );
+TH1F('lep1_eta',    '', 40, -4,4) << ( [lep1_eta]    : 'lep1_eta' );
+TH1F('lep1_phi',    '', 40, -4,4) << ( [lep1_phi]   : 'lep1_phi' );
+TH1F('lep1_e',    '', 50, 0,500) << ( [lep1_e]       : 'lep1_e [GeV]' );
+TH1F('lep1_charge',    '', 50, 0,500) << ( [lep1_charge]       : 'lep1_charge [GeV]' );
+
+TH1F('lep2_pt',    '', 50, 0,500) << ( [lep2_pt]    : 'lep2_pt [GeV]' );
+TH1F('lep2_eta',    '', 40, -4,4) << ( [lep2_eta]    : 'lep2_eta' );
+TH1F('lep2_phi',    '', 40, -4,4) << ( [lep2_phi]   : 'lep2_phi' );
+TH1F('lep2_e',    '', 50, 0,500) << ( [lep2_e]       : 'lep2_e [GeV]' );
+TH1F('lep2_charge',    '', 50, 0,500) << ( [lep2_charge]       : 'lep2_charge [GeV]' );
+
+TH1F('muon1_pt',    '', 50, 0,500) << ( [muon1_pt]    : 'muon1_pt [GeV]' );
+TH1F('muon1_eta',    '', 40, -4,4) << ( [muon1_eta]    : 'muon1_eta' );
+TH1F('muon1_phi',    '', 40, -4,4) << ( [muon1_phi]   : 'muon1_phi' );
+TH1F('muon1_e',    '', 50, 0,500) << ( [muon1_e]       : 'muon1_e [GeV]' );
+TH1F('muon1_charge',    '', 50, 0,500) << ( [muon1_charge]       : 'muon1_charge [GeV]' );
+
+TH1F('u1_pt',    '', 50, 0,500) << ( [u1_pt]    : 'u1_pt [GeV]' );
+TH1F('u1_eta',    '', 40, -4,4) << ( [u1_eta]    : 'u1_eta' );
+TH1F('u1_phi',    '', 40, -4,4) << ( [u1_phi]   : 'u1_phi' );
+TH1F('u1_e',    '', 50, 0,500) << ( [u1_e]       : 'u1_e [GeV]' );
+TH1F('u1_charge',    '', 50, 0,500) << ( [u1_charge]       : 'u1_charge [GeV]' );
+
+TH1F('muon2_pt',    '', 50, 0,500) << ( [muon2_pt]    : 'muon2_pt [GeV]' );
+TH1F('muon2_eta',    '', 40, -4,4) << ( [muon2_eta]    : 'muon2_eta' );
+TH1F('muon2_phi',    '', 40, -4,4) << ( [muon2_phi]   : 'muon2_phi' );
+TH1F('muon2_e',    '', 50, 0,500) << ( [muon2_e]       : 'muon2_e [GeV]' );
+TH1F('muon2_charge',    '', 50, 0,500) << ( [muon2_charge]       : 'muon2_charge [GeV]' );
+
+TH1F('ele1_pt',    '', 50, 0,500) << ( [ele1_pt]    : 'ele1_pt [GeV]' );
+TH1F('ele1_eta',    '', 40, -4,4) << ( [ele1_eta]    : 'ele1_eta' );
+TH1F('ele1_phi',    '', 40, -4,4) << ( [ele1_phi]   : 'ele1_phi' );
+TH1F('ele1_e',    '', 50, 0,500) << ( [ele1_e]       : 'ele1_e [GeV]' );
+TH1F('ele1_charge',    '', 50, 0,500) << ( [ele1_charge]       : 'ele1_charge [GeV]' );
+
+TH1F('up_pt',    '', 50, 0,500) << ( [up_pt]    : 'up_pt [GeV]' );
+TH1F('up_eta',    '', 40, -4,4) << ( [up_eta]    : 'up_eta' );
+TH1F('up_phi',    '', 40, -4,4) << ( [up_phi]   : 'up_phi' );
+TH1F('up_e',    '', 50, 0,500) << ( [up_e]       : 'up_e [GeV]' );
+
+TH1F('um_pt',    '', 50, 0,500) << ( [um_pt]    : 'um_pt [GeV]' );
+TH1F('um_eta',    '', 40, -4,4) << ( [um_eta]    : 'um_eta' );
+TH1F('um_phi',    '', 40, -4,4) << ( [um_phi]   : 'um_phi' );
+TH1F('um_e',    '', 50, 0,500) << ( [um_e]       : 'um_e [GeV]' );
+
+TH1F('u3_pt',    '', 50, 0,250) << ( [u3_pt]    : 'u3_pt [GeV]' );
+TH1F('u3_eta',    '', 40, -4,4) << ( [u3_eta]    : 'u3_eta' );
+TH1F('u3_phi',    '', 40, -4,4) << ( [u3_phi]   : 'u3_phi' );
+TH1F('u3_e',    '', 50, 0,500) << ( [u3_e]       : 'u3_e [GeV]' );
+
+TH1F('ep_pt',    '', 35, 0,350) << ( [ep_pt]    : 'ep_pt [GeV]' );
+TH1F('ep_eta',    '', 40, -4,4) << ( [ep_eta]    : 'ep_eta' );
+TH1F('ep_phi',    '', 40, -4,4) << ( [ep_phi]   : 'ep_phi' );
+TH1F('ep_e',    '', 50, 0,500) << ( [ep_e]       : 'ep_e [GeV]' );
+
+TH1F('em_pt',    '', 35, 0,350) << ( [em_pt]    : 'em_pt [GeV]' );
+TH1F('em_eta',    '', 40, -4,4) << ( [em_eta]    : 'em_eta' );
+TH1F('em_phi',    '', 40, -4,4) << ( [em_phi]   : 'em_phi' );
+TH1F('em_e',    '', 50, 0,500) << ( [em_e]       : 'em_e [GeV]' );
+
+
+TH1F('sumPt_SRjet',    '', 50, 0,500) << ( [sumPt_SRjet]    : 'sumPt_SRjet [GeV]' );
+
+TH1F('dR_u1u2',    '', 20, 0,4) << ( [dR_u1u2]    : 'dR_u1u2' );
+TH1F('dR_u1e1',    '', 20, 0,4) << ( [dR_u1e1]    : 'dR_u1e1' );
+TH1F('dR_j1u1',    '', 20, 0,4) << ( [dR_j1u1]    : 'dR_j1u1' );
+TH1F('dR_j1u2',    '', 20, 0,4) << ( [dR_j1u2]    : 'dR_j1u2' );
+TH1F('dR_j1e1',    '', 20, 0,4) << ( [dR_j1e1]    : 'dR_j1e1' );
+
+TH1F('dR_jet1_HWjj',    '', 20, 0,4) << ( [dR_jet1_HWjj]    : 'dR_jet1_HWjj' );
+
+TH1F('dR_jet1_lep1',    '', 20, 0,4) << ( [dR_jet1_lep1]    : 'dR_jet1_lep1' );
+TH1F('dR_jet1_lep2',    '', 20, 0,4) << ( [dR_jet1_lep2]    : 'dR_jet1_lep2' );
+TH1F('dR_HWjj_lep1',    '', 20, 0,4) << ( [dR_HWjj_lep1]    : 'dR_HWjj_lep1' );
+TH1F('dR_HWjj_lep2',    '', 20, 0,4) << ( [dR_HWjj_lep2]    : 'dR_HWjj_lep2' );
+TH1F('dR_lep1_lep2',    '', 20, 0,4) << ( [dR_lep1_lep2]    : 'dR_lep1_lep2' );
+
+TH1F('dR_u1ep',    '', 20, 0,4) << ( [dR_u1ep]    : 'dR_u1ep' );
+TH1F('dR_u1em',    '', 20, 0,4) << ( [dR_u1em]    : 'dR_u1em' );
+TH1F('dR_epem',    '', 20, 0,4) << ( [dR_epem]    : 'dR_epem' );
+TH1F('dR_j1ep',    '', 20, 0,4) << ( [dR_j1ep]    : 'dR_j1ep' );
+TH1F('dR_j1em',    '', 20, 0,4) << ( [dR_j1em]    : 'dR_j1em' );
+
+TH1F('dR_HWjj_ep',    '', 20, 0,4) << ( [dR_HWjj_ep]    : 'dR_HWjj_ep' );
+TH1F('dR_HWjj_em',    '', 20, 0,4) << ( [dR_HWjj_em]    : 'dR_HWjj_em' );
+TH1F('dR_HWjj_u1',    '', 20, 0,4) << ( [dR_HWjj_u1]    : 'dR_HWjj_u1' );
+
+TH1F('dR_u3up',    '', 20, 0,4) << ( [dR_u3up]    : 'dR_u3up' );
+TH1F('dR_u3um',    '', 20, 0,4) << ( [dR_u3um]    : 'dR_u3um' );
+TH1F('dR_upum',    '', 20, 0,4) << ( [dR_upum]    : 'dR_upum' );
+TH1F('dR_j1up',    '', 20, 0,4) << ( [dR_j1up]    : 'dR_j1up' );
+TH1F('dR_j1um',    '', 20, 0,4) << ( [dR_j1um]    : 'dR_j1um' );
+TH1F('dR_j1u3',    '', 20, 0,4) << ( [dR_j1u3]    : 'dR_j1u3' );
+
+TH1F('dR_e1up',    '', 20, 0,4) << ( [dR_e1up]    : 'dR_e1up' );
+TH1F('dR_e1um',    '', 20, 0,4) << ( [dR_e1um]    : 'dR_e1um' );
+TH1F('dR_j1e1',    '', 20, 0,4) << ( [dR_j1e1]    : 'dR_j1e1' );
+TH1F('dR_HWjj_e1',    '', 20, 0,4) << ( [dR_HWjj_e1]    : 'dR_HWjj_e1' );
+
+TH1F('dR_HWjj_up',    '', 20, 0,4) << ( [dR_HWjj_up]    : 'dR_HWjj_up' );
+TH1F('dR_HWjj_um',    '', 20, 0,4) << ( [dR_HWjj_um]    : 'dR_HWjj_um' );
+TH1F('dR_HWjj_u3',    '', 20, 0,4) << ( [dR_HWjj_u3]    : 'dR_HWjj_u3' );
+
+TH1F('M_j1u1',    '', 50, 0,500) << ( [M_j1u1]       : 'M_j1u1 [GeV]' );
+TH1F('Pt_j1u1',    '', 50, 0,500) << ( [Pt_j1u1]       : 'Pt_j1u1 [GeV]' );
+TH1F('M_j1u2',    '', 50, 0,500) << ( [M_j1u2]       : 'M_j1u2 [GeV]' );
+TH1F('Pt_j1u2',    '', 50, 0,500) << ( [Pt_j1u2]       : 'Pt_j1u2 [GeV]' );
+
+
+TH1F('M_epem',    '', 50, 0,500) << ( [M_epem]       : 'M_epem [GeV]' );
+TH1F('Pt_epem',    '', 50, 0,500) << ( [Pt_epem]       : 'Pt_epem [GeV]' );
+TH1F('mT_Wu1mis',    '', 50, 0,500) << ( [mT_Wu1mis]       : 'mT_Wu1mis [GeV]' );
+TH1F('Pt_Wu1mis',    '', 50, 0,500) << ( [Pt_Wu1mis]       : 'Pt_Wu1mis [GeV]' );
+
+TH1F('M_upum',    '', 50, 0,500) << ( [M_upum]       : 'M_upum [GeV]' );
+TH1F('Pt_upum',    '', 50, 0,500) << ( [Pt_upum]       : 'Pt_upum [GeV]' );
+TH1F('mT_Wu3mis',    '', 50, 0,500) << ( [mT_Wu3mis]       : 'mT_Wu3mis [GeV]' );
+TH1F('Pt_Wu3mis',    '', 50, 0,500) << ( [Pt_Wu3mis]       : 'Pt_Wu3mis [GeV]' );
+
+TH1F('Pt_HBoson_jj_miss',    '', 50, 0,500) << ( [Pt_HBoson_jj_miss]       : 'Pt_HBoson_jj_miss [GeV]' );
+TH1F('Pt_HBoson_LRj_miss',    '', 50, 0,500) << ( [Pt_HBoson_LRj_miss]       : 'Pt_HBoson_LRj_miss [GeV]' );
+
+TH1F('muon1_HWnu_pz',    '', 50, 0,500) << ( [muon1_HWnu_pz]       : 'muon1_HWnu_pz [GeV]' );
+TH1F('u3_HWnu_pz',    '', 50, 0,500) << ( [u3_HWnu_pz]       : 'u3_HWnu_pz [GeV]' );
+
+TH1F('SRjet1_pt',    '', 50, 0,500) << ( [SRjet1_pt]    : 'SRjet1_pt [GeV]' );
+TH1F('SRjet1_eta',    '', 40, -4,4) << ( [SRjet1_eta]    : 'SRjet1_eta' );
+TH1F('SRjet1_m',    '', 50, 0,500) << ( [SRjet1_m]       : 'SRjet1_m [GeV]' );
+
+TH1F('SRjet2_pt',    '', 50, 0,500) << ( [SRjet2_pt]    : 'SRjet2_pt [GeV]' );
+TH1F('SRjet2_eta',    '', 40, -4,4) << ( [SRjet2_eta]    : 'SRjet2_eta' );
+TH1F('SRjet2_m',    '', 50, 0,500) << ( [SRjet2_m]       : 'SRjet2_m [GeV]' );
+
+TH1F('HWjj_pt',    '', 50, 0,500) << ( [HWjj_pt]    : 'HWjj_pt [GeV]' );
+TH1F('HWjj_eta',    '', 40, -4,4) << ( [HWjj_eta]    : 'HWjj_eta' );
+TH1F('HWjj_m',    '', 50, 0,500) << ( [HWjj_m]       : 'HWjj_m [GeV]' );
+
+TH1F('ZBoson_pt',    '', 40, 0,200) << ( [ZBoson_pt]    : 'ZBoson_pt [GeV]' );
+TH1F('ZBoson_eta',    '', 40, -4,4) << ( [ZBoson_eta]    : 'ZBoson_eta' );
+TH1F('ZBoson_m',    '', 50, 0,500) << ( [ZBoson_m]       : 'ZBoson_m [GeV]' );
+
+TH1F('HBoson_jj_pt',    '', 50, 0,500) << ( [HBoson_jj_pt]    : 'HBoson_jj_pt [GeV]' );
+TH1F('HBoson_jj_eta',    '', 40, -4,4) << ( [HBoson_jj_eta]    : 'HBoson_jj_eta' );
+TH1F('HBoson_jj_m',    '', 50, 0,500) << ( [HBoson_jj_m]       : 'HBoson_jj_m [GeV]' );
+
+TH1F('all_vis_jj_pt',    '', 50, 0,500) << ( [all_vis_jj_pt]    : 'all_vis_jj_pt [GeV]' );
+TH1F('all_vis_jj_eta',    '', 40, -4,4) << ( [all_vis_jj_eta]    : 'all_vis_jj_eta' );
+TH1F('all_vis_jj_m',    '', 50, 0,500) << ( [all_vis_jj_m]       : 'all_vis_jj_m [GeV]' );
+
+TH1F('HBoson_LRj_pt',    '', 50, 0,500) << ( [HBoson_LRj_pt]    : 'HBoson_LRj_pt [GeV]' );
+TH1F('HBoson_LRj_eta',    '', 40, -4,4) << ( [HBoson_LRj_eta]    : 'HBoson_LRj_eta' );
+TH1F('HBoson_LRj_m',    '', 50, 0,500) << ( [HBoson_LRj_m]       : 'HBoson_LRj_m [GeV]' );
+
+TH1F('all_vis_LRj_pt',    '', 50, 0,500) << ( [all_vis_LRj_pt]    : 'all_vis_LRj_pt [GeV]' );
+TH1F('all_vis_LRj_eta',    '', 40, -4,4) << ( [all_vis_LRj_eta]    : 'all_vis_LRj_eta' );
+TH1F('all_vis_LRj_m',    '', 50, 0,500) << ( [all_vis_LRj_m]       : 'all_vis_LRj_m [GeV]' );
+
+TH1F('HWlep_mT',    '', 50, 0,500) << ( [HWlep_mT]       : 'HWlep_mT [GeV]' );
+TH1F('HBoson_jj_mT',    '', 50, 0,500) << ( [HBoson_jj_mT]       : 'HBoson_jj_mT [GeV]' )
+TH1F('HBoson_LRj_mT',    '', 50, 0,500) << ( [HBoson_LRj_mT]       : 'HBoson_LRj_mT [GeV]' )
+
+
+TH1F('dR_SRjet1_HWlep',    '', 20, 0,4) << ( [dR_SRjet1_HWlep]    : 'dR_SRjet1_HWlep' );
+TH1F('dR_SRjet2_HWlep',    '', 20, 0,4) << ( [dR_SRjet2_HWlep]    : 'dR_SRjet2_HWlep' );
+TH1F('dR_HWjj_HWlep',    '', 20, 0,4) << ( [dR_HWjj_HWlep]    : 'dR_HWjj_HWlep' );
+TH1F('dR_ZBoson_HWlep',    '', 20, 0,4) << ( [dR_ZBoson_HWlep]    : 'dR_ZBoson_HWlep' );
+TH1F('dR_ZBoson_HWjj',    '', 20, 0,4) << ( [dR_ZBoson_HWjj]    : 'dR_ZBoson_HWjj' );
+TH1F('dR_VWlep_HWlep',    '', 20, 0,4) << ( [dR_VWlep_HWlep]    : 'dR_VWlep_HWlep' );
+TH1F('dR_VWlep_HWjj',    '', 20, 0,4) << ( [dR_VWlep_HWjj]    : 'dR_VWlep_HWjj' );
+
+TH1F('dEta_SRjet1_HWlep',    '', 20, 0,4) << ( [dEta_SRjet1_HWlep]    : 'dEta_SRjet1_HWlep' );
+TH1F('dEta_SRjet2_HWlep',    '', 20, 0,4) << ( [dEta_SRjet2_HWlep]    : 'dEta_SRjet2_HWlep' );
+TH1F('dEta_HWjj_HWlep',    '', 20, 0,4) << ( [dEta_HWjj_HWlep]    : 'dEta_HWjj_HWlep' );
+TH1F('dEta_ZBoson_HWlep',    '', 20, 0,4) << ( [dEta_ZBoson_HWlep]    : 'dEta_ZBoson_HWlep' );
+TH1F('dEta_ZBoson_HWjj',    '', 20, 0,4) << ( [dEta_ZBoson_HWjj]    : 'dEta_ZBoson_HWjj' );
+TH1F('dEta_VWlep_HWlep',    '', 20, 0,4) << ( [dEta_VWlep_HWlep]    : 'dEta_VWlep_HWlep' );
+TH1F('dEta_VWlep_HWjj',    '', 20, 0,4) << ( [dEta_VWlep_HWjj]    : 'dEta_VWlep_HWjj' );
+TH1F('dEta_jet1_HWjj',    '', 20, 0,4) << ( [dEta_jet1_HWjj]    : 'dEta_jet1_HWjj' );
+
+TH1F('dPhi_SRjet1_HWlep',    '', 20, 0,4) << ( [dPhi_SRjet1_HWlep]    : 'dPhi_SRjet1_HWlep' );
+TH1F('dPhi_SRjet2_HWlep',    '', 20, 0,4) << ( [dPhi_SRjet2_HWlep]    : 'dPhi_SRjet2_HWlep' );
+TH1F('dPhi_HWjj_HWlep',    '', 20, 0,4) << ( [dPhi_HWjj_HWlep]    : 'dPhi_HWjj_HWlep' );
+TH1F('dPhi_ZBoson_HWlep',    '', 20, 0,4) << ( [dPhi_ZBoson_HWlep]    : 'dPhi_ZBoson_HWlep' );
+TH1F('dPhi_ZBoson_HWjj',    '', 20, 0,4) << ( [dPhi_ZBoson_HWjj]    : 'dPhi_ZBoson_HWjj' );
+TH1F('dPhi_VWlep_HWlep',    '', 20, 0,4) << ( [dPhi_VWlep_HWlep]    : 'dPhi_VWlep_HWlep' );
+TH1F('dPhi_VWlep_HWjj',    '', 20, 0,4) << ( [dPhi_VWlep_HWjj]    : 'dPhi_VWlep_HWjj' );
+TH1F('dPhi_jet1_HWjj',    '', 20, 0,4) << ( [dPhi_jet1_HWjj]    : 'dPhi_jet1_HWjj' );
+
+TH1F('dR_SRjet1_SRjet2',    '', 20, 0,4) << ( [dR_SRjet1_SRjet2]    : 'dR_SRjet1_SRjet2' );
+TH1F('dPhi_all_vis_jj_miss',    '', 20, 0,4) << ( [dPhi_all_vis_jj_miss]    : 'dPhi_all_vis_jj_miss' );
+TH1F('dPhi_all_vis_LRj_miss',    '', 20, 0,4) << ( [dPhi_all_vis_LRj_miss]    : 'dPhi_all_vis_LRj_miss' );
+
+TH1F('dnn_1u1e',    '', 50, 0,1) << ( $(dnn_1u1e)   : 'dnn_1u1e' );
+TH1F('dnn_2u0e',    '', 50, 0,1) << ( $(dnn_2u0e)   : 'dnn_2u0e' );
+TH1F('dnn_1u1ep1em',    '', 50, 0,1) << ( $(dnn_1u1ep1em)   : 'dnn_1u1ep1em' );
+TH1F('dnn_1u1up1um',    '', 50, 0,1) << ( $(dnn_1u1up1um)   : 'dnn_1u1up1um' );
+TH1F('dnn_1e1up1um',    '', 50, 0,1) << ( $(dnn_1e1up1um)   : 'dnn_1e1up1um' );
+
+TH1F('METSig',    '', 11, 0,11) << ( [METSig]     : 'METSig' );
+
+TH1F('BDT_1u1e', '', 50, -0.6, 0.6) << ($(BDT_1u1e) : 'BDT_1u1e'); 
+TH1F('Fisher_1u1e', '', 50, -2.5, 2) << ($(Fisher_1u1e) : 'Fisher_1u1e'); 
+TH1F('Likelihood_1u1e', '', 50, -10, 10) << ($(Likelihood_1u1e) : 'Likelihood_1u1e'); 
+TH1F('LD_1u1e', '', 50, -2, 1) << ($(LD_1u1e) : 'LD_1u1e'); 
+TH1F('DNN_CPU_1u1e', '', 50, 0, 1) << ($(DNN_CPU_1u1e) : 'DNN_CPU_1u1e'); 
+
+TH1F('BDT_2u0e', '', 50, -0.6, 0.6) << ($(BDT_2u0e) : 'BDT_2u0e'); 
+TH1F('Fisher_2u0e', '', 50, -2.5, 2) << ($(Fisher_2u0e) : 'Fisher_2u0e'); 
+TH1F('Likelihood_2u0e', '', 50, -10, 3) << ($(Likelihood_2u0e) : 'Likelihood_2u0e'); 
+TH1F('LD_2u0e', '', 50, -2, 1) << ($(LD_2u0e) : 'LD_2u0e'); 
+TH1F('DNN_CPU_2u0e', '', 50, 0, 1) << ($(DNN_CPU_2u0e) : 'DNN_CPU_2u0e'); 
+
+TH1F('BDT_1u1up1um', '', 50, -0.6, 0.6) << ($(BDT_1u1up1um) : 'BDT_1u1up1um'); 
+TH1F('Fisher_1u1up1um', '', 50, -2.5, 2) << ($(Fisher_1u1up1um) : 'Fisher_1u1up1um'); 
+TH1F('Likelihood_1u1up1um', '', 50, -10, 3) << ($(Likelihood_1u1up1um) : 'Likelihood_1u1up1um'); 
+TH1F('LD_1u1up1um', '', 50, -2, 1) << ($(LD_1u1up1um) : 'LD_1u1up1um'); 
+TH1F('DNN_CPU_1u1up1um', '', 50, 0, 1) << ($(DNN_CPU_1u1up1um) : 'DNN_CPU_1u1up1um'); 
+
+TH1F('BDT_1u1ep1em', '', 50, -0.6, 0.6) << ($(BDT_1u1ep1em) : 'BDT_1u1ep1em'); 
+TH1F('Fisher_1u1ep1em', '', 50, -2.5, 2) << ($(Fisher_1u1ep1em) : 'Fisher_1u1ep1em'); 
+TH1F('Likelihood_1u1ep1em', '', 50, -10, 3) << ($(Likelihood_1u1ep1em) : 'Likelihood_1u1ep1em'); 
+TH1F('LD_1u1ep1em', '', 50, -2, 1) << ($(LD_1u1ep1em) : 'LD_1u1ep1em'); 
+TH1F('DNN_CPU_1u1ep1em', '', 50, 0, 1) << ($(DNN_CPU_1u1ep1em) : 'DNN_CPU_1u1ep1em'); 
+
+TH1F('BDT_1e1up1um', '', 50, -0.6, 0.6) << ($(BDT_1e1up1um) : 'BDT_1e1up1um'); 
+TH1F('Fisher_1e1up1um', '', 50, -2.5, 2) << ($(Fisher_1e1up1um) : 'Fisher_1e1up1um'); 
+TH1F('Likelihood_1e1up1um', '', 50, -10, 3) << ($(Likelihood_1e1up1um) : 'Likelihood_1e1up1um'); 
+TH1F('LD_1e1up1um', '', 50, -2, 1) << ($(LD_1e1up1um) : 'LD_1e1up1um'); 
+TH1F('DNN_CPU_1e1up1um', '', 50, 0, 1) << ($(DNN_CPU_1e1up1um) : 'DNN_CPU_1e1up1um'); 
+
+TH1F('GBDT_skTMVA_1u1e', '', 50, -5, 5) << ($(GBDT_skTMVA_1u1e) : 'GBDT_skTMVA_1u1e');
+
+#_______________________________________________________________________________
+# Assign histograms to cuts
+#_______________________________________________________________________________
+
+@CutChannels:njet,nSRjet
+
+#@Cut_2u0e_Same_Charge:MET,njet,nSRjet,sumPt_SRjet, lep1_pt,lep1_eta,lep2_pt,lep2_eta,jet1_pt,jet1_eta,jet1_m,HWjj_pt,HWjj_eta,HWjj_m,SRjet1_pt,SRjet1_eta,SRjet1_m,SRjet2_pt,SRjet2_eta,SRjet2_m,HBoson_jj_pt,HBoson_jj_eta,HBoson_jj_m,all_vis_jj_pt,all_vis_jj_eta,all_vis_jj_m,HBoson_LRj_pt,HBoson_LRj_eta,HBoson_LRj_m,all_vis_LRj_pt,all_vis_LRj_eta,all_vis_LRj_m,dR_SRjet1_HWlep,dR_SRjet2_HWlep, dR_lep1_lep2,dR_jet1_HWjj, dR_jet1_lep1,dR_jet1_lep2, dR_HWjj_lep1,dR_HWjj_lep2,dnn_2u0e
+
+@Cut_2u0e_Same_Charge:METSig,dnn_2u0e,BDT_2u0e,Fisher_2u0e,Likelihood_2u0e,LD_2u0e,DNN_CPU_2u0e
+
+#@Cut_1u1e_Same_Charge:MET,njet,nSRjet,sumPt_SRjet, lep1_pt,lep1_eta,lep2_pt,lep2_eta,jet1_pt,jet1_eta,jet1_m,HWjj_pt,HWjj_eta,HWjj_m,SRjet1_pt,SRjet1_eta,SRjet1_m,SRjet2_pt,SRjet2_eta,SRjet2_m,HBoson_jj_pt,HBoson_jj_eta,HBoson_jj_m,all_vis_jj_pt,all_vis_jj_eta,all_vis_jj_m,HBoson_LRj_pt,HBoson_LRj_eta,HBoson_LRj_m,all_vis_LRj_pt,all_vis_LRj_eta,all_vis_LRj_m,dR_SRjet1_HWlep,dR_SRjet2_HWlep, dR_lep1_lep2,dR_jet1_HWjj, dR_jet1_lep1,dR_jet1_lep2, dR_HWjj_lep1,dR_HWjj_lep2,dnn_1u1e
+
+@Cut_1u1e_Same_Charge:METSig,dnn_1u1e,BDT_1u1e,Fisher_1u1e,Likelihood_1u1e,LD_1u1e,DNN_CPU_1u1e,GBDT_skTMVA_1u1e
+
+#@Cut_1e1up1um_Ele1ID:MET,njet,nSRjet,sumPt_SRjet, up_pt,up_eta,um_pt,um_eta,ele1_pt,ele1_eta, jet1_pt,jet1_eta,jet1_m,HWjj_pt,HWjj_eta,HWjj_m,SRjet1_pt,SRjet1_eta,SRjet1_m,SRjet2_pt,SRjet2_eta,SRjet2_m,ZBoson_pt,ZBoson_eta,ZBoson_m,HBoson_jj_pt,HBoson_jj_eta,HBoson_jj_m,all_vis_jj_pt,all_vis_jj_eta,all_vis_jj_m,HBoson_LRj_pt,HBoson_LRj_eta,HBoson_LRj_m,all_vis_LRj_pt,all_vis_LRj_eta,all_vis_LRj_m,HWlep_mT,HBoson_jj_mT,HBoson_LRj_mT, dR_SRjet1_HWlep,dR_SRjet2_HWlep, dR_e1up,dR_e1um,dR_upum,dR_jet1_HWjj, dR_j1e1,dR_j1up,dR_j1um, dR_HWjj_up,dR_HWjj_um,dR_HWjj_e1,dR_ZBoson_HWlep,dR_ZBoson_HWjj,dnn_1e1up1um
+
+@Cut_1e1up1um_Ele1ID:METSig,dnn_1e1up1um,BDT_1e1up1um,Fisher_1e1up1um,Likelihood_1e1up1um,LD_1e1up1um,DNN_CPU_1e1up1um
+
+#@Cut_1u1up1um_Muon2ID:MET,njet,nSRjet,sumPt_SRjet, up_pt,up_eta,um_pt,um_eta,u3_pt,u3_eta, jet1_pt,jet1_eta,jet1_m,HWjj_pt,HWjj_eta,HWjj_m,SRjet1_pt,SRjet1_eta,SRjet1_m,SRjet2_pt,SRjet2_eta,SRjet2_m,ZBoson_pt,ZBoson_eta,ZBoson_m,HBoson_jj_pt,HBoson_jj_eta,HBoson_jj_m,all_vis_jj_pt,all_vis_jj_eta,all_vis_jj_m,HBoson_LRj_pt,HBoson_LRj_eta,HBoson_LRj_m,all_vis_LRj_pt,all_vis_LRj_eta,all_vis_LRj_m,HWlep_mT,HBoson_jj_mT,HBoson_LRj_mT, dR_SRjet1_HWlep,dR_SRjet2_HWlep, dR_u3up,dR_u3um,dR_upum,dR_jet1_HWjj, dR_j1u3,dR_j1up,dR_j1um, dR_HWjj_up,dR_HWjj_um,dR_HWjj_u3,dR_ZBoson_HWlep,dR_ZBoson_HWjj,dnn_1u1up1um
+
+@Cut_1u1up1um_Muon2ID:METSig,dnn_1u1up1um,BDT_1u1up1um ,Fisher_1u1up1um ,Likelihood_1u1up1um ,LD_1u1up1um ,DNN_CPU_1u1up1um 
+
+#@Cut_1u1ep1em_Ele1ID:MET,njet,nSRjet,sumPt_SRjet, ep_pt,ep_eta,em_pt,em_eta,u1_pt,u1_eta, jet1_pt,jet1_eta,jet1_m,HWjj_pt,HWjj_eta,HWjj_m,SRjet1_pt,SRjet1_eta,SRjet1_m,SRjet2_pt,SRjet2_eta,SRjet2_m,ZBoson_pt,ZBoson_eta,ZBoson_m,HBoson_jj_pt,HBoson_jj_eta,HBoson_jj_m,all_vis_jj_pt,all_vis_jj_eta,all_vis_jj_m,HBoson_LRj_pt,HBoson_LRj_eta,HBoson_LRj_m,all_vis_LRj_pt,all_vis_LRj_eta,all_vis_LRj_m,HWlep_mT,HBoson_jj_mT,HBoson_LRj_mT, dR_SRjet1_HWlep,dR_SRjet2_HWlep, dR_u1ep,dR_u1em,dR_epem,dR_jet1_HWjj, dR_j1u1,dR_j1ep,dR_j1em, dR_HWjj_ep,dR_HWjj_em,dR_HWjj_u1, dR_ZBoson_HWlep,dR_ZBoson_HWjj,dnn_1u1ep1em
+
+@Cut_1u1ep1em_Ele1ID:METSig,dnn_1u1ep1em,BDT_1u1ep1em,Fisher_1u1ep1em,Likelihood_1u1ep1em,LD_1u1ep1em,DNN_CPU_1u1ep1em
+
+
+
+
+
+

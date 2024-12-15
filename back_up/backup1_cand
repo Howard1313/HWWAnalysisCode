@@ -1,0 +1,1756 @@
+#include "HWWAnalysisCode/ZHCand.h"
+
+#include <limits>
+#include <string.h>
+#include <iostream>
+#include <map>
+#include "TMath.h"
+
+#include "xAODParticleEvent/CompositeParticleContainer.h"
+#include "xAODParticleEvent/ParticleContainer.h"
+#include "xAODMissingET/MissingETContainer.h"
+
+
+// uncomment the following line to enable debug printouts
+#define _DEBUG_
+// you can perform debug printouts with statements like this
+// DEBUG("error number %d occurred",someInteger);
+
+// be careful to not move the _DEBUG_ flag behind the following line
+// otherwise, it will show no effect
+#include "QFramework/TQLibrary.h"
+
+ClassImp(ZHCand)
+
+//______________________________________________________________________________________________
+
+ZHCand::ZHCand(){
+  // default constructor
+  DEBUGclass("default constructor called");
+}
+
+//______________________________________________________________________________________________
+
+ZHCand::~ZHCand(){
+  // default destructor
+  DEBUGclass("destructor called");
+} 
+
+
+#define XAOD_STANDALONE 1
+// put here any EDM includes you might need, e.g.
+/* example block
+#include "xAODParticleEvent/CompositeParticleContainer.h"
+*/
+
+//______________________________________________________________________________________________
+
+bool ZHCand::makeCache() const {
+  // function that chaches vector that is later retrieved with function getVector()
+  // called on every event for every cut and histogram
+  
+  DEBUGclass("=============================== entering function ===========================");
+
+  // the TQEventObservable only works in an ASG RELEASE, hence
+  // we encapsulate the implementation in an ifdef/ifndef block
+  #ifndef HAS_XAOD
+  #warning "using plain ROOT compilation scheme - please add an ASG Analysis Release in order to use this feature!"
+  return std::numeric_limits<double>::quiet_NaN();
+  #else
+  // in the rest of this function, you should retrieve the data and calculate your return value
+  // here is the place where most of your custom code should go
+  // a couple of comments should guide you through the process
+  // when writing your code, please keep in mind that this code can be executed several times on every event
+  // make your code efficient. catch all possible problems. when in doubt, contact experts!
+
+  if (this->getCurrentEntry() == this->fCachedEntry) {
+    return true; //nothing to do here, return value already cached
+  }
+
+  // clear the old cache before recalculating it for new event
+  /* example block
+     myvector.clear();
+  */
+
+     myvector.clear();
+  // first, you can retrieve the data members you need with the 'retrieve' method:
+  /* example block:
+  // Retrieve CompositeParticle container
+  const xAOD::CompositeParticleContainer *cand = 0;
+  if(!this->fEvent->retrieve(cand, this->mContName.Data()).isSuccess()){
+  DEBUGclass("failed to retrieve candidates!");
+  return false;
+  }
+   */
+  // Retrieve CompositeParticle container
+  const xAOD::CompositeParticleContainer *cand = 0;
+  if(!this->fEvent->retrieve(cand, this->mContName.Data()).isSuccess()){
+  DEBUGclass("failed to retrieve candidates!");
+  return false;
+  }
+  DEBUGclass(" sucess retrieved candidates! %s",this->mContName.Data());
+  DEBUGclass(" cand->size(): %i",cand->size());
+  
+  // after you have retrieved your data members, you can proceed to calculate the return value
+  // probably, you first have to retrieve an element from the container
+  /* example block:
+  const xAOD::CompositeParticle *Evt = cand->at(0);
+  */
+  int nmuon=0;
+  int nmuon_p=0;
+  int nmuon_m=0;
+  int nele=0;
+  int nele_p=0;
+  int nele_m=0;
+  int njet=0;
+  int nSRjet=0;
+  int nlep=0; 
+
+  //scalar sum pt
+  float SumPt_Charge_lep=0;
+  float SumPt_SRjet=0;
+  float SumPt_All=0;
+  //vector sum px,py include miss object
+  float SumPx_lep_jet=0;
+  float SumPx_lep_SRjet=0;
+  float SumPy_lep_jet=0;
+  float SumPy_lep_SRjet=0;
+  
+  // part/otherpart, index, pt
+  std::vector<std::tuple<std::string, int, float>>vecjet;
+  std::vector<std::tuple<std::string, int, float>>vecSRjet;
+  std::vector<std::tuple<std::string, int, float>>vecmuon;
+  std::vector<std::tuple<std::string, int, float>>vecmuon_p;
+  std::vector<std::tuple<std::string, int, float>>vecmuon_m;
+  std::vector<std::tuple<std::string, int, float>>vecele;
+  std::vector<std::tuple<std::string, int, float>>vecele_p;
+  std::vector<std::tuple<std::string, int, float>>vecele_m;
+  // ele/muon, part/otherpart,index, pt
+  std::vector<std::tuple<std::string, std::string, int, float>>veclep;
+    
+//1st loop
+  DEBUGclass("============================ event info start ===============================");
+  const xAOD::CompositeParticle *Evt = cand->at(0);
+  for (std::size_t n = 0; n < Evt->nParts(); ++n){
+    if (Evt->part(n)->type()==xAOD::Type::Jet){
+      njet++;
+      const xAOD::Jet *jet = Evt->jet(n);
+      vecjet.push_back({"part", n, jet->pt() });
+      TLorentzVector jet_TLV=jet->p4();
+      SumPx_lep_jet+=jet_TLV.Px();
+      SumPy_lep_jet+=jet_TLV.Py();
+    }
+    if (Evt->part(n)->type()==xAOD::Type::Muon){
+      nmuon++;
+      nlep++;
+      const xAOD::Muon *muon = Evt->muon(n);
+      int muon_charge = muon->charge();
+      if (muon_charge==1){vecmuon_p.push_back({"part", n, muon->pt() });nmuon_p++;}
+      if (muon_charge==-1){vecmuon_m.push_back({"part", n, muon->pt() });nmuon_m++;}
+      vecmuon.push_back({"part", n, muon->pt() });
+      veclep.push_back({"muon", "part", n, muon->pt() });
+      SumPt_Charge_lep+=muon->pt();
+      SumPt_All+=muon->pt();
+      TLorentzVector muon_TLV=muon->p4();
+      SumPx_lep_jet+=muon_TLV.Px();
+      SumPy_lep_jet+=muon_TLV.Py();
+      SumPx_lep_SRjet+=muon_TLV.Px();
+      SumPy_lep_SRjet+=muon_TLV.Py();
+      //DEBUGclass("part :%i  muon eta:%f ,muon phi:%f , pt:%f ",n, muon->eta(),muon->phi(),muon->pt());
+    }
+    if (Evt->part(n)->type()==xAOD::Type::Electron){
+      nele++;
+      nlep++;
+      const xAOD::Electron* ele=Evt->electron(n);
+      int ele_charge = ele->charge();
+      if (ele_charge==1){vecele_p.push_back({"part", n, ele->pt() });nele_p++;}
+      if (ele_charge==-1){vecele_m.push_back({"part", n, ele->pt() });nele_m++;}
+      vecele.push_back({"part", n, ele->pt() });
+      veclep.push_back({"ele", "part", n, ele->pt() });
+      SumPt_Charge_lep+=ele->pt();
+      SumPt_All+=ele->pt();
+      TLorentzVector ele_TLV=ele->p4();
+      SumPx_lep_jet+=ele_TLV.Px();
+      SumPy_lep_jet+=ele_TLV.Py();
+      SumPx_lep_SRjet+=ele_TLV.Px();
+      SumPy_lep_SRjet+=ele_TLV.Py();
+    }    
+  }
+  for (std::size_t n = 0; n < Evt->nOtherParts(); ++n){
+    if (Evt->otherPart(n)->type()==xAOD::Type::Jet){
+      nSRjet++;
+      const xAOD::Jet *jet = Evt->otherJet(n);
+      vecSRjet.push_back({"otherpart", n, jet->pt() });
+      SumPt_SRjet+=jet->pt();
+      SumPt_All+=jet->pt();
+      TLorentzVector jet_TLV=jet->p4();
+      SumPx_lep_SRjet+=jet_TLV.Px();
+      SumPy_lep_SRjet+=jet_TLV.Py();
+    }
+    if (Evt->otherPart(n)->type()==xAOD::Type::Muon){
+      nmuon++;
+      nlep++;
+      const xAOD::Muon *muon = Evt->otherMuon(n);
+      int muon_charge = muon->charge();
+      if (muon_charge==1){vecmuon_p.push_back({"otherpart", n, muon->pt() });nmuon_p++;}
+      if (muon_charge==-1){vecmuon_m.push_back({"otherpart", n, muon->pt() });nmuon_m++;}
+      vecmuon.push_back({"otherpart", n, muon->pt() });
+      veclep.push_back({"muon", "otherpart", n, muon->pt() });
+      SumPt_Charge_lep+=muon->pt();
+      SumPt_All+=muon->pt();
+      TLorentzVector muon_TLV=muon->p4();
+      SumPx_lep_jet+=muon_TLV.Px();
+      SumPy_lep_jet+=muon_TLV.Py();
+      SumPx_lep_SRjet+=muon_TLV.Px();
+      SumPy_lep_SRjet+=muon_TLV.Py();
+    }
+    if (Evt->otherPart(n)->type()==xAOD::Type::Electron){
+      nele++;
+      nlep++;
+      const xAOD::Electron* ele=Evt->otherElectron(n);
+      int ele_charge = ele->charge();
+      if (ele_charge==1){vecele_p.push_back({"otherpart", n, ele->pt() });nele_p++;}
+      if (ele_charge==-1){vecele_m.push_back({"otherpart", n, ele->pt() });nele_m++;}
+      vecele.push_back({"otherpart", n, ele->pt() });
+      veclep.push_back({"ele", "otherpart", n, ele->pt() });
+      SumPt_Charge_lep+=ele->pt();
+      SumPt_All+=ele->pt();
+      TLorentzVector ele_TLV=ele->p4();
+      SumPx_lep_jet+=ele_TLV.Px();
+      SumPy_lep_jet+=ele_TLV.Py();
+      SumPx_lep_SRjet+=ele_TLV.Px();
+      SumPy_lep_SRjet+=ele_TLV.Py();
+    }    
+  }
+
+  const xAOD::MissingET *METCand = Evt->missingET();
+  SumPx_lep_jet+=METCand->mpx();
+  SumPy_lep_jet+=METCand->mpy();
+  SumPx_lep_SRjet+=METCand->mpx();
+  SumPy_lep_SRjet+=METCand->mpy();
+  //DEBUGclass("retrieve done");
+  
+  if(njet>=1) std::sort(vecjet.begin(), vecjet.end(), cmp1 );
+  if(nSRjet>=1) std::sort(vecSRjet.begin(), vecSRjet.end(), cmp1 );
+  
+  if(nmuon>=1) std::sort(vecmuon.begin(), vecmuon.end(), cmp1 );
+  if(nmuon_p>=1) std::sort(vecmuon_p.begin(), vecmuon_p.end(), cmp1 );
+  if(nmuon_m>=1) std::sort(vecmuon_m.begin(), vecmuon_m.end(), cmp1 );
+  
+  if(nele>=1) std::sort(vecele.begin(), vecele.end(), cmp1 );
+  if(nele_p>=1) std::sort(vecele_p.begin(), vecele_p.end(), cmp1 );
+  if(nele_m>=1) std::sort(vecele_m.begin(), vecele_m.end(), cmp1 );
+  
+  if(nlep>=1) std::sort(veclep.begin(), veclep.end(), cmp2 );
+  //DEBUGclass("sort done");
+
+  //SRjet
+  const xAOD::Jet* SRjet1;
+  TLorentzVector SRjet1_TLV(9999999, 9999999, 9999999, 9999999);
+  if(nSRjet>=1) {
+    auto type = std::get<0>(vecSRjet.at(0));
+    int index = std::get<1>(vecSRjet.at(0));
+    if(type == "otherpart") SRjet1 = Evt->otherJet(index);
+    SRjet1_TLV = SRjet1->p4();
+  }
+  const xAOD::Jet* SRjetLast;
+  TLorentzVector SRjetLast_TLV(9999999, 9999999, 9999999, 9999999);
+  if(nSRjet>=1) {
+    auto type = std::get<0>(vecSRjet.at(nSRjet-1));
+    int index = std::get<1>(vecSRjet.at(nSRjet-1));
+    if(type == "otherpart") SRjetLast = Evt->otherJet(index);
+    SRjetLast_TLV = SRjetLast->p4();
+  }
+  
+  //jet 
+  float jet1_pt=9999999;
+  float jet1_eta=9999999;
+  float jet1_phi=9999999;
+  float jet1_mass=9999999;
+  const xAOD::Jet* jet1;
+  TLorentzVector jet1_TLV(9999999, 9999999, 9999999, 9999999);
+  if(njet>=1) {
+    auto type = std::get<0>(vecjet.at(0));
+    int index = std::get<1>(vecjet.at(0));
+    if(type == "part") jet1 = Evt->jet(index);
+    jet1_TLV = jet1->p4();
+    jet1_pt = jet1->pt();
+    jet1_eta = jet1->eta();
+    jet1_phi = jet1->phi();
+    jet1_mass = jet1_TLV.M();
+    //DEBUGclass("jet1_pt:%f",jet1_pt);
+    //DEBUGclass("jet1_eta:%f",jet1_eta);
+    //DEBUGclass("jet1_phi:%f",jet1_phi);
+    //DEBUGclass("jet1_mass:%f",jet1_mass);
+  }
+  
+  float jet2_pt=9999999;
+  float jet2_eta=9999999;
+  float jet2_phi=9999999;
+  float jet2_mass=9999999;
+  const xAOD::Jet* jet2;
+  TLorentzVector jet2_TLV(9999999, 9999999, 9999999, 9999999);
+  if(njet>=2) {
+    auto type = std::get<0>(vecjet.at(1));
+    int index = std::get<1>(vecjet.at(1));
+    if(type == "part") jet2 = Evt->jet(index);
+    jet2_TLV = jet2->p4();
+    jet2_pt = jet2->pt();
+    jet2_eta = jet2->eta();
+    jet2_phi = jet2->phi();
+    jet2_mass = jet2_TLV.M();
+    //DEBUGclass("jet2_pt:%f",jet2_pt);
+    //DEBUGclass("jet2_eta:%f",jet2_eta);
+    //DEBUGclass("jet2_phi:%f",jet2_phi);
+    //DEBUGclass("jet2_mass:%f",jet2_mass);
+  }
+  //DEBUGclass("jet done");
+  
+  //ele 
+  float ele1_pt=9999999;
+  float ele1_eta=9999999;
+  float ele1_phi=9999999;
+  float ele1_mass=9999999;
+  int ele1_charge=9999999;
+  const xAOD::Electron* ele1;
+  TLorentzVector ele1_TLV(9999999, 9999999, 9999999, 9999999);
+  if(nele>=1){
+    int index = std::get<1>(vecele.at(0));
+    auto type = std::get<0>(vecele.at(0));
+    if(type == "part") ele1 = Evt->electron(index);
+    if(type == "otherpart") ele1 = Evt->otherElectron(index);
+    ele1_pt = ele1->pt();
+    ele1_eta =  ele1->eta();
+    ele1_phi =  ele1->phi();
+    ele1_charge =  ele1->charge();
+    ele1_TLV =  ele1->p4();
+    ele1_mass = ele1_TLV.M();
+    DEBUGclass("ele1 type: %s",type.c_str());
+  } 
+
+  float ele2_pt=9999999;
+  float ele2_eta=9999999;
+  float ele2_phi=9999999;
+  float ele2_mass=9999999;
+  int ele2_charge=9999999;
+  const xAOD::Electron* ele2;
+  TLorentzVector ele2_TLV(9999999, 9999999, 9999999, 9999999);
+  if(nele>=2){
+    int index = std::get<1>(vecele.at(1));
+    auto type = std::get<0>(vecele.at(1));
+    if(type == "part") ele2 = Evt->electron(index);
+    if(type == "otherpart") ele2 = Evt->otherElectron(index);
+    ele2_pt = ele2->pt();
+    ele2_eta =  ele2->eta();
+    ele2_phi =  ele2->phi();
+    ele2_charge =  ele2->charge();
+    ele2_TLV =  ele2->p4();
+    ele2_mass = ele2_TLV.M();
+    DEBUGclass("ele2 type: %s",type.c_str());
+  } 
+
+  const xAOD::Electron* ele1_p;
+  TLorentzVector ele1_p_TLV(9999999, 9999999, 9999999, 9999999);
+  if(nele_p>=1){
+    int index = std::get<1>(vecele_p.at(0));
+    auto type = std::get<0>(vecele_p.at(0));
+    if(type == "part") ele1_p = Evt->electron(index);
+    if(type == "otherpart") ele1_p = Evt->otherElectron(index);
+    ele1_p_TLV =  ele1_p->p4();
+  } 
+
+  const xAOD::Electron* ele1_m;
+  TLorentzVector ele1_m_TLV(9999999, 9999999, 9999999, 9999999);
+  if(nele_m>=1){
+    int index = std::get<1>(vecele_m.at(0));
+    auto type = std::get<0>(vecele_m.at(0));
+    if(type == "part") ele1_m = Evt->electron(index);
+    if(type == "otherpart") ele1_m = Evt->otherElectron(index);
+    ele1_m_TLV =  ele1_m->p4();
+  }
+  DEBUGclass("ele done");
+  
+  //muon
+  float muon1_pt=9999999;
+  float muon1_eta=9999999;
+  float muon1_phi=9999999;
+  float muon1_mass=9999999;
+  int muon1_charge=9999999;
+  const xAOD::Muon* muon1;
+  TLorentzVector muon1_TLV(9999999, 9999999, 9999999, 9999999);
+  if(nmuon>=1){
+    int index = std::get<1>(vecmuon.at(0));
+    auto type = std::get<0>(vecmuon.at(0));
+    if(type == "part") muon1 = Evt->muon(index);
+    if(type == "otherpart") muon1 = Evt->otherMuon(index);
+    muon1_pt = muon1->pt();
+    muon1_eta =  muon1->eta();
+    muon1_phi =  muon1->phi();
+    muon1_charge =  muon1->charge();
+    muon1_TLV =  muon1->p4();
+    muon1_mass = muon1_TLV.M();
+    DEBUGclass("muon1 type: %s",type.c_str());
+  }
+  
+  float muon2_pt=9999999;
+  float muon2_eta=9999999;
+  float muon2_phi=9999999;
+  float muon2_mass=9999999;
+  float muon2_charge=9999999;
+  const xAOD::Muon* muon2;
+  TLorentzVector muon2_TLV(9999999, 9999999, 9999999, 9999999);
+  if(nmuon>=2){
+    int index = std::get<1>(vecmuon.at(1));
+    auto type = std::get<0>(vecmuon.at(1));
+    if(type == "part") muon2 = Evt->muon(index);
+    if(type == "otherpart") muon2 = Evt->otherMuon(index);
+    muon2_pt = muon2->pt();
+    muon2_eta =  muon2->eta();
+    muon2_phi =  muon2->phi();
+    muon2_charge =  muon2->charge();
+    muon2_TLV =  muon2->p4();
+    muon2_mass = muon2_TLV.M();
+    DEBUGclass("muon2 type: %s",type.c_str());
+  }
+
+  float muon3_pt=9999999;
+  float muon3_eta=9999999;
+  float muon3_phi=9999999;
+  float muon3_mass=9999999;
+  int muon3_charge=9999999;
+  const xAOD::Muon* muon3;
+  TLorentzVector muon3_TLV(9999999, 9999999, 9999999, 9999999);
+  if(nmuon>=3){
+    int index = std::get<1>(vecmuon.at(2));
+    auto type = std::get<0>(vecmuon.at(2));
+    if(type == "part") muon3 = Evt->muon(index);
+    if(type == "otherpart") muon3 = Evt->otherMuon(index);
+    muon3_pt = muon3->pt();
+    muon3_eta =  muon3->eta();
+    muon3_phi =  muon3->phi();
+    muon3_charge =  muon3->charge();
+    muon3_TLV =  muon3->p4();
+    muon3_mass = muon3_TLV.M();
+    DEBUGclass("muon3 type: %s",type.c_str());
+  }
+
+  const xAOD::Muon* up1;
+  TLorentzVector up1_TLV(9999999, 9999999, 9999999, 9999999);
+  if(nmuon_p>=1){
+    int index = std::get<1>(vecmuon_p.at(0));
+    auto type = std::get<0>(vecmuon_p.at(0));
+    if(type == "part") up1 = Evt->muon(index);
+    if(type == "otherpart") up1 = Evt->otherMuon(index);
+    up1_TLV =  up1->p4();
+  } 
+
+  const xAOD::Muon* up2;
+  TLorentzVector up2_TLV(9999999, 9999999, 9999999, 9999999);
+  if(nmuon_p>=2){
+    int index = std::get<1>(vecmuon_p.at(1));
+    auto type = std::get<0>(vecmuon_p.at(1));
+    if(type == "part") up2 = Evt->muon(index);
+    if(type == "otherpart") up2 = Evt->otherMuon(index);
+    up2_TLV =  up2->p4();
+  }
+
+  const xAOD::Muon* um1;
+  TLorentzVector um1_TLV(9999999, 9999999, 9999999, 9999999);
+  if(nmuon_m>=1){
+    int index = std::get<1>(vecmuon_m.at(0));
+    auto type = std::get<0>(vecmuon_m.at(0));
+    if(type == "part") um1 = Evt->muon(index);
+    if(type == "otherpart") um1 = Evt->otherMuon(index);
+    um1_TLV =  um1->p4();
+  }
+
+  const xAOD::Muon* um2;
+  TLorentzVector um2_TLV(9999999, 9999999, 9999999, 9999999);
+  if(nmuon_m>=2){
+    int index = std::get<1>(vecmuon_m.at(1));
+    auto type = std::get<0>(vecmuon_m.at(1));
+    if(type == "part") um2 = Evt->muon(index);
+    if(type == "otherpart") um2 = Evt->otherMuon(index);
+    um2_TLV =  um2->p4();
+  }
+  //DEBUGclass("muon done");
+
+  //uPair
+  std::vector<std::tuple<float,std::string,std::string,int,int>> vec_uPair;
+  for (std::size_t i = 0; i < nmuon_p; ++i) {
+    const xAOD::Muon* muon_p;
+    auto up_type = std::get<0>(vecmuon_p.at(i));
+    int up_index = std::get<1>(vecmuon_p.at(i));
+    if(up_type == "part") muon_p = Evt->muon(up_index);
+    if(up_type == "otherpart") muon_p = Evt->otherMuon(up_index);
+    auto muon_p_TLV = muon_p->p4();
+    for (std::size_t i = 0; i < nmuon_m; ++i) {
+      const xAOD::Muon* muon_m;
+      auto um_type = std::get<0>(vecmuon_m.at(i));
+      int um_index = std::get<1>(vecmuon_m.at(i));
+      if(um_type == "part") muon_m = Evt->muon(um_index);
+      if(um_type == "otherpart") muon_m = Evt->otherMuon(um_index);
+      auto muon_m_TLV = muon_m->p4();
+
+      auto uPair_TLV = muon_p_TLV+muon_m_TLV;
+      vec_uPair.push_back({uPair_TLV.M(),up_type,um_type,up_index,um_index});
+      //DEBUGclass("M_uPair:%f",uPair_TLV.M());
+    }
+  }
+  //DEBUGclass("uPair done");
+
+  //ePair
+  std::vector<std::tuple<float,std::string,std::string,int,int>> vec_ePair;
+  for (std::size_t i = 0; i < nele_p; ++i) {
+    const xAOD::Electron* ele_p;
+    auto ep_type = std::get<0>(vecele_p.at(i));
+    int ep_index = std::get<1>(vecele_p.at(i));
+    if(ep_type == "part") ele_p = Evt->electron(ep_index);
+    if(ep_type == "otherpart") ele_p = Evt->otherElectron(ep_index);
+    auto ele_p_TLV = ele_p->p4();
+    for (std::size_t i = 0; i < nele_m; ++i) {
+      const xAOD::Electron* ele_m;
+      auto em_type = std::get<0>(vecele_m.at(i));
+      int em_index = std::get<1>(vecele_m.at(i));
+      if(em_type == "part") ele_m = Evt->electron(em_index);
+      if(em_type == "otherpart") ele_m = Evt->otherElectron(em_index);
+      auto ele_m_TLV = ele_m->p4();
+
+      auto ePair_TLV = ele_p_TLV+ele_m_TLV;
+      vec_ePair.push_back({ePair_TLV.M(),ep_type,em_type,ep_index,em_index});
+      //DEBUGclass("M_ePair:%f",ePair_TLV.M());
+    }
+  }
+  //DEBUGclass("ePair done");
+
+  //M_Zc_uPair
+  float Zmass = 91187.6;//MeV
+  float Hmass = 125250;//MeV
+  float min_mass_diff_Z_uPair = 9999999;
+  std::tuple<float,std::string,std::string,int,int> Zc_uPair;
+  float M_Zc_uPair = 9999999;
+  TLorentzVector method2_Zuu_TLV(9999999, 9999999, 9999999, 9999999);
+  TLorentzVector method2_Zup_TLV(9999999, 9999999, 9999999, 9999999);
+  TLorentzVector method2_Zum_TLV(9999999, 9999999, 9999999, 9999999);
+  if (vec_uPair.size()>=1){
+    for (std::size_t i = 0; i < vec_uPair.size(); ++i) {
+      float M_uPair = std::get<0>(vec_uPair.at(i));
+      float mass_diff = std::abs(M_uPair-Zmass);
+      if(mass_diff<min_mass_diff_Z_uPair) {
+        min_mass_diff_Z_uPair=mass_diff; 
+        Zc_uPair = vec_uPair.at(i);
+      }
+    }
+    M_Zc_uPair = std::get<0>(Zc_uPair);
+    auto up_type = std::get<1>(Zc_uPair);
+    auto um_type = std::get<2>(Zc_uPair);
+    auto up_index = std::get<3>(Zc_uPair);
+    auto um_index = std::get<4>(Zc_uPair);
+
+    const xAOD::Muon* muon_p;
+    if(up_type == "part") muon_p = Evt->muon(up_index);
+    if(up_type == "otherpart") muon_p = Evt->otherMuon(up_index);
+    method2_Zup_TLV = muon_p->p4();
+    
+    const xAOD::Muon* muon_m;
+    if(um_type == "part") muon_m = Evt->muon(um_index);
+    if(um_type == "otherpart") muon_m = Evt->otherMuon(um_index);
+    method2_Zum_TLV = muon_m->p4();
+
+    method2_Zuu_TLV = method2_Zup_TLV + method2_Zum_TLV;
+    
+    //DEBUGclass("M_Zc_uPair:%f",M_Zc_uPair);
+  }
+  //DEBUGclass("M_Zc_uPair done");
+
+  //M_Zc_ePair
+  float min_mass_diff_Z_ePair = 9999999;
+  std::tuple<float,std::string,std::string,int,int> Zc_ePair;
+  float M_Zc_ePair = 9999999;
+  TLorentzVector method2_Zee_TLV(9999999, 9999999, 9999999, 9999999);
+  if (vec_ePair.size()>=1){
+    for (std::size_t i = 0; i < vec_ePair.size(); ++i) {
+      float M_ePair = std::get<0>(vec_ePair.at(i));
+      float mass_diff = std::abs(M_ePair-Zmass);
+      if(mass_diff<min_mass_diff_Z_ePair) {
+        min_mass_diff_Z_ePair=mass_diff; 
+        Zc_ePair = vec_ePair.at(i);
+      }
+    }
+    M_Zc_ePair = std::get<0>(Zc_ePair);
+    auto ep_type = std::get<1>(Zc_ePair);
+    auto em_type = std::get<2>(Zc_ePair);
+    auto ep_index = std::get<3>(Zc_ePair);
+    auto em_index = std::get<4>(Zc_ePair);
+
+    const xAOD::Electron* ele_p;
+    if(ep_type == "part") ele_p = Evt->electron(ep_index);
+    if(ep_type == "otherpart") ele_p = Evt->otherElectron(ep_index);
+    auto ele_p_TLV = ele_p->p4();
+    
+    const xAOD::Electron* ele_m;
+    if(em_type == "part") ele_m = Evt->electron(em_index);
+    if(em_type == "otherpart") ele_m = Evt->otherElectron(em_index);
+    auto ele_m_TLV = ele_m->p4();
+
+    method2_Zee_TLV = ele_p_TLV + ele_m_TLV;
+    
+    //DEBUGclass("M_Zc_ePair:%f",M_Zc_ePair);
+  }
+  //DEBUGclass("M_Zc_ePair done");
+
+  //lep_no_Zc_uPair
+  auto veclep_no_Zc_uPair = veclep;
+  if (vec_uPair.size()>=1){
+    auto uPair_p_type = std::get<1>(Zc_uPair);
+    auto uPair_m_type = std::get<2>(Zc_uPair);
+    int uPair_p_index = std::get<3>(Zc_uPair);
+    int uPair_m_index = std::get<4>(Zc_uPair);
+  
+    int uPair_p_posi=0;
+    int uPair_m_posi=0;
+    if(nmuon_p>=1 && nmuon_m>=1 && nlep>=3){
+      for (std::size_t i = 0; i < nlep; ++i) {
+        auto flavor = std::get<0>(veclep.at(i));
+        auto type = std::get<1>(veclep.at(i));
+        int index = std::get<2>(veclep.at(i));
+        if(flavor=="muon" && type==uPair_p_type && index== uPair_p_index){uPair_p_posi=i;}
+        if(flavor=="muon" && type==uPair_m_type && index== uPair_m_index){uPair_m_posi=i;}
+      }
+      if (uPair_p_posi>uPair_m_posi){
+        veclep_no_Zc_uPair.erase(veclep_no_Zc_uPair.begin()+uPair_p_posi);
+        veclep_no_Zc_uPair.erase(veclep_no_Zc_uPair.begin()+uPair_m_posi);
+      }
+      if (uPair_p_posi<uPair_m_posi){
+        veclep_no_Zc_uPair.erase(veclep_no_Zc_uPair.begin()+uPair_m_posi);
+        veclep_no_Zc_uPair.erase(veclep_no_Zc_uPair.begin()+uPair_p_posi);
+      }
+    }
+    //DEBUGclass("n_lep:%f",veclep.size());
+    //DEBUGclass("n_lep_no_Zc_uPair:%f",veclep_no_Zc_uPair.size());
+  }
+  //DEBUGclass("lep_no_Zc_uPair done");
+
+  //lep_no_Zc_ePair
+  auto veclep_no_Zc_ePair = veclep;
+  if (vec_ePair.size()>=1){
+    auto ePair_p_type = std::get<1>(Zc_ePair);
+    auto ePair_m_type = std::get<2>(Zc_ePair);
+    int ePair_p_index = std::get<3>(Zc_ePair);
+    int ePair_m_index = std::get<4>(Zc_ePair); 
+    int ePair_p_posi=0;
+    int ePair_m_posi=0;
+    if(nele_p>=1 && nele_m>=1 && nlep>=3){
+      for (std::size_t i = 0; i < nlep; ++i) {
+        auto flavor = std::get<0>(veclep.at(i));
+        auto type = std::get<1>(veclep.at(i));
+        int index = std::get<2>(veclep.at(i));
+        if(flavor=="ele" && type==ePair_p_type && index== ePair_p_index){ePair_p_posi=i;}
+        if(flavor=="ele" && type==ePair_m_type && index== ePair_m_index){ePair_m_posi=i;}
+      }
+      if (ePair_p_posi>ePair_m_posi){
+        veclep_no_Zc_ePair.erase(veclep_no_Zc_ePair.begin()+ePair_p_posi);
+        veclep_no_Zc_ePair.erase(veclep_no_Zc_ePair.begin()+ePair_m_posi);
+      }
+      if (ePair_p_posi<ePair_m_posi){
+        veclep_no_Zc_ePair.erase(veclep_no_Zc_ePair.begin()+ePair_m_posi);
+        veclep_no_Zc_ePair.erase(veclep_no_Zc_ePair.begin()+ePair_p_posi);
+      }
+    }
+  }
+  //DEBUGclass("lep_no_Zc_ePair done");
+
+  //noZcUpair_Hlep
+  TLorentzVector noZcUpair_Hlep_TLV(9999999, 9999999, 9999999, 9999999);
+  TLorentzVector noZcUpair_Hmuon_TLV(9999999, 9999999, 9999999, 9999999);
+  if (veclep_no_Zc_uPair.size()>=1){
+    auto flavor = std::get<0>(veclep_no_Zc_uPair.at(0));
+    auto type = std::get<1>(veclep_no_Zc_uPair.at(0));
+    int index = std::get<2>(veclep_no_Zc_uPair.at(0));
+    
+    const xAOD::Muon* muon;
+    if(flavor=="muon"){
+      if(type == "part") muon = Evt->muon(index);
+      if(type == "otherpart") muon = Evt->otherMuon(index);
+      noZcUpair_Hlep_TLV = muon->p4();
+      noZcUpair_Hmuon_TLV = muon->p4();
+    }
+
+    const xAOD::Electron* ele;
+    if(flavor=="ele"){
+      if(type == "part") ele = Evt->electron(index);
+      if(type == "otherpart") ele = Evt->otherElectron(index);
+      noZcUpair_Hlep_TLV = ele->p4();
+    }
+  }
+
+  //noZcEpair_Hlep
+  TLorentzVector noZcEpair_Hlep_TLV(9999999, 9999999, 9999999, 9999999);
+  TLorentzVector noZcEpair_Hmuon_TLV(9999999, 9999999, 9999999, 9999999);
+  if (veclep_no_Zc_ePair.size()>=1){
+    auto flavor = std::get<0>(veclep_no_Zc_ePair.at(0));
+    auto type = std::get<1>(veclep_no_Zc_ePair.at(0));
+    int index = std::get<2>(veclep_no_Zc_ePair.at(0));
+
+    const xAOD::Muon* muon;
+    if(flavor=="muon"){
+      if(type == "part") muon = Evt->muon(index);
+      if(type == "otherpart") muon = Evt->otherMuon(index);
+      noZcEpair_Hlep_TLV = muon->p4();
+      noZcEpair_Hmuon_TLV = muon->p4();
+    }
+
+    const xAOD::Electron* ele;
+    if(flavor=="ele"){
+      if(type == "part") ele = Evt->electron(index);
+      if(type == "otherpart") ele = Evt->otherElectron(index);
+      noZcEpair_Hlep_TLV = ele->p4();
+    }
+  }
+  
+  //M_jet1_noZcUpair_Hlep
+  float M_jet1_noZcUpair_Hlep=9999999;
+  float dR_jet1_noZcUpair_Hlep=9999999;
+  if (veclep_no_Zc_uPair.size()>=1){
+    TLorentzVector jet1_noZcUpair_Hlep_TLV = jet1_TLV + noZcUpair_Hlep_TLV; 
+    M_jet1_noZcUpair_Hlep = jet1_noZcUpair_Hlep_TLV.M();
+    dR_jet1_noZcUpair_Hlep = jet1_TLV.DeltaR(noZcUpair_Hlep_TLV);
+  }
+
+  //M_jet2_noZcUpair_Hlep
+  float M_jet2_noZcUpair_Hlep=9999999;
+  float dR_jet2_noZcUpair_Hlep=9999999;
+  if (veclep_no_Zc_uPair.size()>=1){
+    TLorentzVector jet2_noZcUpair_Hlep_TLV = jet2_TLV + noZcUpair_Hlep_TLV; 
+    M_jet2_noZcUpair_Hlep = jet2_noZcUpair_Hlep_TLV.M();
+    dR_jet2_noZcUpair_Hlep = jet2_TLV.DeltaR(noZcUpair_Hlep_TLV);
+  }
+
+  //M_jet1_noZcEpair_Hlep
+  float M_jet1_noZcEpair_Hlep=9999999;
+  float dR_jet1_noZcEpair_Hlep=9999999;
+  if (veclep_no_Zc_ePair.size()>=1){
+    TLorentzVector jet1_noZcEpair_Hlep_TLV = jet1_TLV + noZcEpair_Hlep_TLV; 
+    M_jet1_noZcEpair_Hlep = jet1_noZcEpair_Hlep_TLV.M();
+    dR_jet1_noZcEpair_Hlep = jet1_TLV.DeltaR(noZcEpair_Hlep_TLV);
+  }
+  
+  //lep
+  float lep1_pt=9999999;
+  float lep1_eta=9999999;
+  float lep1_phi=9999999;
+  int lep1_charge=9999999;
+  int lep1_flavor=9999999;
+  TLorentzVector lep1_TLV(9999999, 9999999, 9999999, 9999999);
+  if(nlep>=1) {
+    lep1_pt = std::get<3>(veclep.at(0));
+    auto flavor = std::get<0>(veclep.at(0));
+    auto type = std::get<1>(veclep.at(0));
+    int index = std::get<2>(veclep.at(0));
+    const xAOD::Muon* muon;
+    if (flavor=="muon") {
+      lep1_flavor = 0;
+      if(type == "part") muon = Evt->muon(index);
+      if(type == "otherpart") muon = Evt->otherMuon(index);
+      auto lep1=muon;
+      lep1_eta = lep1->eta();
+      lep1_phi = lep1->phi();
+      lep1_charge = lep1->charge();
+      lep1_TLV = lep1->p4();
+    }
+    const xAOD::Electron* ele;
+    if (flavor=="ele") {
+      lep1_flavor = 1;
+      if(type == "part") ele = Evt->electron(index);
+      if(type == "otherpart") ele = Evt->otherElectron(index);
+      auto lep1=ele;
+      lep1_eta = lep1->eta();
+      lep1_phi = lep1->phi();
+      lep1_charge = lep1->charge();
+      lep1_TLV = lep1->p4();
+    }
+  }
+
+  float lep2_pt=9999999;
+  float lep2_eta=9999999;
+  float lep2_phi=9999999;
+  int lep2_charge=9999999;
+  int lep2_flavor=9999998;
+  TLorentzVector lep2_TLV(9999999, 9999999, 9999999, 9999999);
+  if(nlep>=2) {
+    lep2_pt = std::get<3>(veclep.at(1));
+    auto flavor = std::get<0>(veclep.at(1));
+    auto type = std::get<1>(veclep.at(1));
+    int index = std::get<2>(veclep.at(1));
+    const xAOD::Muon* muon;
+    if (flavor=="muon") {
+      lep2_flavor = 0;
+      if(type == "part") muon = Evt->muon(index);
+      if(type == "otherpart") muon = Evt->otherMuon(index);
+      auto lep2=muon;
+      lep2_eta = lep2->eta();
+      lep2_phi = lep2->phi();
+      lep2_charge = lep2->charge();
+      lep2_TLV = lep2->p4();
+    }
+    const xAOD::Electron* ele;
+    if (flavor=="ele") {
+      lep2_flavor = 1;
+      if(type == "part") ele = Evt->electron(index);
+      if(type == "otherpart") ele = Evt->otherElectron(index);
+      auto lep2=ele;
+      lep2_eta = lep2->eta();
+      lep2_phi = lep2->phi();
+      lep2_charge = lep2->charge();
+      lep2_TLV = lep2->p4();
+    }
+  }
+
+  float lep3_pt=9999999;
+  float lep3_eta=9999999;
+  float lep3_phi=9999999;
+  int lep3_charge=9999999;
+  int lep3_flavor=9999997;
+  TLorentzVector lep3_TLV(9999999, 9999999, 9999999, 9999999);
+  if(nlep>=3) {
+    lep3_pt = std::get<3>(veclep.at(2));
+    auto flavor = std::get<0>(veclep.at(2));
+    auto type = std::get<1>(veclep.at(2));
+    int index = std::get<2>(veclep.at(2));
+    const xAOD::Muon* muon;
+    if (flavor=="muon") {
+      lep3_flavor = 0;
+      if(type == "part") muon = Evt->muon(index);
+      if(type == "otherpart") muon = Evt->otherMuon(index);
+      auto lep3=muon;
+      lep3_eta = lep3->eta();
+      lep3_phi = lep3->phi();
+      lep3_charge = lep3->charge();
+      lep3_TLV = lep3->p4();
+    }
+    const xAOD::Electron* ele;
+    if (flavor=="ele") {
+      lep3_flavor = 1;
+      if(type == "part") ele = Evt->electron(index);
+      if(type == "otherpart") ele = Evt->otherElectron(index);
+      auto lep3=ele;
+      lep3_eta = lep3->eta();
+      lep3_phi = lep3->phi();
+      lep3_charge = lep3->charge();
+      lep3_TLV = lep3->p4();
+    }
+  }
+  //DEBUGclass("lep done");
+
+  //DEBUGclass("out jet1_TLV.Pt():%f",jet1_TLV.Pt());
+  //DEBUGclass("out jet1_TLV.M():%f",jet1_TLV.M());
+  //DEBUGclass("out jet1_TLV.E():%f",jet1_TLV.E());
+  //jet1 dR,M,mT
+  float M_jet1_muon1 = 9999999;
+  float mT_jet1_muon1 = 9999999;
+  float dR_jet1_muon1 = 9999999;
+  float dEta_jet1_muon1 = 9999999;
+  float dPhi_jet1_muon1 = 9999999;
+  float M_jet1_muon2 = 9999999;
+  float mT_jet1_muon2 = 9999999;
+  float dR_jet1_muon2 = 9999999;
+  float dEta_jet1_muon2 = 9999999;
+  float dPhi_jet1_muon2 = 9999999;
+  float M_jet1_muon3 = 9999999;
+  float mT_jet1_muon3 = 9999999;
+  float dR_jet1_muon3 = 9999999;
+  float M_jet1_ele1 = 9999999;
+  float mT_jet1_ele1 = 9999999;
+  float dR_jet1_ele1 = 9999999;
+  float dEta_jet1_ele1 = 9999999;
+  float dPhi_jet1_ele1 = 9999999;
+  float M_jet1_ele2 = 9999999;
+  float mT_jet1_ele2 = 9999999;
+  float dR_jet1_ele2 = 9999999;
+
+  float mT_jet1_noZcUpair_Hlep = 9999999;
+  float mT_jet1_noZcEpair_Hlep = 9999999;
+  
+  if(njet>=1 && veclep_no_Zc_uPair.size()>=1){
+    auto H_TLV = jet1_TLV+noZcUpair_Hlep_TLV;
+    auto ET=sqrt(H_TLV.M()* H_TLV.M()+ H_TLV.Pt()* H_TLV.Pt());
+    double deltaPhi = fabs(H_TLV.Phi()-METCand->phi());
+    if (deltaPhi >= TMath::Pi()) deltaPhi = 2*TMath::Pi()-deltaPhi;
+    mT_jet1_noZcUpair_Hlep  = sqrt(2*ET*METCand->met()*(1-cos(deltaPhi)));
+    //DEBUGclass("mT_jet1_noZcUpair_Hlep:%f",mT_jet1_noZcUpair_Hlep);
+  }
+
+  if(njet>=1 && veclep_no_Zc_ePair.size()>=1){
+    auto H_TLV = jet1_TLV+noZcEpair_Hlep_TLV;
+    auto ET=sqrt(H_TLV.M()* H_TLV.M()+ H_TLV.Pt()* H_TLV.Pt());
+    double deltaPhi = fabs(H_TLV.Phi()-METCand->phi());
+    if (deltaPhi >= TMath::Pi()) deltaPhi = 2*TMath::Pi()-deltaPhi;
+    mT_jet1_noZcEpair_Hlep  = sqrt(2*ET*METCand->met()*(1-cos(deltaPhi)));
+    //DEBUGclass("mT_jet1_noZcEpair_Hlep:%f",mT_jet1_noZcEpair_Hlep);
+  }
+  
+  if(njet>=1 && nmuon>=1){
+    auto H_TLV = jet1_TLV+muon1_TLV;
+    M_jet1_muon1 = H_TLV.M();
+    //DEBUGclass("M_jet1_muon1:%f",M_jet1_muon1);
+    
+    //DEBUGclass("jet1_TLV.Pt():%f",jet1_TLV.Pt());
+    //DEBUGclass("jet1_TLV.M():%f",jet1_TLV.M());
+    //DEBUGclass("jet1_TLV.E():%f",jet1_TLV.E());
+    
+    //DEBUGclass("muon1_TLV.Pt():%f",muon1_TLV.Pt());
+    //DEBUGclass("muon1_TLV.M():%f",muon1_TLV.M());
+    //DEBUGclass("muon1_TLV.E():%f",muon1_TLV.E());
+    auto ET=sqrt(H_TLV.M()* H_TLV.M()+ H_TLV.Pt()* H_TLV.Pt());
+    double deltaPhi = fabs(H_TLV.Phi()-METCand->phi());
+    if (deltaPhi >= TMath::Pi()) deltaPhi = 2*TMath::Pi()-deltaPhi;
+    mT_jet1_muon1  = sqrt(2*ET*METCand->met()*(1-cos(deltaPhi)));
+    //DEBUGclass("H_TLV.Pt():%f",H_TLV.Pt());
+    //DEBUGclass("ET:%f",ET);
+    //DEBUGclass("METCand->met():%f",METCand->met());
+    //DEBUGclass("mT_jet1_muon1:%f",mT_jet1_muon1);
+    dEta_jet1_muon1 = fabs(muon1_eta-jet1_eta);
+    dPhi_jet1_muon1 = fabs(muon1_phi-jet1_phi);
+    if (dPhi_jet1_muon1 >= TMath::Pi()) dPhi_jet1_muon1 = 2*TMath::Pi()-dPhi_jet1_muon1;
+    dR_jet1_muon1 = sqrt(dEta_jet1_muon1*dEta_jet1_muon1+dPhi_jet1_muon1*dPhi_jet1_muon1);
+  }
+
+  
+  if(njet>=1 && nmuon>=2){
+    auto H_TLV = jet1_TLV+muon2_TLV;
+    M_jet1_muon2 = H_TLV.M();
+    //DEBUGclass("M_jet1_muon2:%f",M_jet1_muon2);
+    auto ET=sqrt(H_TLV.M()* H_TLV.M()+ H_TLV.Pt()* H_TLV.Pt());
+    double deltaPhi = fabs(H_TLV.Phi()-METCand->phi());
+    if (deltaPhi >= TMath::Pi()) deltaPhi = 2*TMath::Pi()-deltaPhi;
+    mT_jet1_muon2  = sqrt(2*ET*METCand->met()*(1-cos(deltaPhi)));
+    //DEBUGclass("mT_jet1_muon2:%f",mT_jet1_muon2);
+    dEta_jet1_muon2 = fabs(muon2_eta-jet1_eta);
+    dPhi_jet1_muon2 = fabs(muon2_phi-jet1_phi);
+    if (dPhi_jet1_muon2 >= TMath::Pi()) dPhi_jet1_muon2 = 2*TMath::Pi()-dPhi_jet1_muon2;
+    dR_jet1_muon2 = sqrt(dEta_jet1_muon2*dEta_jet1_muon2+dPhi_jet1_muon2*dPhi_jet1_muon2);
+  }
+
+  
+  if(njet>=1 && nmuon>=3){
+    auto H_TLV = jet1_TLV+muon3_TLV;
+    M_jet1_muon3 = H_TLV.M();
+    //DEBUGclass("M_jet1_muon3:%f",M_jet1_muon3);
+    auto ET=sqrt(H_TLV.M()* H_TLV.M()+ H_TLV.Pt()* H_TLV.Pt());
+    double deltaPhi = fabs(H_TLV.Phi()-METCand->phi());
+    if (deltaPhi >= TMath::Pi()) deltaPhi = 2*TMath::Pi()-deltaPhi;
+    mT_jet1_muon3  = sqrt(2*ET*METCand->met()*(1-cos(deltaPhi)));
+
+    double dEta_jet1_muon3 = fabs(muon3_eta-jet1_eta);
+    double dPhi_jet1_muon3 = fabs(muon3_phi-jet1_phi);
+    if (dPhi_jet1_muon3 >= TMath::Pi()) dPhi_jet1_muon3 = 2*TMath::Pi()-dPhi_jet1_muon3;
+    dR_jet1_muon3 = sqrt(dEta_jet1_muon3*dEta_jet1_muon3+dPhi_jet1_muon3*dPhi_jet1_muon3);
+  }
+
+  
+  if(njet>=1 && nele>=1){
+    auto H_TLV = jet1_TLV+ele1_TLV;
+    M_jet1_ele1 = H_TLV.M();
+    //DEBUGclass("M_jet1_ele1:%f",M_jet1_ele1);
+    auto ET=sqrt(H_TLV.M()* H_TLV.M()+ H_TLV.Pt()* H_TLV.Pt());
+    double deltaPhi = fabs(H_TLV.Phi()-METCand->phi());
+    if (deltaPhi >= TMath::Pi()) deltaPhi = 2*TMath::Pi()-deltaPhi;
+    mT_jet1_ele1  = sqrt(2*ET*METCand->met()*(1-cos(deltaPhi)));
+    //DEBUGclass("ele1_TLV.Pt():%f",ele1_TLV.Pt());
+    //DEBUGclass("ele1_TLV.M():%f",ele1_TLV.M());
+    //DEBUGclass("ele1_TLV.E():%f",ele1_TLV.E());
+
+    dEta_jet1_ele1 = fabs(ele1_eta-jet1_eta);
+    dPhi_jet1_ele1 = fabs(ele1_phi-jet1_phi);
+    if (dPhi_jet1_ele1 >= TMath::Pi()) dPhi_jet1_ele1 = 2*TMath::Pi()-dPhi_jet1_ele1;
+    dR_jet1_ele1 = sqrt(dEta_jet1_ele1*dEta_jet1_ele1+dPhi_jet1_ele1*dPhi_jet1_ele1);
+  }
+
+  if(njet>=1 && nele>=2){
+    auto H_TLV = jet1_TLV+ele2_TLV;
+    M_jet1_ele2 = H_TLV.M();
+    //DEBUGclass("M_jet1_ele2:%f",M_jet1_ele2);
+    auto ET=sqrt(H_TLV.M()* H_TLV.M()+ H_TLV.Pt()* H_TLV.Pt());
+    double deltaPhi = fabs(H_TLV.Phi()-METCand->phi());
+    if (deltaPhi >= TMath::Pi()) deltaPhi = 2*TMath::Pi()-deltaPhi;
+    mT_jet1_ele2  = sqrt(2*ET*METCand->met()*(1-cos(deltaPhi)));
+
+    double dEta_jet1_ele2 = fabs(ele2_eta-jet1_eta);
+    double dPhi_jet1_ele2 = fabs(ele2_phi-jet1_phi);
+    if (dPhi_jet1_ele2 >= TMath::Pi()) dPhi_jet1_ele2 = 2*TMath::Pi()-dPhi_jet1_ele2;
+    dR_jet1_ele2 = sqrt(dEta_jet1_ele2*dEta_jet1_ele2+dPhi_jet1_ele2*dPhi_jet1_ele2);
+  }
+  //DEBUGclass("jet1 dR,M,mT done");
+
+  //jet2 dR,M,mT
+  float M_jet2_muon1 = 9999999;
+  float mT_jet2_muon1 = 9999999;
+  float dR_jet2_muon1 = 9999999;
+  float M_jet2_muon2 = 9999999;
+  float mT_jet2_muon2 = 9999999;
+  float dR_jet2_muon2 = 9999999;
+  float M_jet2_muon3 = 9999999;
+  float mT_jet2_muon3 = 9999999;
+  float dR_jet2_muon3 = 9999999;
+  float M_jet2_ele1 = 9999999;
+  float mT_jet2_ele1 = 9999999;
+  float dR_jet2_ele1 = 9999999;
+  float M_jet2_ele2 = 9999999;
+  float mT_jet2_ele2 = 9999999;
+  float dR_jet2_ele2 = 9999999;
+  if(njet>=2 && nmuon>=1){
+    auto H_TLV = jet2_TLV+muon1_TLV;
+    M_jet2_muon1 = H_TLV.M();
+    
+    auto ET=sqrt(H_TLV.M()* H_TLV.M()+ H_TLV.Pt()* H_TLV.Pt());
+    double deltaPhi = fabs(H_TLV.Phi()-METCand->phi());
+    if (deltaPhi >= TMath::Pi()) deltaPhi = 2*TMath::Pi()-deltaPhi;
+    mT_jet2_muon1  = sqrt(2*ET*METCand->met()*(1-cos(deltaPhi)));
+
+    double dEta_jet2_muon1 = fabs(muon1_eta-jet2_eta);
+    double dPhi_jet2_muon1 = fabs(muon1_phi-jet2_phi);
+    if (dPhi_jet2_muon1 >= TMath::Pi()) dPhi_jet2_muon1 = 2*TMath::Pi()-dPhi_jet2_muon1;
+    dR_jet2_muon1 = sqrt(dEta_jet2_muon1*dEta_jet2_muon1+dPhi_jet2_muon1*dPhi_jet2_muon1);
+  }
+
+  if(njet>=2 && nmuon>=2){
+    auto H_TLV = jet2_TLV+muon2_TLV;
+    M_jet2_muon2 = H_TLV.M();
+    
+    auto ET=sqrt(H_TLV.M()* H_TLV.M()+ H_TLV.Pt()* H_TLV.Pt());
+    double deltaPhi = fabs(H_TLV.Phi()-METCand->phi());
+    if (deltaPhi >= TMath::Pi()) deltaPhi = 2*TMath::Pi()-deltaPhi;
+    mT_jet2_muon2  = sqrt(2*ET*METCand->met()*(1-cos(deltaPhi)));
+
+    double dEta_jet2_muon2 = fabs(muon2_eta-jet2_eta);
+    double dPhi_jet2_muon2 = fabs(muon2_phi-jet2_phi);
+    if (dPhi_jet2_muon2 >= TMath::Pi()) dPhi_jet2_muon2 = 2*TMath::Pi()-dPhi_jet2_muon2;
+    dR_jet2_muon2 = sqrt(dEta_jet2_muon2*dEta_jet2_muon2+dPhi_jet2_muon2*dPhi_jet2_muon2);
+  }
+
+  if(njet>=2 && nmuon>=3){
+    auto H_TLV = jet2_TLV+muon3_TLV;
+    M_jet2_muon3 = H_TLV.M();
+    
+    auto ET=sqrt(H_TLV.M()* H_TLV.M()+ H_TLV.Pt()* H_TLV.Pt());
+    double deltaPhi = fabs(H_TLV.Phi()-METCand->phi());
+    if (deltaPhi >= TMath::Pi()) deltaPhi = 2*TMath::Pi()-deltaPhi;
+    mT_jet2_muon3  = sqrt(2*ET*METCand->met()*(1-cos(deltaPhi)));
+
+    double dEta_jet2_muon3 = fabs(muon3_eta-jet2_eta);
+    double dPhi_jet2_muon3 = fabs(muon3_phi-jet2_phi);
+    if (dPhi_jet2_muon3 >= TMath::Pi()) dPhi_jet2_muon3 = 2*TMath::Pi()-dPhi_jet2_muon3;
+    dR_jet2_muon3 = sqrt(dEta_jet2_muon3*dEta_jet2_muon3+dPhi_jet2_muon3*dPhi_jet2_muon3);
+  }
+
+  if(njet>=2 && nele>=1){
+    auto H_TLV = jet2_TLV+ele1_TLV;
+    M_jet2_ele1 = H_TLV.M();
+    
+    auto ET=sqrt(H_TLV.M()* H_TLV.M()+ H_TLV.Pt()* H_TLV.Pt());
+    double deltaPhi = fabs(H_TLV.Phi()-METCand->phi());
+    if (deltaPhi >= TMath::Pi()) deltaPhi = 2*TMath::Pi()-deltaPhi;
+    mT_jet2_ele1  = sqrt(2*ET*METCand->met()*(1-cos(deltaPhi)));
+
+    double dEta_jet2_ele1 = fabs(ele1_eta-jet2_eta);
+    double dPhi_jet2_ele1 = fabs(ele1_phi-jet2_phi);
+    if (dPhi_jet2_ele1 >= TMath::Pi()) dPhi_jet2_ele1 = 2*TMath::Pi()-dPhi_jet2_ele1;
+    dR_jet2_ele1 = sqrt(dEta_jet2_ele1*dEta_jet2_ele1+dPhi_jet2_ele1*dPhi_jet2_ele1);
+  }
+
+  if(njet>=2 && nele>=2){
+    auto H_TLV = jet2_TLV+ele2_TLV;
+    M_jet2_ele2 = H_TLV.M();
+    
+    auto ET=sqrt(H_TLV.M()* H_TLV.M()+ H_TLV.Pt()* H_TLV.Pt());
+    double deltaPhi = fabs(H_TLV.Phi()-METCand->phi());
+    if (deltaPhi >= TMath::Pi()) deltaPhi = 2*TMath::Pi()-deltaPhi;
+    mT_jet2_ele2  = sqrt(2*ET*METCand->met()*(1-cos(deltaPhi)));
+
+    double dEta_jet2_ele2 = fabs(ele2_eta-jet2_eta);
+    double dPhi_jet2_ele2 = fabs(ele2_phi-jet2_phi);
+    if (dPhi_jet2_ele2 >= TMath::Pi()) dPhi_jet2_ele2 = 2*TMath::Pi()-dPhi_jet2_ele2;
+    dR_jet2_ele2 = sqrt(dEta_jet2_ele2*dEta_jet2_ele2+dPhi_jet2_ele2*dPhi_jet2_ele2);
+  }
+  //DEBUGclass("jet2 dR,M,mT done");
+
+  //M_ep1em1
+  float M_ep1em1 = 9999999;
+  if(nele_p>=1 && nele_m>=1){
+    auto ep1em1_TLV = ele1_p_TLV + ele1_m_TLV;
+    M_ep1em1 = ep1em1_TLV.M();
+    //DEBUGclass("M_ep1em1:%f",M_ep1em1);
+  }
+  //DEBUGclass("M_ep1em1 done");
+  
+  //M_up1um1
+  float M_up1um1 = 9999999;
+  TLorentzVector up1um1_TLV(9999999, 9999999, 9999999, 9999999);
+  if(nmuon_p>=1 && nmuon_m>=1){
+    up1um1_TLV = up1_TLV + um1_TLV;
+    M_up1um1 = up1um1_TLV.M();
+    //DEBUGclass("M_up1um1:%f",M_up1um1);
+  }
+  //DEBUGclass("M_up1um1 done");
+
+  //M_l1l2
+  float M_l1l2 = 9999999;
+  if(nlep>=2){
+    auto l1l2_TLV = lep1_TLV + lep2_TLV;
+    M_l1l2 = l1l2_TLV.M();
+  }
+  //DEBUGclass("M_l1l2 done");
+
+  //W_mT
+  float W_mT_muon1 =9999999;
+  float W_mT_muon2 =9999999;
+  float W_mT_muon3 =9999999;
+  float W_mT_ele1 =9999999;
+  float W_mT_ele2 =9999999;
+  float W_mT_noZcUpair_Hlep =9999999;
+  float W_mT_noZcEpair_Hlep =9999999;
+  if (veclep_no_Zc_uPair.size()>=1){
+    auto ET_lep=sqrt(noZcUpair_Hlep_TLV.M()*noZcUpair_Hlep_TLV.M()+noZcUpair_Hlep_TLV.Pt()*noZcUpair_Hlep_TLV.Pt());
+    auto dPhi_l_miss = fabs(noZcUpair_Hlep_TLV.Phi()-METCand->phi());
+    if (dPhi_l_miss>= TMath::Pi()) dPhi_l_miss = 2*TMath::Pi()-dPhi_l_miss;
+    W_mT_noZcUpair_Hlep = sqrt(2*ET_lep*METCand->met()*(1-cos(dPhi_l_miss)));
+  }
+
+  if (veclep_no_Zc_ePair.size()>=1){
+    auto ET_lep=sqrt(noZcEpair_Hlep_TLV.M()*noZcEpair_Hlep_TLV.M()+noZcEpair_Hlep_TLV.Pt()*noZcEpair_Hlep_TLV.Pt());
+    auto dPhi_l_miss = fabs(noZcEpair_Hlep_TLV.Phi()-METCand->phi());
+    if (dPhi_l_miss>= TMath::Pi()) dPhi_l_miss = 2*TMath::Pi()-dPhi_l_miss;
+    W_mT_noZcEpair_Hlep = sqrt(2*ET_lep*METCand->met()*(1-cos(dPhi_l_miss)));
+  }
+  
+  if(nmuon>=1){
+    auto ET_lep=sqrt(muon1_TLV.M()*muon1_TLV.M()+muon1_TLV.Pt()*muon1_TLV.Pt());
+    auto dPhi_l_miss = fabs(muon1_TLV.Phi()-METCand->phi());
+    if (dPhi_l_miss>= TMath::Pi()) dPhi_l_miss = 2*TMath::Pi()-dPhi_l_miss;
+    W_mT_muon1 = sqrt(2*ET_lep*METCand->met()*(1-cos(dPhi_l_miss)));
+  }
+
+  if(nmuon>=2){
+    auto ET_lep=sqrt(muon2_TLV.M()*muon2_TLV.M()+muon2_TLV.Pt()*muon2_TLV.Pt());
+    auto dPhi_l_miss = fabs(muon2_TLV.Phi()-METCand->phi());
+    if (dPhi_l_miss>= TMath::Pi()) dPhi_l_miss = 2*TMath::Pi()-dPhi_l_miss;
+    W_mT_muon2 = sqrt(2*ET_lep*METCand->met()*(1-cos(dPhi_l_miss)));
+  }
+
+  if(nmuon>=3){
+    auto ET_lep=sqrt(muon3_TLV.M()*muon3_TLV.M()+muon3_TLV.Pt()*muon3_TLV.Pt());
+    auto dPhi_l_miss = fabs(muon3_TLV.Phi()-METCand->phi());
+    if (dPhi_l_miss>= TMath::Pi()) dPhi_l_miss = 2*TMath::Pi()-dPhi_l_miss;
+    W_mT_muon3 = sqrt(2*ET_lep*METCand->met()*(1-cos(dPhi_l_miss)));
+  }
+
+  if(nele>=1){
+    auto ET_lep=sqrt(ele1_TLV.M()*ele1_TLV.M()+ele1_TLV.Pt()*ele1_TLV.Pt());
+    auto dPhi_l_miss = fabs(ele1_TLV.Phi()-METCand->phi());
+    if (dPhi_l_miss>= TMath::Pi()) dPhi_l_miss = 2*TMath::Pi()-dPhi_l_miss;
+    W_mT_ele1 = sqrt(2*ET_lep*METCand->met()*(1-cos(dPhi_l_miss)));
+  }
+  
+
+  if(nele>=2){
+    auto ET_lep=sqrt(ele2_TLV.M()*ele2_TLV.M()+ele2_TLV.Pt()*ele2_TLV.Pt());
+    auto dPhi_l_miss = fabs(ele2_TLV.Phi()-METCand->phi());
+    if (dPhi_l_miss>= TMath::Pi()) dPhi_l_miss = 2*TMath::Pi()-dPhi_l_miss;
+    W_mT_ele2 = sqrt(2*ET_lep*METCand->met()*(1-cos(dPhi_l_miss)));
+  }
+  //DEBUGclass("W_mT done");
+  //dPt_jet1_jet2,dEta_jet1_jet2,dPhi_jet1_jet2
+  float dPt_jet1_jet2 =9999999;
+  float dEta_jet1_jet2 =9999999;
+  float dPhi_jet1_jet2 =9999999;
+  if(njet>=2){
+    dPt_jet1_jet2=fabs(jet1_pt-jet2_pt);
+    dEta_jet1_jet2=fabs(jet1_eta-jet2_eta);
+    dPhi_jet1_jet2=fabs(jet1_phi-jet2_phi);
+    if (dPhi_jet1_jet2>= TMath::Pi()) dPhi_jet1_jet2 = 2*TMath::Pi()-dPhi_jet1_jet2;
+  }
+  //DEBUGclass("d_jet1_jet2 done");
+
+  TLorentzVector method3_muon_TLV(9999999, 9999999, 9999999, 9999999);
+  TLorentzVector method3_Zup_TLV(9999999, 9999999, 9999999, 9999999);
+  TLorentzVector method3_Zum_TLV(9999999, 9999999, 9999999, 9999999);
+  TLorentzVector method3_Z_TLV(9999999, 9999999, 9999999, 9999999);
+  TLorentzVector method3_jet_TLV(9999999, 9999999, 9999999, 9999999);
+  int n_method3_match=0;
+  float dR_pt200jet_up1 = 99999;
+  float dR_pt200jet_up2 = 99999;
+  if(nmuon_p==2 && nmuon_m==1){
+    const xAOD::Jet* jet;
+    TLorentzVector jet_TLV;
+    for (std::size_t i = 0; i < njet; ++i){
+      auto type = std::get<0>(vecjet.at(i));
+      int index = std::get<1>(vecjet.at(i));
+      if(type == "part") jet = Evt->jet(index);
+      jet_TLV=jet->p4();
+      if(jet_TLV.Pt()/1000>200){
+        float dR_jet_up1 = jet_TLV.DeltaR(up1_TLV);
+        float dR_jet_up2 = jet_TLV.DeltaR(up2_TLV);
+        if (dR_jet_up1<dR_pt200jet_up1) dR_pt200jet_up1 = dR_jet_up1;
+        if (dR_jet_up2<dR_pt200jet_up2) dR_pt200jet_up2 = dR_jet_up2;
+        if(dR_jet_up1<1) {
+          n_method3_match++;
+          method3_muon_TLV = up1_TLV;
+          method3_Zup_TLV = up2_TLV;
+          method3_Zum_TLV = um1_TLV;
+          method3_Z_TLV=up2_TLV+um1_TLV;
+          method3_jet_TLV = jet_TLV;
+        }
+        if(dR_jet_up2<1) {
+          n_method3_match++;
+          method3_muon_TLV = up2_TLV;
+          method3_Zup_TLV = up1_TLV;
+          method3_Zum_TLV = um1_TLV;
+          method3_Z_TLV=up1_TLV+um1_TLV;
+          method3_jet_TLV = jet_TLV;
+        }
+      }
+    }
+
+    if(n_method3_match>1){
+      method3_muon_TLV = noZcUpair_Hmuon_TLV;
+      method3_jet_TLV = jet1_TLV;
+      method3_Zup_TLV = method2_Zup_TLV;
+      method3_Zum_TLV = method2_Zum_TLV;
+      method3_Z_TLV = method2_Zuu_TLV;
+    }
+  }
+  
+  float dR_pt200jet_um1 = 99999;
+  float dR_pt200jet_um2 = 99999;
+  if(nmuon_m==2 && nmuon_p==1){
+    const xAOD::Jet* jet;
+    TLorentzVector jet_TLV;
+    for (std::size_t i = 0; i < njet; ++i){
+      auto type = std::get<0>(vecjet.at(i));
+      int index = std::get<1>(vecjet.at(i));
+      if(type == "part") jet = Evt->jet(index);
+      jet_TLV=jet->p4();
+      if(jet_TLV.Pt()/1000>200){
+        float dR_jet_um1 = jet_TLV.DeltaR(um1_TLV);
+        float dR_jet_um2 = jet_TLV.DeltaR(um2_TLV);
+        if (dR_jet_um1<dR_pt200jet_um1) dR_pt200jet_um1 = dR_jet_um1;
+        if (dR_jet_um2<dR_pt200jet_um2) dR_pt200jet_um2 = dR_jet_um2;
+        if(dR_jet_um1<1) {
+          n_method3_match++;
+          method3_muon_TLV = um1_TLV;
+          method3_Zup_TLV = up1_TLV;
+          method3_Zum_TLV = um2_TLV;
+          method3_Z_TLV=up1_TLV+um2_TLV;
+          method3_jet_TLV = jet_TLV;
+        }
+        if(dR_jet_um2<1) {
+          n_method3_match++;
+          method3_muon_TLV = um2_TLV;
+          method3_Zup_TLV = up1_TLV;
+          method3_Zum_TLV = um1_TLV;
+          method3_Z_TLV=up1_TLV+um1_TLV;
+          method3_jet_TLV = jet_TLV;
+        }
+      }
+    }
+
+    if(n_method3_match>1){
+      method3_muon_TLV = noZcUpair_Hmuon_TLV;
+      method3_jet_TLV = jet1_TLV;
+      method3_Zup_TLV = method2_Zup_TLV;
+      method3_Zum_TLV = method2_Zum_TLV;
+      method3_Z_TLV = method2_Zuu_TLV;
+    }
+  }
+
+  // method3 mt
+  float W_mT_method3 = 9999999;
+  float H_mT_method3 = 9999999;
+  if(n_method3_match>=1){
+    auto ET_lep=sqrt(method3_muon_TLV.M()*method3_muon_TLV.M()+method3_muon_TLV.Pt()*method3_muon_TLV.Pt());
+    auto dPhi_l_miss = fabs(method3_muon_TLV.Phi()-METCand->phi());
+    if (dPhi_l_miss>= TMath::Pi()) dPhi_l_miss = 2*TMath::Pi()-dPhi_l_miss;
+    W_mT_method3 = sqrt(2*ET_lep*METCand->met()*(1-cos(dPhi_l_miss)));
+
+    auto H_TLV = method3_jet_TLV+method3_muon_TLV;
+    auto ET=sqrt(H_TLV.M()* H_TLV.M()+ H_TLV.Pt()* H_TLV.Pt());
+    double deltaPhi = fabs(H_TLV.Phi()-METCand->phi());
+    if (deltaPhi >= TMath::Pi()) deltaPhi = 2*TMath::Pi()-deltaPhi;
+    H_mT_method3  = sqrt(2*ET*METCand->met()*(1-cos(deltaPhi)));
+  }
+  
+ //DEBUGclass("method 3 done");
+  float method3_H_pt = 9999999;
+  if (n_method3_match>=1){
+    method3_H_pt = (method3_jet_TLV+method3_muon_TLV).Pt();
+  }
+  //DEBUGclass("method3_H_pt done");
+
+
+  //RcSRjet
+  float dR_RcSRjet_muon1 = 9999999;
+  float dR_RcSRjet_muon2 = 9999999;
+  float dR_RcSRjet_ele1 = 9999999;
+  float dR_RcSRjet_jet1 = 9999999;
+
+  if(nSRjet>=1){
+    for (std::size_t i = 0; i < nSRjet; ++i){
+      int index = std::get<1>(vecSRjet.at(i));
+      TLorentzVector SRjet_TLV = Evt->otherJet(index)->p4(); 
+      if(nmuon>=1){
+        float dR_SRjet_muon1 = SRjet_TLV.DeltaR(muon1_TLV);
+        if(dR_SRjet_muon1<dR_RcSRjet_muon1) dR_RcSRjet_muon1=dR_SRjet_muon1;
+      }
+      if(nmuon>=2){
+        float dR_SRjet_muon2 = SRjet_TLV.DeltaR(muon2_TLV);
+        if(dR_SRjet_muon2<dR_RcSRjet_muon2) dR_RcSRjet_muon2=dR_SRjet_muon2;
+      }
+      if(nele>=1){
+        float dR_SRjet_ele1 = SRjet_TLV.DeltaR(ele1_TLV);
+        if(dR_SRjet_ele1<dR_RcSRjet_ele1) dR_RcSRjet_ele1=dR_SRjet_ele1;
+      }
+      if(nele>=1){
+        float dR_SRjet_jet1 = SRjet_TLV.DeltaR(jet1_TLV);
+        if(dR_SRjet_jet1<dR_RcSRjet_jet1) dR_RcSRjet_jet1=dR_SRjet_jet1;
+      }
+    }
+  }
+  DEBUGclass("dR_RcSRjet_muon1: %f",dR_RcSRjet_muon1);
+  //H pt
+  float H_px_muon1 = METCand->mpx()+jet1_TLV.Px()+muon1_TLV.Px();
+  float H_py_muon1 = METCand->mpy()+jet1_TLV.Py()+muon1_TLV.Py(); 
+  float H_pt_muon1 = sqrt(H_px_muon1*H_px_muon1 + H_py_muon1*H_py_muon1);
+
+  float H_px_muon3 = METCand->mpx()+jet1_TLV.Px()+muon3_TLV.Px();
+  float H_py_muon3 = METCand->mpy()+jet1_TLV.Py()+muon3_TLV.Py(); 
+  float H_pt_muon3 = sqrt(H_px_muon3*H_px_muon3 + H_py_muon3*H_py_muon3);
+
+  float H_px_method3_muon = METCand->mpx()+jet1_TLV.Px()+method3_muon_TLV.Px();
+  float H_py_method3_muon = METCand->mpy()+jet1_TLV.Py()+method3_muon_TLV.Py(); 
+  float H_pt_method3_muon = sqrt(H_px_method3_muon*H_px_method3_muon + H_py_method3_muon*H_py_method3_muon);
+
+  float M_jet1_method3_muon = (jet1_TLV+method3_muon_TLV).M();
+  DEBUGclass("H_pt_muon1: %f",H_pt_muon1);
+
+  //pt2
+  float WH_pt2=99999999;
+  float H_px_miss_pt2Method=99999999;
+  float H_py_miss_pt2Method=99999999;
+  float H_pt_pt2Method=99999999;
+  float W_pt_pt2Method=99999999;
+  float pT_scale = SumPt_All;
+
+  if(nmuon==2 || (nele == 1 && nmuon==1)){
+    for (int nx = -100; nx < 101; ++nx){
+      for (int ny = -100; ny < 101; ++ny){
+        TLorentzVector Hmuon_TLV;
+        TLorentzVector Wlep_TLV;
+        if (nele == 1 && nmuon==1) {Hmuon_TLV = muon1_TLV; Wlep_TLV=ele1_TLV;}
+        if (nmuon==2) {Hmuon_TLV = muon2_TLV; Wlep_TLV=muon1_TLV;}
+        float H_px_miss =nx/(float)100*pT_scale;
+        float H_py_miss =ny/(float)100*pT_scale;
+        float W_px_miss =METCand->mpx()-H_px_miss;
+        float W_py_miss =METCand->mpy()-H_py_miss;
+        
+        float H_px = H_px_miss+jet1_TLV.Px()+Hmuon_TLV.Px();
+        float H_py = H_py_miss+jet1_TLV.Py()+Hmuon_TLV.Py();
+        float H_pt = sqrt(H_px*H_px+H_py*H_py);
+        float W_px = W_px_miss+Wlep_TLV.Px();
+        float W_py = W_py_miss+Wlep_TLV.Py();
+        float W_pt = sqrt(W_px*W_px+W_py*W_py);
+        float pt_max = std::max(H_pt,W_pt);
+        if (pt_max<WH_pt2) {
+          WH_pt2=pt_max;H_px_miss_pt2Method=H_px_miss;H_py_miss_pt2Method=H_py_miss;H_pt_pt2Method=H_pt;W_pt_pt2Method=W_pt;
+        }
+      }
+    }
+    DEBUGclass("WH_pt2: %f",WH_pt2);
+    DEBUGclass("H_pt_pt2Method: %f",H_pt_pt2Method);
+    DEBUGclass("W_pt_pt2Method: %f",W_pt_pt2Method);
+    DEBUGclass("dpt: %f",abs(W_pt_pt2Method-H_pt_pt2Method));
+    DEBUGclass("METCand->mpx(): %f",METCand->mpx());
+    DEBUGclass("H_px_miss_pt2Method: %f",H_px_miss_pt2Method);
+    DEBUGclass("H_px_miss_ratio: %f",H_px_miss_pt2Method/pT_scale);
+    DEBUGclass("METCand->mpy(): %f",METCand->mpy());
+    DEBUGclass("H_py_miss_pt2Method: %f",H_py_miss_pt2Method);
+    DEBUGclass("H_py_miss_ratio: %f",H_py_miss_pt2Method/pT_scale);
+  }
+  float W_px_miss_pt2Method=METCand->mpx()-H_px_miss_pt2Method;
+  float W_py_miss_pt2Method=METCand->mpy()-H_py_miss_pt2Method;
+  
+
+  float mT_H_pt2Method =99999999;
+  if(nmuon==2||(nele == 1 && nmuon==1)){
+    TLorentzVector Hmuon_TLV;
+    if (nele == 1 && nmuon==1) Hmuon_TLV = muon1_TLV; 
+    if (nmuon==2) Hmuon_TLV = muon2_TLV; 
+    auto H_TLV = jet1_TLV+Hmuon_TLV;
+    auto ET=sqrt(H_TLV.M()* H_TLV.M()+ H_TLV.Pt()* H_TLV.Pt());
+    double deltaPhi = fabs(H_TLV.Phi()-atan(H_py_miss_pt2Method/H_px_miss_pt2Method));
+    if (deltaPhi >= TMath::Pi()) deltaPhi = 2*TMath::Pi()-deltaPhi;
+    float met = sqrt(H_px_miss_pt2Method*H_px_miss_pt2Method+H_py_miss_pt2Method*H_py_miss_pt2Method);
+    mT_H_pt2Method  = sqrt(2*ET*met*(1-cos(deltaPhi)));
+  }
+  DEBUGclass("mT_H_pt2Method: %f",mT_H_pt2Method);
+  float mT_W_pt2Method =99999999;
+  if(nmuon==2||(nele == 1 && nmuon==1)){
+    TLorentzVector Wlep_TLV;
+    if (nele == 1 && nmuon==1) Wlep_TLV = ele1_TLV; 
+    if (nmuon==2) Wlep_TLV = muon1_TLV; 
+    auto ET=sqrt(Wlep_TLV.M()* Wlep_TLV.M()+ Wlep_TLV.Pt()* Wlep_TLV.Pt());
+    double deltaPhi = fabs(Wlep_TLV.Phi()-atan(W_py_miss_pt2Method/W_px_miss_pt2Method));
+    if (deltaPhi >= TMath::Pi()) deltaPhi = 2*TMath::Pi()-deltaPhi;
+    float met = sqrt(W_px_miss_pt2Method*W_px_miss_pt2Method+W_py_miss_pt2Method*W_py_miss_pt2Method);
+    mT_W_pt2Method  = sqrt(2*ET*met*(1-cos(deltaPhi)));
+  }
+  DEBUGclass("mT_W_pt2Method: %f",mT_W_pt2Method);
+  DEBUGclass("============================ event info end =====================");
+  //number
+  myvector.push_back(njet);
+  myvector.push_back(nmuon);
+  myvector.push_back(nele);
+  myvector.push_back(nmuon_p);
+  myvector.push_back(nmuon_m);
+  myvector.push_back(nele_p);
+  myvector.push_back(nele_m);
+  myvector.push_back(nlep);//7
+
+  //pt
+  myvector.push_back(jet1_pt);
+  myvector.push_back(jet2_pt);
+  
+  myvector.push_back(muon1_pt);
+  myvector.push_back(muon2_pt);
+  myvector.push_back(muon3_pt);//12
+  
+  myvector.push_back(ele1_pt);
+  myvector.push_back(ele2_pt);
+  
+  myvector.push_back(lep1_pt);
+  myvector.push_back(lep2_pt);
+  myvector.push_back(lep3_pt);//17
+
+  //eta
+  myvector.push_back(jet1_eta);
+  myvector.push_back(jet2_eta);
+  
+  myvector.push_back(muon1_eta);
+  myvector.push_back(muon2_eta);
+  myvector.push_back(muon3_eta);//22
+  
+  myvector.push_back(ele1_eta);
+  myvector.push_back(ele2_eta);
+  
+  myvector.push_back(lep1_eta);
+  myvector.push_back(lep2_eta);
+  myvector.push_back(lep3_eta);//27
+
+  //phi
+  myvector.push_back(jet1_phi);
+  myvector.push_back(jet2_phi);
+  
+  myvector.push_back(muon1_phi);
+  myvector.push_back(muon2_phi);
+  myvector.push_back(muon3_phi);//32
+  
+  myvector.push_back(ele1_phi);
+  myvector.push_back(ele2_phi);
+  
+  myvector.push_back(lep1_phi);
+  myvector.push_back(lep2_phi);
+  myvector.push_back(lep3_phi);//37
+
+  //mass
+  myvector.push_back(jet1_mass);
+  myvector.push_back(jet2_mass);//39
+
+  //flavor
+  myvector.push_back(lep1_flavor);
+  myvector.push_back(lep2_flavor);
+  myvector.push_back(lep3_flavor);//42
+
+  //charge
+  myvector.push_back(lep1_charge);
+  myvector.push_back(lep2_charge);
+  myvector.push_back(lep3_charge);//45
+
+  myvector.push_back(muon1_charge);
+  myvector.push_back(muon2_charge);
+  myvector.push_back(muon3_charge);//48
+
+  myvector.push_back(ele1_charge);
+  myvector.push_back(ele2_charge);//50
+
+  //dR
+  myvector.push_back(dR_jet1_muon1);
+  myvector.push_back(dR_jet1_muon2);
+  myvector.push_back(dR_jet1_muon3);
+
+  myvector.push_back(dR_jet1_ele1);
+  myvector.push_back(dR_jet1_ele2);//55
+
+  myvector.push_back(dR_jet2_muon1);
+  myvector.push_back(dR_jet2_muon2);
+  myvector.push_back(dR_jet2_muon3);
+
+  myvector.push_back(dR_jet2_ele1);
+  myvector.push_back(dR_jet2_ele2);//60
+  
+  //composite M jet-lep
+  myvector.push_back(M_jet1_muon1);
+  myvector.push_back(M_jet1_muon2);
+  myvector.push_back(M_jet1_muon3);
+
+  myvector.push_back(M_jet1_ele1);
+  myvector.push_back(M_jet1_ele2);//65
+
+  myvector.push_back(M_jet2_muon1);
+  myvector.push_back(M_jet2_muon2);
+  myvector.push_back(M_jet2_muon3);
+
+  myvector.push_back(M_jet2_ele1);
+  myvector.push_back(M_jet2_ele2);//70
+
+  //composite mT jet-lep
+  myvector.push_back(mT_jet1_muon1);
+  myvector.push_back(mT_jet1_muon2);
+  myvector.push_back(mT_jet1_muon3);
+
+  myvector.push_back(mT_jet1_ele1);
+  myvector.push_back(mT_jet1_ele2);//75
+
+  myvector.push_back(mT_jet2_muon1);
+  myvector.push_back(mT_jet2_muon2);
+  myvector.push_back(mT_jet2_muon3);
+
+  myvector.push_back(mT_jet2_ele1);
+  myvector.push_back(mT_jet2_ele2);//80
+
+  //composite M lep-lep
+  myvector.push_back(M_ep1em1);
+  myvector.push_back(M_up1um1);
+  myvector.push_back(M_l1l2);//83
+
+  //mT W
+  myvector.push_back(W_mT_muon1);
+  myvector.push_back(W_mT_muon2);
+  myvector.push_back(W_mT_muon3);
+
+  myvector.push_back(W_mT_ele1);
+  myvector.push_back(W_mT_ele2);//88
+
+  //j1j2
+  myvector.push_back(dPt_jet1_jet2);
+  myvector.push_back(dEta_jet1_jet2);
+  myvector.push_back(dPhi_jet1_jet2);//91
+
+  //jet1_noZcUpair_Hlep
+  myvector.push_back(M_Zc_uPair);
+  myvector.push_back(M_jet1_noZcUpair_Hlep);
+  myvector.push_back(dR_jet1_noZcUpair_Hlep);
+  myvector.push_back(W_mT_noZcUpair_Hlep);
+  myvector.push_back(mT_jet1_noZcUpair_Hlep);//96
+
+  //jet1_noZcEpair_Hlep
+  myvector.push_back(M_Zc_ePair);
+  myvector.push_back(M_jet1_noZcEpair_Hlep);
+  myvector.push_back(dR_jet1_noZcEpair_Hlep);
+  myvector.push_back(W_mT_noZcEpair_Hlep);
+  myvector.push_back(mT_jet1_noZcEpair_Hlep);//101
+
+  myvector.push_back(dR_jet2_noZcUpair_Hlep);//102
+
+  //method3
+  myvector.push_back(dR_pt200jet_up1);
+  myvector.push_back(dR_pt200jet_up2);
+  myvector.push_back(dR_pt200jet_um1);
+  myvector.push_back(dR_pt200jet_um2);
+  myvector.push_back(n_method3_match);
+  myvector.push_back(method3_H_pt);//108
+
+  myvector.push_back(noZcEpair_Hmuon_TLV.Pt());
+  myvector.push_back(method3_Z_TLV.M());
+  myvector.push_back(method3_Z_TLV.Pt());
+  myvector.push_back(method2_Zee_TLV.Pt());//112
+
+  myvector.push_back(W_mT_method3);
+  myvector.push_back(H_mT_method3);//114
+
+  myvector.push_back(METCand->met());//115
+
+  myvector.push_back(dEta_jet1_muon1);
+  myvector.push_back(dEta_jet1_muon2);
+  myvector.push_back(dEta_jet1_ele1);
+  myvector.push_back(dPhi_jet1_muon1);
+  myvector.push_back(dPhi_jet1_muon2);
+  myvector.push_back(dPhi_jet1_ele1);//121
+
+  myvector.push_back(nSRjet);
+  myvector.push_back(SumPt_Charge_lep);
+  myvector.push_back(SumPt_SRjet);
+  myvector.push_back(SumPt_All);//125
+
+  myvector.push_back(SRjet1_TLV.Pt());
+  myvector.push_back(SRjet1_TLV.Eta());
+  myvector.push_back(SRjetLast_TLV.Pt());
+  myvector.push_back(SRjetLast_TLV.Eta());//129
+
+  myvector.push_back(dR_RcSRjet_muon1);
+  myvector.push_back(dR_RcSRjet_muon2);
+  myvector.push_back(dR_RcSRjet_ele1);
+  myvector.push_back(dR_RcSRjet_jet1);//133
+
+  myvector.push_back(muon1_TLV.DeltaR(ele1_TLV));
+  myvector.push_back(muon1_TLV.DeltaR(ele2_TLV));
+  myvector.push_back(ele1_TLV.DeltaR(ele2_TLV));
+  myvector.push_back(muon1_TLV.DeltaR(muon2_TLV));
+  myvector.push_back(muon1_TLV.DeltaR(muon3_TLV));
+  myvector.push_back(muon2_TLV.DeltaR(muon3_TLV));//139
+
+  myvector.push_back(up1um1_TLV.Pt());//140
+
+  myvector.push_back(method3_muon_TLV.DeltaR(method3_Zup_TLV));
+  myvector.push_back(method3_muon_TLV.DeltaR(method3_Zum_TLV));
+  myvector.push_back(method3_Zup_TLV.DeltaR(method3_Zum_TLV));
+  myvector.push_back(method3_jet_TLV.DeltaR(method3_muon_TLV));
+  myvector.push_back(method3_jet_TLV.DeltaR(method3_Zup_TLV));
+  myvector.push_back(method3_jet_TLV.DeltaR(method3_Zum_TLV));//146
+
+  myvector.push_back(H_pt_muon1);
+  myvector.push_back(H_pt_method3_muon);
+  myvector.push_back(abs(H_pt_muon1-method2_Zee_TLV.Pt()));
+  myvector.push_back(abs(H_pt_method3_muon-method3_Z_TLV.Pt()));//150
+
+  myvector.push_back(M_jet1_method3_muon);//151
+
+  myvector.push_back(H_pt_muon3);
+  myvector.push_back(abs(H_pt_muon3-up1um1_TLV.Pt()));//153
+
+  myvector.push_back(WH_pt2);
+  myvector.push_back(H_px_miss_pt2Method/pT_scale);
+  myvector.push_back(H_py_miss_pt2Method/pT_scale);
+  myvector.push_back(H_pt_pt2Method);
+  myvector.push_back(W_pt_pt2Method);
+  myvector.push_back(abs(W_pt_pt2Method-H_pt_pt2Method));
+  myvector.push_back(mT_H_pt2Method);
+  myvector.push_back(mT_W_pt2Method);//161
+
+  myvector.push_back(abs(SumPx_lep_jet));
+  myvector.push_back(abs(SumPy_lep_jet));
+  myvector.push_back(abs(SumPx_lep_SRjet));
+  myvector.push_back(abs(SumPy_lep_SRjet));//165
+  
+  // bookmark cached entry
+  this->fCachedEntry = this->getCurrentEntry();
+  DEBUGclass("Created new set of cached values in instance '%s'",this->GetName());
+  return true;
+#endif
+}
+
+//______________________________________________________________________________________________
+
+const std::vector<double>* ZHCand::getVector() const {
+  // Function to retrieve the cached vector
+  /* example block
+     return &myvector;
+  */
+  
+     return &myvector;
+  //this should never be executed, we just make the compiler calm down
+  throw std::runtime_error("Illegal / unsupported mode selected!");
+  return NULL;
+}
+
+//______________________________________________________________________________________________
+
+double ZHCand::getValue() const {
+  // Value retrieval function, called on every event for every cut and histogram
+  // Since this is a vector observable this should never be executed
+  DEBUGclass("entering function getValue");
+  throw std::runtime_error("Caught attempt to evaluate vector valued observable in scalar context");
+  return std::numeric_limits<double>::quiet_NaN();
+}
+
+//______________________________________________________________________________________________
+
+double ZHCand::getValueAt(int index) const {
+  // Function to return element of vector with specified index
+  if (!this->makeCache()) {
+    ERROR("Failed to obtain return values!");
+    return std::numeric_limits<double>::quiet_NaN();
+  }
+
+  const std::vector<double>* vec = this->getVector();
+  if ((int)vec->size() == 0) { // vector is empty, not even filled once
+    throw std::runtime_error("Attempted to retrieve value of vector that is empty");
+    return std::numeric_limits<double>::quiet_NaN(); 
+  }
+  if (index >= (int)vec->size()) {
+    throw std::runtime_error("Attempted to retrieve value for out of bounds");
+    return std::numeric_limits<double>::quiet_NaN();
+  }
+  return vec->at(index);
+}
+
+//______________________________________________________________________________________________
+
+int ZHCand::getNevaluations() const {
+  // Function to return the size of the vector that is going to be retrieved
+  
+  if (!this->makeCache()) {
+    ERROR("Failed to obtain return values!");
+    return -1;
+  }
+  if (this->fType==TQObservable::ObservableType::scalar) return 1;
+  const std::vector<double>* vec = this->getVector();
+  if (vec) return vec->size();
+  return -1;
+}
+//______________________________________________________________________________________________
+
+bool ZHCand::initializeSelf(){
+  // initialize this observable
+  // called once per sample (input file) so that the observable knows the name of the event candidate
+  // will be EventEM or EventME in the case of DF analysis (depending on the current channel)
+  // example block
+     TString ContName = "";
+     if(!this->fSample->getTagString("~cand",ContName)) return false;
+     this->mContName = "Event"+ContName;
+  
+
+  DEBUGclass("initializing");
+  
+  fCachedEntry = -1;
+  return true;
+}
+
+//______________________________________________________________________________________________
+
+bool ZHCand::finalizeSelf(){
+  // finalize this observable
+  // remember to undo anything you did in initializeSelf() !
+  /* example block
+     myvector.clear();
+  */
+  
+  myvector.clear();
+  DEBUGclass("finalizing");
+  return true;
+}
+//______________________________________________________________________________________________
+
+ZHCand::ZHCand(const TString& name):
+TQEventObservable(name)
+{
+  // constructor with name argument
+  DEBUGclass("constructor called with '%s'",name.Data());
+}
+
+bool ZHCand :: cmp1 (std::tuple<std::string, int, float> a, std::tuple<std::string, int, float> b)
+{
+    return std::get<2>(a) > std::get<2>(b);
+}
+bool ZHCand :: cmp2 (std::tuple<std::string, std::string, int, float> a, std::tuple<std::string,std::string, int, float> b)
+{
+    return std::get<3>(a) > std::get<3>(b);
+}

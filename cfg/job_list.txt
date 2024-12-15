@@ -1,0 +1,52 @@
+#jobs file for ggF analysis
+
+# The following parameter can be optimized in-line for the
+# individual jobs. Make sure you specify the
+# '--allowArgChanges' option when executing submit.py
+
+#!etc
+#!memory=8000.
+#!time=2000
+#!queue=medium
+#!queue=nemo_vm_atljak
+
+!maxSampleCount=10
+!maxSampleSize=3000
+!time=200
+!memory=3000
+
+
+# -----------------------------
+sig/?/?/mh125/ggf
+sig/?/?/mh125/vbf
+#sig/?/?/mh125/vh/tautau
+sig/?/?/mh125/vh/wh
+sig/?/?/mh125/vh/zh/qqZmumu
+sig/?/?/mh125/vh/zh/qqZee
+sig/?/?/mh125/vh/zh/ggZmumu
+sig/?/?/mh125/vh/zh/ggZee
+#
+bkg/?/?/diboson/
+bkg/?/?/Zjets/
+#bkg/?/?/Zjets/Sherpa2p2p1/Nom/ee/
+#bkg/?/?/Zjets/Sherpa2p2p1/Nom/mm/364100_s
+#bkg/?/?/Zjets/Sherpa2p2p1/Nom/mm/364101_s
+#bkg/?/?/Zjets/Sherpa2p2p1/Nom/mm/364102_s
+#bkg/?/?/Zjets/Sherpa2p2p1/Nom/mm/364103_s
+#bkg/?/?/Zjets/Sherpa2p2p1/Nom/mm/364104_s
+#bkg/?/?/Zjets/Sherpa2p2p1/Nom/mm/364105_s
+#bkg/?/?/Zjets/Sherpa2p2p1/Nom/mm/364106_s
+#bkg/?/?/Zjets/Sherpa2p2p1/Nom/mm/364107_s
+#bkg/?/?/Zjets/Sherpa2p2p1/Nom/mm/364108_s
+#bkg/?/?/Zjets/Sherpa2p2p1/Nom/mm/364109_s
+#bkg/?/?/Zjets/Sherpa2p2p1/Nom/mm/364110_s
+#bkg/?/?/Zjets/Sherpa2p2p1/Nom/mm/364111_s
+#bkg/?/?/Zjets/Sherpa2p2p1/Nom/mm/364112_s
+#bkg/?/?/Zjets/Sherpa2p2p1/Nom/mm/364113_s
+#bkg/?/?/Zjets/Sherpa2p2p1/Nom/tt/
+#
+bkg/?/?/Wjets/
+#
+bkg/?/?/top/
+# - data -
+data/?/?/

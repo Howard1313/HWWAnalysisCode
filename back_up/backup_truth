@@ -1,0 +1,1883 @@
+#include "PMGTools/PMGTruthWeightTool.h"
+#include "xAODJet/JetContainer.h"
+#include "xAODMissingET/MissingETContainer.h"
+#include "xAODTruth/TruthEventContainer.h"
+#include "xAODTruth/TruthParticleContainer.h"
+#include <AsgMessaging/MessageCheck.h>
+#include <MyAnalysis/MyxAODAnalysis.h>
+#include <xAODEventInfo/EventInfo.h>
+
+MyxAODAnalysis ::MyxAODAnalysis(const std::string &name,
+                                ISvcLocator *pSvcLocator)
+    : EL::AnaAlgorithm(name, pSvcLocator) {
+  // Here you put any code for the base initialization of variables,
+  // e.g. initialize all pointers to 0.  This is also where you
+  // declare all properties for your algorithm.  Note that things like
+  // resetting statistics variables or booking histograms should
+  // rather go into the initialize() function.
+}
+
+StatusCode MyxAODAnalysis ::initialize() {
+  // Here you do everything that needs to be done at the very
+  // beginning on each worker node, e.g. create histograms and output
+  // trees.  This method gets called before any input files are
+  // connected.
+  ANA_CHECK(book(TH1F("njet", "njet", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("nmuon", "nmuon", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("nHmuon", "nHmuon", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("nZmuon", "nZmuon", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("nHele", "nHele", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("nZele", "nZele", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("nele", "nele", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("nmuon_p", "nmuon_p", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("nmuon_m", "nmuon_m", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("nele_p", "nele_p", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("nele_m", "nele_m", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("nlep", "nlep", 11, 0, 11)));
+
+  ANA_CHECK(book(TH1F("dR_jet1_muon1", "dR_jet1_muon1", 25, 0,5))); 
+  ANA_CHECK(book(TH1F("dR_jet1_muon2", "dR_jet1_muon2", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("dR_jet1_muon3", "dR_jet1_muon3", 25, 0, 5)));
+
+  ANA_CHECK(book(TH1F("dR_jet2_muon1", "dR_jet2_muon1", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("dR_jet2_muon2", "dR_jet2_muon2", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("dR_jet2_muon3", "dR_jet2_muon3", 25, 0, 5)));
+
+  ANA_CHECK(book(TH1F("dR_jet1_ep1", "dR_jet1_ep1", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("dR_jet1_em1", "dR_jet1_em1", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("dR_jet2_ep1", "dR_jet2_ep1", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("dR_jet2_em1", "dR_jet2_em1", 25, 0, 5)));
+
+  ANA_CHECK(book(TH1F("M_jet1_muon1", "M_jet1_muon1[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("M_jet1_muon2", "M_jet1_muon2[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("M_jet1_muon3", "M_jet1_muon3[GeV]", 50, 0, 500)));
+
+  ANA_CHECK(book(TH1F("M_jet2_muon1", "M_jet2_muon1[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("M_jet2_muon2", "M_jet2_muon2[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("M_jet2_muon3", "M_jet2_muon3[GeV]", 50, 0, 500)));
+
+  ANA_CHECK(book(TH1F("M_ep1em1", "M_ep1em1[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("M_up1um1", "M_up1um1[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("dR_ep1em1", "dR_ep1em1", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("dR_up1um1", "dR_up1um1", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("dR_Hmuon_ep1", "dR_Hmuon_ep1", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("dR_Hmuon_em1", "dR_Hmuon_em1", 25, 0, 5)));
+
+  // ANA_CHECK (book (TH1F ("M_l1l2", "M_l1l2[GeV]", 50, 0, 500)));
+
+  // ANA_CHECK (book (TH1F ("n_weight","n_weight", 5, 0, 5)));
+  // ANA_CHECK (book (TH1F ("weight","weight", 5, -2, 2)));
+
+  ANA_CHECK(book(TH1F("Hmuon_pt_rank", "Hmuon_pt_rank", 4, 0, 4)));
+  ANA_CHECK(book(TH1F("Hmuon_pt", "Hmuon_pt[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("Hmuon_eta", "Hmuon_eta", 40, -4, 4)));
+  ANA_CHECK(book(TH1F("Hmuon_phi", "Hmuon_phi", 40, -4, 4)));
+  ANA_CHECK(book(TH1F("Hmuon_charge", "Hmuon_charge", 5, -2, 3)));
+
+  // ANA_CHECK (book (TH1F ("muon1_pt", "muon1_pt[GeV]", 50, 0, 500)));
+  // ANA_CHECK (book (TH1F ("muon1_eta", "muon1_eta", 40, -4, 4)));
+  // ANA_CHECK (book (TH1F ("muon1_phi", "muon1_phi", 40, -4, 4)));
+  // ANA_CHECK (book (TH1F ("muon1_charge", "muon1_charge", 5,-2,3)));
+
+  ANA_CHECK(book(TH1F("MET", "MET[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("W_mT_Hmuon", "W_mT_Hmuon[GeV]", 50, 0, 500)));
+
+  ANA_CHECK(book(TH1F("M_jet1_Hmuon", "M_jet1_Hmuon[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("M_jet2_Hmuon", "M_jet2_Hmuon[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("mT_jet2_Hmuon", "mT_jet2_Hmuon[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("mT_jet1_Hmuon", "mT_jet1_Hmuon[GeV]", 50, 0, 500)));
+
+  ANA_CHECK(book(TH1F("M_Zc_uPair", "M_Zc_uPair[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("dR_jet1_noZcUpair_Hlep", "dR_jet1_noZcUpair_Hlep", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("M_jet1_noZcUpair_Hlep", "M_jet1_noZcUpair_Hlep[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("noZcUpair_Hlep_isHmuon", "noZcUpair_Hlep_isHmuon", 3, 0, 3)));
+  ANA_CHECK(book(TH1F("muon3_isHmuon", "muon3_isHmuon", 3, 0, 3)));
+  ANA_CHECK(book(TH1F("muon1_isHmuon", "muon1_isHmuon", 3, 0, 3)));
+  ANA_CHECK(book(TH1F("method3_muon_isHmuon", "method3_muon_isHmuon", 3, 0, 3)));
+  ANA_CHECK(book(TH1F("n_method3_match", "n_method3_match", 10, 0, 10)));
+
+  ANA_CHECK(book(TH1F("Mtype", "Mtype", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("Mtype_generation", "Mtype_generation", 7, 0, 7)));
+  ANA_CHECK(book(TH1F("Etype", "Etype", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("Etype_generation", "Etype_generation", 7, 0, 7)));
+
+  // ANA_CHECK (book (TH1F ("nParents_muon", "nParents_muon", 5, 0, 5)));
+  // ANA_CHECK (book (TH1F ("1Pmuon_parent", "1Pmuon_parent", 30, 0, 30)));
+  // ANA_CHECK (book (TH1F ("2Pmuon_parent0", "2Pmuon_parent0", 30, 0, 30)));
+  // ANA_CHECK (book (TH1F ("2Pmuon_parent1", "2Pmuon_parent1", 30, 0, 30)));
+  // ANA_CHECK (book (TH1F ("1MPmuon_gran", "1MPmuon_gran", 30, 0, 30)));
+  // ANA_CHECK (book (TH1F ("1WPmuon_gran", "1WPmuon_gran", 30, 0, 30)));
+
+  // ANA_CHECK (book (TH1F ("gran_pdgid_muonMP", "gran_pdgid_muonMP", 30,0,30))); 
+  // ANA_CHECK (book (TH1F("grangran_pdgid_muonMP","grangran_pdgid_muonMP", 30, 0, 30))); 
+  // ANA_CHECK(book (TH1F("muon_origion_pdgid", "muon_origion_pdgid", 30, 0, 30)));
+  // ANA_CHECK (book(TH1F ("ele_origion_pdgid", "ele_origion_pdgid", 30, 0,30)));
+
+  // ANA_CHECK (book (TH1F ("ep1_pt", "ep1_pt[GeV]", 50, 0, 500)));
+  // ANA_CHECK (book (TH1F ("ep1_eta", "ep1_eta", 40, -4, 4)));
+  // ANA_CHECK (book (TH1F ("ep1_phi", "ep1_phi", 40, -4, 4)));
+
+  // ANA_CHECK (book (TH1F ("em1_pt", "em1_pt[GeV]", 50, 0, 500)));
+  // ANA_CHECK (book (TH1F ("em1_eta", "em1_eta", 40, -4, 4)));
+  // ANA_CHECK (book (TH1F ("em1_phi", "em1_phi", 40, -4, 4)));
+
+  // ANA_CHECK (book (TH1F ("dPt_ep1em1", "dPt_ep1em1[GeV]", 50, 0, 500)));
+  // ANA_CHECK (book (TH1F ("dEta_ep1em1", "dEta_ep1em1", 200, 0, 0.2)));
+  // ANA_CHECK (book (TH1F ("dPhi_ep1em1", "dPhi_ep1em1", 200, 0, 0.2)));
+
+  ANA_CHECK(book(TH1F("dR_jet1_Hmuon", "dR_jet1_Hmuon", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("dR_jet2_Hmuon", "dR_jet2_Hmuon", 25, 0, 5)));
+
+  ANA_CHECK(book(TH1F("dR_HuRcJet_Hmuon", "dR_HuRcJet_Hmuon", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("dR_WMcJet_Hmuon", "dR_WMcJet_Hmuon", 25, 0, 5)));
+
+  ANA_CHECK(book(TH1F("jet1_mass", "jet1_mass[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("jet2_mass", "jet2_mass[GeV]", 50, 0, 500)));
+
+  ANA_CHECK(book(TH1F("HuRcJet_mass", "HuRcJet_mass[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("WMcJet_mass", "WMcJet_mass[GeV]", 50, 0, 500)));
+
+  ANA_CHECK(book(TH1F("jet1_pt", "jet1_pt[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("jet2_pt", "jet2_pt[GeV]", 50, 0, 500)));
+
+  ANA_CHECK(book(TH1F("Boson_pdgid", "Boson_pdgid", 30, 0, 30)));
+  ANA_CHECK(book(TH1F("BosonD_pdgid", "BosonD_pdgid", 30, 0, 30)));
+  ANA_CHECK(book(TH1F("n_ZBoson", "n_ZBoson", 16, 0, 16)));
+  ANA_CHECK(book(TH1F("n_WBoson", "n_WBoson", 16, 0, 16)));
+  ANA_CHECK(book(TH1F("n_HBoson", "n_HBoson", 16, 0, 16)));
+  ANA_CHECK(book(TH1F("n_Higgs", "n_Higgs", 16, 0, 16)));
+  ANA_CHECK(book(TH1F("n_qdW", "n_qdW", 11, 0, 11)));
+  
+  ANA_CHECK(book(TH1F("n_edW", "n_edW", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("n_udW", "n_udW", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("n_tdW", "n_tdW", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("n_ldW", "n_ldW", 11, 0, 11)));
+
+  ANA_CHECK(book(TH1F("n_Wde", "n_Wde", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("n_Wdve", "n_Wdve", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("n_Wdu", "n_Wdu", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("n_Wdvu", "n_Wdvu", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("n_Wdt", "n_Wdt", 11, 0, 11)));
+  ANA_CHECK(book(TH1F("n_Wdvt", "n_Wdvt", 11, 0, 11)));
+
+  ANA_CHECK(book(TH1F("Wde1_pt", "Wde1_pt[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("Wde2_pt", "Wde2_pt[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("Wdve1_pt", "Wdve1_pt[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("Wdve2_pt", "Wdve2_pt[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("Wdu1_pt", "Wdu1_pt[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("Wdu2_pt", "Wdu2_pt[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("Wdvu1_pt", "Wdvu1_pt[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("Wdvu2_pt", "Wdvu2_pt[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("Wdt1_pt", "Wdt1_pt[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("Wdt2_pt", "Wdt2_pt[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("Wdvt1_pt", "Wdvt1_pt[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("Wdvt2_pt", "Wdvt2_pt[GeV]", 50, 0, 500)));
+
+  ANA_CHECK(book(TH1F("dR_Wde1_Wdve1", "dR_Wde1_Wdve1", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("dR_Wde1_Wdve2", "dR_Wde1_Wdve2", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("dR_qdW_Wde1", "dR_qdW_Wde1", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("dR_qdW_Wde2", "dR_qdW_Wde2", 25, 0, 5)));
+
+  ANA_CHECK(book(TH1F("VW_pt", "VW_pt[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("H_pt", "H_pt[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("dpt_HW", "dpt_HW[GeV]", 50, 0, 500)));
+
+  ANA_CHECK(book(TH1F("dR_muon1_RfldW", "dR_muon1_RfldW", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("dR_muon2_qdW", "dR_muon2_qdW", 25, 0, 5)));
+  
+  ANA_CHECK(book(TH1F("W_n_parent", "W_n_parent", 5, 0, 5)));
+  ANA_CHECK(book(TH1F("W_n_child", "W_n_child", 5, 0, 5)));
+  ANA_CHECK(book(TH1F("W_parent_pdgid", "W_parent_pdgid", 30, 0, 30)));
+  ANA_CHECK(book(TH1F("W_child_pdgid", "W_child_pdgid", 30, 0, 30)));
+
+  ANA_CHECK(book(TH1F("qdW_mass", "qdW_mass[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("qdW_pt", "qdW_pt[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("Higgs_mass", "Higgs_mass[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("Higgs_pt", "Higgs_pt[GeV]", 50, 0, 500)));
+
+  ANA_CHECK(book(TH1F("dR_jet1_qdW", "dR_jet1_qdW", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("FJWRcJet_mass", "FJWRcJet_mass[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("FJWRcJet_pt", "FJWRcJet_pt[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("dR_FJWRcJet_qdW", "dR_FJWRcJet_qdW", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("M_FJWRcJet_Hmuon", "M_FJWRcJet_Hmuon[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("dR_FJWRcJet_Hmuon", "dR_FJWRcJet_Hmuon", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("mT_FJWRcJet_Hmuon", "mT_FJWRcJet_Hmuon[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("M_qdW_Hmuon", "M_qdW_Hmuon[GeV]", 50, 0, 500)));
+  ANA_CHECK(book(TH1F("dR_qdW_Hmuon", "dR_qdW_Hmuon", 25, 0, 5)));
+  ANA_CHECK(book(TH1F("mT_qdW_Hmuon", "mT_qdW_Hmuon[GeV]", 50, 0, 500)));
+
+  ANA_CHECK(book(TH1F("SumPx_lep_jet", "SumPx_lep_jet[GeV]", 100, -500, 500)));
+  ANA_CHECK(book(TH1F("SumPy_lep_jet", "SumPy_lep_jet[GeV]", 100, -500, 500)));
+  ANA_CHECK(book(TH1F("SumPx_lep_SRjet", "SumPx_lep_SRjet[GeV]", 100, -500, 500)));
+  ANA_CHECK(book(TH1F("SumPy_lep_SRjet", "SumPy_lep_SRjet[GeV]", 100, -500, 500)));
+
+  // ANA_CHECK (book (TH1F ("dR_pt200jet_up1", "dR_pt200jet_up1", 25, 0, 5)));
+  // ANA_CHECK (book (TH1F ("dR_pt200jet_up2", "dR_pt200jet_up2", 25, 0, 5)));
+  // ANA_CHECK (book (TH1F ("dR_pt200jet_um1", "dR_pt200jet_um1", 25, 0, 5)));
+  // ANA_CHECK (book (TH1F ("dR_pt200jet_um2", "dR_pt200jet_um2", 25, 0, 5)));
+
+  return StatusCode::SUCCESS;
+}
+
+StatusCode MyxAODAnalysis ::execute() {
+  // Here you do everything that needs to be done on every single
+  // events, e.g. read input variables, apply cuts, and fill
+  // histograms and trees.  This is where most of your actual analysis
+  // code will go.
+  // retrieve the eventInfo object from the event store
+  const xAOD::EventInfo *eventInfo = nullptr;
+  ANA_CHECK(evtStore()->retrieve(eventInfo, "EventInfo"));
+
+  float weight = 0;
+  // //retrive event weight
+  // ToolHandle<PMGTools::IPMGTruthWeightTool> m_weightTool;
+  // m_weightTool.setTypeAndName("PMGTools::PMGTruthWeightTool/PMGTruthWeightTool");
+  // ATH_CHECK(m_weightTool.retrieve());
+
+  // int n_weight = 0;
+
+  // ANA_MSG_INFO("weight:"<<weight);
+  // for (auto weight_name : m_weightTool->getWeightNames()) {
+  // n_weight++;
+  // weight = m_weightTool->getWeight(weight_name);
+  // ANA_MSG_INFO("weight_name:"<<weight_name<<" weight:"<<weight);
+  // //my_histogram_map[weight].Fill(my_variable,
+  // m_weightTool->getWeight(weight));
+  // }
+  // ANA_MSG_INFO("n_weight: "<<n_weight);
+  // hist("n_weight")->Fill(n_weight);
+  // hist("weight")->Fill(weight);
+  weight = 1;
+
+  // print out run and event number from retrieved object
+  std::cout << "================= start" << std::endl;
+  ANA_MSG_INFO("================= in execute, runNumber = "
+               << eventInfo->runNumber()
+               << ", eventNumber = " << eventInfo->eventNumber());
+
+  const xAOD::TruthParticleContainer *truthMuons(nullptr);
+  ATH_CHECK(evtStore()->retrieve(truthMuons, "TruthMuons"));
+  ANA_MSG_INFO("retrieve muon successfully");
+
+  const xAOD::TruthParticleContainer *truthElectrons(nullptr);
+  ATH_CHECK(evtStore()->retrieve(truthElectrons, "TruthElectrons"));
+  ANA_MSG_INFO("retrieve electron successfully");
+
+  const xAOD::JetContainer *truthak10jet(nullptr);
+  ATH_CHECK(evtStore()->retrieve(truthak10jet,
+                                 "AntiKt10TruthTrimmedPtFrac5SmallR20Jets"));
+  ANA_MSG_INFO("retrieve fatjet successfully");
+
+  const xAOD::JetContainer* truthak4jet(nullptr);
+  ATH_CHECK(evtStore()->retrieve(truthak4jet, "AntiKt4TruthDressedWZJets"));
+
+  const xAOD::MissingETContainer *MET_Truth(nullptr);
+  ATH_CHECK(evtStore()->retrieve(MET_Truth, "MET_Truth"));
+  ANA_MSG_INFO("retrieve MET successfully");
+
+  int qqZuu_flag = 1;
+  const xAOD::TruthParticleContainer *truthBosonD(nullptr);
+  const xAOD::TruthParticleContainer *truthBoson(nullptr);
+  if (qqZuu_flag == 0) {
+    ATH_CHECK(
+        evtStore()->retrieve(truthBosonD, "TruthBosonsWithDecayParticles"));
+  }
+
+  if (qqZuu_flag == 1) {
+    ATH_CHECK(evtStore()->retrieve(truthBosonD, "TruthWbosonWithDecayParticles"));
+    ATH_CHECK(evtStore()->retrieve(truthBoson, "TruthBoson"));
+  }
+
+  ANA_MSG_INFO("retrieve BosonD successfully");
+
+  std::vector<TLorentzVector> vec_ZBoson;
+  std::vector<TLorentzVector> vec_WBoson;
+  std::vector<TLorentzVector> vec_HBoson;
+  std::vector<TLorentzVector> vec_Higgs;
+  std::vector<TLorentzVector> vec_qdW;
+  std::vector<TLorentzVector> vec_edW;
+  std::vector<TLorentzVector> vec_udW;
+  std::vector<TLorentzVector> vec_tdW;
+  std::vector<TLorentzVector> vec_ldW;
+  std::vector<TLorentzVector> vec_Wde;
+  std::vector<TLorentzVector> vec_Wdve;
+  std::vector<TLorentzVector> vec_Wdvu;
+  std::vector<TLorentzVector> vec_Wdu;
+  std::vector<TLorentzVector> vec_Wdvt;
+  std::vector<TLorentzVector> vec_Wdt;
+
+
+  if (qqZuu_flag == 1) {
+    for (std::size_t i = 0; i < truthBoson->size(); ++i) {
+      auto ithBoson = truthBoson->at(i);
+      hist("Boson_pdgid")->Fill(abs(ithBoson->pdgId()), weight);
+      if (abs(ithBoson->pdgId()) == 23)
+        vec_ZBoson.push_back(ithBoson->p4());
+      if (abs(ithBoson->pdgId()) == 25)
+        vec_HBoson.push_back(ithBoson->p4());
+      if (abs(ithBoson->pdgId()) == 25) {
+        if (ithBoson->nParents() == 0)
+          vec_Higgs.push_back(ithBoson->p4());
+        if (ithBoson->nParents() > 0) {
+          auto parent = ithBoson->parent(0);
+          if (abs(parent->pdgId()) != 25) {
+            vec_Higgs.push_back(ithBoson->p4());
+          }
+        }
+      }
+    }
+    ANA_MSG_INFO("for loop Boson successfully");
+  }
+
+  for (std::size_t i = 0; i < truthBosonD->size(); ++i) {
+    auto ithBoson = truthBosonD->at(i);
+    hist("BosonD_pdgid")->Fill(abs(ithBoson->pdgId()), weight);
+    if (abs(ithBoson->pdgId()) == 23) vec_ZBoson.push_back(ithBoson->p4());
+    
+    if (abs(ithBoson->pdgId()) == 11) vec_Wde.push_back(ithBoson->p4());
+    if (abs(ithBoson->pdgId()) == 12) vec_Wdve.push_back(ithBoson->p4());
+    if (abs(ithBoson->pdgId()) == 13) vec_Wdu.push_back(ithBoson->p4());
+    if (abs(ithBoson->pdgId()) == 14) vec_Wdvu.push_back(ithBoson->p4());
+    if (abs(ithBoson->pdgId()) == 15) vec_Wdt.push_back(ithBoson->p4());
+    if (abs(ithBoson->pdgId()) == 16) vec_Wdvt.push_back(ithBoson->p4());
+    
+    if (abs(ithBoson->pdgId()) == 24) {
+      vec_WBoson.push_back(ithBoson->p4());
+      hist("W_n_parent")->Fill(ithBoson->nParents(), weight);
+      hist("W_n_child")->Fill(ithBoson->nChildren(), weight);
+      if (ithBoson->nParents() > 0)
+        hist("W_parent_pdgid")->Fill(abs(ithBoson->parent(0)->pdgId()), weight);
+      if (ithBoson->nChildren() == 1){
+        hist("W_child_pdgid")->Fill(abs(ithBoson->child(0)->pdgId()), weight);
+      }
+    }
+    if (abs(ithBoson->pdgId()) == 25) vec_HBoson.push_back(ithBoson->p4());
+    
+    if (abs(ithBoson->pdgId()) == 24 && ithBoson->nChildren() == 2) {
+      auto child1 = ithBoson->child(0);
+      auto child2 = ithBoson->child(1);
+      if (abs(child1->pdgId()) < 6 && abs(child2->pdgId()) < 6) vec_qdW.push_back(ithBoson->p4());
+    }
+    
+    if (abs(ithBoson->pdgId()) == 24 && ithBoson->nChildren() >0) {
+      for (int i = 0; i < ithBoson->nChildren(); ++i) {
+        auto child = ithBoson->child(i);
+        if (abs(child->pdgId())== 11) {
+          vec_edW.push_back(ithBoson->p4());
+          vec_ldW.push_back(ithBoson->p4());
+        }
+        if (abs(child->pdgId())== 13) {
+          vec_udW.push_back(ithBoson->p4());
+          vec_ldW.push_back(ithBoson->p4());
+        }
+        if (abs(child->pdgId())== 15) {
+          vec_tdW.push_back(ithBoson->p4());
+          vec_ldW.push_back(ithBoson->p4());
+        }
+      }  
+    }
+
+    
+    if (abs(ithBoson->pdgId()) == 25) {
+      if (ithBoson->nParents() == 0) vec_Higgs.push_back(ithBoson->p4());
+      if (ithBoson->nParents() > 0) {
+        auto parent = ithBoson->parent(0);
+        if (abs(parent->pdgId()) != 25) {
+          vec_Higgs.push_back(ithBoson->p4());
+        }
+      }
+    }
+  }
+  ANA_MSG_INFO("for loop BosonD successfully");
+
+  int n_ZBoson = vec_ZBoson.size();
+  int n_WBoson = vec_WBoson.size();
+  int n_HBoson = vec_HBoson.size();
+  int n_qdW = vec_qdW.size();
+  int n_edW = vec_edW.size();
+  int n_udW = vec_udW.size();
+  int n_tdW = vec_tdW.size();
+  int n_ldW = vec_ldW.size();
+
+  int n_Wde = vec_Wde.size();
+  int n_Wdve = vec_Wdve.size();
+  int n_Wdu = vec_Wdu.size();
+  int n_Wdvu = vec_Wdvu.size();
+  int n_Wdt = vec_Wdt.size();
+  int n_Wdvt = vec_Wdvt.size();
+  int n_Higgs = vec_Higgs.size();
+  hist("n_ZBoson")->Fill(n_ZBoson, weight);
+  hist("n_WBoson")->Fill(n_WBoson, weight);
+  hist("n_HBoson")->Fill(n_HBoson, weight);
+  hist("n_Higgs")->Fill(n_Higgs, weight);
+  hist("n_qdW")->Fill(n_qdW, weight);
+  hist("n_edW")->Fill(n_edW, weight);
+  hist("n_udW")->Fill(n_udW, weight);
+  hist("n_tdW")->Fill(n_tdW, weight);
+  hist("n_ldW")->Fill(n_ldW, weight);
+
+  hist("n_Wde")->Fill(n_Wde, weight);
+  hist("n_Wdve")->Fill(n_Wdve, weight);
+  hist("n_Wdu")->Fill(n_Wdu, weight);
+  hist("n_Wdvu")->Fill(n_Wdvu, weight);
+  hist("n_Wdt")->Fill(n_Wdt, weight);
+  hist("n_Wdvt")->Fill(n_Wdvt, weight);
+
+  std::sort(vec_Wde.begin(), vec_Wde.end(), cmp3);
+  std::sort(vec_Wdve.begin(), vec_Wdve.end(), cmp3);
+  std::sort(vec_Wdu.begin(), vec_Wdu.end(), cmp3);
+  std::sort(vec_Wdvu.begin(), vec_Wdvu.end(), cmp3);
+  std::sort(vec_Wdt.begin(), vec_Wdt.end(), cmp3);
+  std::sort(vec_Wdvt.begin(), vec_Wdvt.end(), cmp3);
+
+  if (n_Wde>=1) hist("Wde1_pt")->Fill(vec_Wde.at(0).Pt()/1000, weight);
+  if (n_Wde>=2) hist("Wde2_pt")->Fill(vec_Wde.at(1).Pt()/1000, weight);
+  if (n_Wdve>=1) hist("Wdve1_pt")->Fill(vec_Wdve.at(0).Pt()/1000, weight);
+  if (n_Wdve>=2) hist("Wdve2_pt")->Fill(vec_Wdve.at(1).Pt()/1000, weight);
+  if (n_Wdu>=1) hist("Wdu1_pt")->Fill(vec_Wdu.at(0).Pt()/1000, weight);
+  if (n_Wdu>=2) hist("Wdu2_pt")->Fill(vec_Wdu.at(1).Pt()/1000, weight);
+  if (n_Wdvu>=1) hist("Wdvu1_pt")->Fill(vec_Wdvu.at(0).Pt()/1000, weight);
+  if (n_Wdvu>=2) hist("Wdvu2_pt")->Fill(vec_Wdvu.at(1).Pt()/1000, weight);
+  if (n_Wdt>=1) hist("Wdt1_pt")->Fill(vec_Wdt.at(0).Pt()/1000, weight);
+  if (n_Wdt>=2) hist("Wdt2_pt")->Fill(vec_Wdt.at(1).Pt()/1000, weight);
+  if (n_Wdvt>=1) hist("Wdvt1_pt")->Fill(vec_Wdvt.at(0).Pt()/1000, weight);
+  if (n_Wdvt>=2) hist("Wdvt2_pt")->Fill(vec_Wdvt.at(1).Pt()/1000, weight);
+
+  if (n_Wde>=1 && n_Wdve>=1) hist("dR_Wde1_Wdve1")->Fill(vec_Wde.at(0).DeltaR(vec_Wdve.at(0)), weight);
+  if (n_Wde>=1 && n_Wdve>=2) hist("dR_Wde1_Wdve2")->Fill(vec_Wde.at(0).DeltaR(vec_Wdve.at(1)), weight);
+  if (n_Wde>=1 && n_qdW>=1) hist("dR_qdW_Wde1")->Fill(vec_Wde.at(0).DeltaR(vec_qdW.at(0)), weight);
+  if (n_Wde>=2 && n_qdW>=1) hist("dR_qdW_Wde2")->Fill(vec_Wde.at(1).DeltaR(vec_qdW.at(0)), weight);
+
+  if (n_Wde>=1 && n_Wdve>=1) hist("VW_pt")->Fill((vec_Wde.at(0)+vec_Wdve.at(0)).Pt()/1000, weight);
+  if (n_Wde>=2 && n_Wdve>=2) hist("H_pt")->Fill((vec_Wde.at(1)+vec_Wdve.at(1)+vec_qdW.at(0)).Pt()/1000, weight);
+  if (n_Wde>=2 && n_Wdve>=2) hist("dpt_HW")->Fill(abs((vec_Wde.at(1)+vec_Wdve.at(1)+vec_qdW.at(0)).Pt()-(vec_Wde.at(0)+vec_Wdve.at(0)).Pt())/1000, weight);
+  
+
+  TLorentzVector qdW_TLV;
+  if (n_qdW > 0) {
+    qdW_TLV = vec_qdW.at(0);
+  }
+  ANA_MSG_INFO("qdW_TLV successfully");
+
+  // Higgs
+  TLorentzVector Higgs_TLV;
+  if (n_Higgs > 0) {
+    Higgs_TLV = vec_Higgs.at(0);
+  }
+  float Higgs_mass = 9999999;
+  float Higgs_pt = 9999999;
+  if (n_Higgs > 0) {
+    Higgs_mass = Higgs_TLV.M();
+    Higgs_pt = Higgs_TLV.Pt();
+    hist("Higgs_mass")->Fill(Higgs_mass * 0.001, weight);
+    hist("Higgs_pt")->Fill(Higgs_pt * 0.001, weight);
+  }
+  ANA_MSG_INFO("Higgs_TLV successfully");
+
+  const xAOD::MissingET *METCand = MET_Truth->at(0);
+  ANA_MSG_INFO("METCand->met():" << METCand->met());
+  ANA_MSG_INFO("METCand->phi():" << METCand->phi());
+  float MET = METCand->met();
+
+  float SumPx_lep_jet=0;
+  float SumPx_lep_SRjet=0;
+  float SumPy_lep_jet=0;
+  float SumPy_lep_SRjet=0;
+
+  // construct vecak10jet
+  std::vector<std::tuple<int, float>> vecak10jet;
+  for (std::size_t i = 0; i < truthak10jet->size(); ++i) {
+    auto jet = truthak10jet->at(i);
+    vecak10jet.push_back({i, jet->pt()});
+    TLorentzVector jet_TLV=jet->p4();
+    SumPx_lep_jet+=jet_TLV.Px();
+    SumPy_lep_jet+=jet_TLV.Py();
+  }
+  std::sort(vecak10jet.begin(), vecak10jet.end(), cmp1);
+  ANA_MSG_INFO("construct vecak10jet done");
+  
+  //construct vecak4jet (truth jet)
+  std::vector<std::tuple<int, float>>vecak4jet;
+  for (std::size_t i = 0; i < truthak4jet->size(); ++i) {
+    auto SRjet = truthak4jet->at(i);
+    vecak4jet.push_back({ i,SRjet->pt() });
+    TLorentzVector SRjet_TLV=SRjet->p4();
+    SumPx_lep_SRjet+=SRjet_TLV.Px();
+    SumPy_lep_SRjet+=SRjet_TLV.Py();
+  }
+  std::sort(vecak4jet.begin(), vecak4jet.end(), cmp1);
+  // veclep
+  std::vector<std::tuple<std::string, int, float>> veclep;
+
+  // construct vecmuon
+  std::vector<std::tuple<int, float>> vecmuon;
+  std::vector<std::tuple<int, float>> vecmuon_p;
+  std::vector<std::tuple<int, float>> vecmuon_m;
+  for (std::size_t i = 0; i < truthMuons->size(); ++i) {
+    auto muon = truthMuons->at(i);
+    vecmuon.push_back({i, muon->pt()});
+    veclep.push_back({"muon", i, muon->pt()});
+    if (muon->pdgId() == -13) {
+      vecmuon_p.push_back({i, muon->pt()});
+    }
+    if (muon->pdgId() == 13) {
+      vecmuon_m.push_back({i, muon->pt()});
+    }
+    TLorentzVector muon_TLV=muon->p4();
+    SumPx_lep_jet+=muon_TLV.Px();
+    SumPy_lep_jet+=muon_TLV.Py();
+    SumPx_lep_SRjet+=muon_TLV.Px();
+    SumPy_lep_SRjet+=muon_TLV.Py();
+  }
+  std::sort(vecmuon.begin(), vecmuon.end(), cmp1);
+  std::sort(vecmuon_p.begin(), vecmuon_p.end(), cmp1);
+  std::sort(vecmuon_m.begin(), vecmuon_m.end(), cmp1);
+  ANA_MSG_INFO("construct vecmuon done");
+
+  // construct vecEle
+  std::vector<std::tuple<int, float>> vecele;
+  std::vector<std::tuple<int, float>> vecele_p;
+  std::vector<std::tuple<int, float>> vecele_m;
+  for (std::size_t i = 0; i < truthElectrons->size(); ++i) {
+    auto ele = truthElectrons->at(i);
+    vecele.push_back({i, ele->pt()});
+    veclep.push_back({"electron", i, ele->pt()});
+    if (ele->pdgId() == -11) {
+      vecele_p.push_back({i, ele->pt()});
+    }
+    if (ele->pdgId() == 11) {
+      vecele_m.push_back({i, ele->pt()});
+    }
+    TLorentzVector ele_TLV=ele->p4();
+    SumPx_lep_jet+=ele_TLV.Px();
+    SumPy_lep_jet+=ele_TLV.Py();
+    SumPx_lep_SRjet+=ele_TLV.Px();
+    SumPy_lep_SRjet+=ele_TLV.Py();
+  }
+  std::sort(vecele.begin(), vecele.end(), cmp1);
+  std::sort(vecele_p.begin(), vecele_p.end(), cmp1);
+  std::sort(vecele_m.begin(), vecele_m.end(), cmp1);
+  std::sort(veclep.begin(), veclep.end(), cmp2);
+  ANA_MSG_INFO("construct vecEle done");
+
+  int njet = vecak10jet.size();
+  int nSRjet = vecak4jet.size();
+  int nlep = veclep.size();
+  int nmuon = vecmuon.size();
+  int nmuon_p = vecmuon_p.size();
+  int nmuon_m = vecmuon_m.size();
+  int nele = vecele.size();
+  int nele_p = vecele_p.size();
+  int nele_m = vecele_m.size();
+
+  SumPx_lep_jet+=METCand->mpx();
+  SumPy_lep_jet+=METCand->mpy();
+  SumPx_lep_SRjet+=METCand->mpx();
+  SumPy_lep_SRjet+=METCand->mpy();
+
+  hist("SumPx_lep_jet")->Fill(SumPx_lep_jet * 0.001, weight);
+  hist("SumPy_lep_jet")->Fill(SumPy_lep_jet * 0.001, weight);
+  hist("SumPx_lep_SRjet")->Fill(SumPx_lep_SRjet * 0.001, weight);
+  hist("SumPy_lep_SRjet")->Fill(SumPy_lep_SRjet * 0.001, weight);
+
+  ANA_MSG_INFO("construct number done");
+
+  std::cout << "nmuon: " << nmuon << ";nmuon_p: " << nmuon_p
+            << ";nmuon_m: " << nmuon_m << std::endl;
+  std::cout << "nele: " << nele << ";nele_p: " << nele_p
+            << ";nele_m: " << nele_m << std::endl;
+  std::cout << "nlep: " << nlep << ";nak10jet: " << njet << std::endl;
+
+  // Mtype
+  std::vector<int> vec_Mtype;
+  // if(nmuon>=1){
+  //   for (const xAOD::TruthParticle* ithMuon: *truthMuons){
+  //     int Mtype = 0;
+  //     if(ithMuon->nParents()==0) Mtype =1;
+  //     if(ithMuon->nParents()==1) {
+  //       auto parent = ithMuon->parent(0);
+  //       if(parent->pdgId()==23){
+  //         if(parent->nParents()==1){
+  //           auto gran = parent->parent(0);
+  //           if(gran->nParents()==0 && gran->pdgId()==23) Mtype =2;
+  //         }
+  //       }
+  //       if(abs(parent->pdgId())==24){
+  //         if(parent->nParents()==1){
+  //           auto gran = parent->parent(0);
+  //           if(gran->nParents()==0 && abs(gran->pdgId())==24) Mtype =3;
+  //           if(gran->pdgId()==25) Mtype =4;
+  //           if(gran->nParents()>0 && abs(gran->pdgId())==24) {
+  //             if(gran->parent(0)->pdgId()==25) Mtype =5;
+  //           }
+  //         }
+  //       }
+  //       if(abs(parent->pdgId())!=24 && abs(parent->pdgId())!=23 ){
+  //         std::cout<<"1parent_muon_parent:"<<parent->pdgId()<<std::endl;
+  //         Mtype =6;
+  //       }
+  //     }
+  //     if(ithMuon->nParents()==2){
+  //       auto parent0 = ithMuon->parent(0);
+  //       auto parent1 = ithMuon->parent(1);
+  //       // hist ("2Pmuon_parent0")->Fill (parent0->pdgId(),weight);
+  //       // hist ("2Pmuon_parent1")->Fill (parent1->pdgId(),weight);
+  //       if(!(abs(parent0->pdgId())==24 && abs(parent1->pdgId())==24)) Mtype
+  //       =9; if(abs(parent0->pdgId())==24 && abs(parent1->pdgId())==24){
+  //         if(parent0->nParents()==1 && parent1->nParents()==1){
+  //           auto gran0 = parent0->parent(0);
+  //           auto gran1 = parent1->parent(0);
+  //           //std::cout<<"2parent_muon_gran: "<<gran0->pdgId()<<"
+  //           "<<gran1->pdgId()<<std::endl; if(gran0->pdgId()==25 &&
+  //           gran1->pdgId()==25) Mtype =8; if(abs(gran0->pdgId())==24 &&
+  //           abs(gran1->pdgId())==24){
+  //             if(gran0->nParents()==1 && gran1->nParents()==1){
+  //               if(gran0->parent(0)->pdgId()==25 &&
+  //               gran1->parent(0)->pdgId()==25) Mtype =7;
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //     vec_Mtype.push_back(Mtype);
+  //     hist ("Mtype")->Fill (Mtype,weight);
+  //     //std::cout<<"Mtype: "<<Mtype<<std::endl;
+  //   }
+  // }
+
+  // if(nmuon>=1){
+  //   for (const xAOD::TruthParticle* ithMuon: *truthMuons){
+  //     int Mtype = 0;
+  //     if(ithMuon->nParents()==0) Mtype =1;
+  //     if(ithMuon->nParents()==1) {
+  //       auto parent = ithMuon->parent(0);
+  //       if(parent->pdgId()==23) Mtype =2;
+  //       if(abs(parent->pdgId())==13 && parent->nParents()==1){
+  //         auto gran = parent->parent(0);
+  //         hist ("gran_pdgid_muonMP")->Fill (abs(gran->pdgId()),weight);
+  //         if(gran->pdgId()==23) Mtype =3;
+  //         if(abs(gran->pdgId())==24 && gran->nParents()==1) {
+  //           auto grangran = gran->parent(0);
+  //           hist ("grangran_pdgid_muonMP")->Fill
+  //           (abs(grangran->pdgId()),weight); if(grangran->pdgId()==25) Mtype
+  //           =4; if(abs(grangran->pdgId())==24 && grangran->nParents()==1) {
+  //             auto grangrangran = grangran->parent(0);
+  //             if(grangrangran->pdgId()==25) Mtype =5;
+  //           }
+  //         }
+  //       }
+  //       if(abs(parent->pdgId())==24 && parent->nParents()==1){
+  //         auto gran = parent->parent(0);
+  //         if(gran->pdgId()==25 ) Mtype =6;
+  //         if(gran->pdgId()==24 && gran->nParents()==1) {
+  //           auto grangran = gran->parent(0);
+  //           if(grangran->pdgId()==25)Mtype =7;
+  //         }
+  //       }
+  //     }
+  //     vec_Mtype.push_back(Mtype);
+  //     hist ("Mtype")->Fill (Mtype,weight);
+  //     //std::cout<<"Mtype: "<<Mtype<<std::endl;
+  //   }
+  // }
+
+  if (nmuon >= 1) {
+    for (const xAOD::TruthParticle *ithMuon : *truthMuons) {
+      int Mtype = 0;
+      int generation = 0;
+      if (ithMuon->nParents() == 0)
+        Mtype = 4;
+      if (ithMuon->nParents() >= 1) {
+        const xAOD::TruthParticle *origion = ithMuon->parent(0);
+        generation++;
+        while (origion->nParents() >= 1) {
+          origion = origion->parent(0);
+          generation++;
+          if (abs(origion->pdgId()) == 23)
+            break;
+          if (abs(origion->pdgId()) == 25)
+            break;
+        }
+        if (abs(origion->pdgId()) == 23)
+          Mtype = 1;
+        if (abs(origion->pdgId()) == 24)
+          Mtype = 2;
+        if (abs(origion->pdgId()) == 25)
+          Mtype = 3;
+        // hist ("muon_origion_pdgid")->Fill (abs(origion->pdgId()),weight);
+      }
+
+      vec_Mtype.push_back(Mtype);
+      hist("Mtype")->Fill(Mtype, weight);
+      hist("Mtype_generation")->Fill(generation, weight);
+      // std::cout<<"Mtype: "<<Mtype<<std::endl;
+    }
+  }
+
+  ANA_MSG_INFO("construct Mtype done");
+  std::vector<int> vec_Etype;
+  if (nele >= 1) {
+    for (const xAOD::TruthParticle *ithElectron : *truthElectrons) {
+      int Etype = 0;
+      int generation = 0;
+      if (ithElectron->nParents() == 0)
+        Etype = 4;
+      if (ithElectron->nParents() >= 1) {
+        const xAOD::TruthParticle *origion = ithElectron->parent(0);
+        generation++;
+        while (origion->nParents() >= 1) {
+          origion = origion->parent(0);
+          generation++;
+          if (abs(origion->pdgId()) == 23)
+            break;
+          if (abs(origion->pdgId()) == 25)
+            break;
+        }
+        if (abs(origion->pdgId()) == 23)
+          Etype = 1;
+        if (abs(origion->pdgId()) == 24)
+          Etype = 2;
+        if (abs(origion->pdgId()) == 25)
+          Etype = 3;
+        // hist ("ele_origion_pdgid")->Fill (abs(origion->pdgId()),weight);
+      }
+
+      vec_Etype.push_back(Etype);
+      hist("Etype")->Fill(Etype, weight);
+      hist("Etype_generation")->Fill(generation, weight);
+      // std::cout<<"Etype: "<<Etype<<std::endl;
+    }
+  }
+
+  ANA_MSG_INFO("construct Etype done");
+
+  // check M type
+  if (nmuon >= 1) {
+    for (const xAOD::TruthParticle *ithMuon : *truthMuons) {
+      // hist ("nParents_muon")->Fill (ithMuon->nParents(),weight);
+      // if(ithMuon->nParents()==1) {
+      //   auto parent = ithMuon->parent(0);
+      //   hist ("1Pmuon_parent")->Fill (abs(parent->pdgId()),weight);
+
+      //   if(parent->pdgId()==13){
+      //     if(parent->nParents()==1){
+      //       auto gran = parent->parent(0);
+      //       hist ("1MPmuon_gran")->Fill (gran->pdgId(),weight);
+      //     }
+      //   }
+      //   if(abs(parent->pdgId())==24){
+      //     if(parent->nParents()==1){
+      //       auto gran = parent->parent(0);
+      //       hist ("1WPmuon_gran")->Fill (gran->pdgId(),weight);
+      //     }
+      //   }
+
+      // }
+      // std::cout<<"Mtype: "<<Mtype<<std::endl;
+    }
+  }
+  float Zmass = 91187.6; // MeV
+  float Hmass = 125250;  // MeV
+  float Wmass = 80433;   // MeV
+
+  // Hmuon
+  int nHmuon = 0;
+  int nZmuon = 0;
+  float Hmuon_pt = 9999999;
+  float Hmuon_eta = 9999999;
+  float Hmuon_phi = 9999999;
+  int Hmuon_charge = 9999999;
+  TLorentzVector Hmuon_TLV;
+  for (std::size_t n = 0; n < vec_Mtype.size(); ++n) {
+    int type = vec_Mtype.at(n);
+    if (type == 3) {
+      nHmuon++;
+      auto Hmuon = truthMuons->at(n);
+      Hmuon_pt = Hmuon->pt();
+      Hmuon_eta = Hmuon->eta();
+      Hmuon_phi = Hmuon->phi();
+      Hmuon_charge = Hmuon->charge();
+      Hmuon_TLV = Hmuon->p4();
+    }
+    if (type == 1) {
+      nZmuon++;
+    }
+  }
+
+  // Hele
+  int nHele = 0;
+  int nZele = 0;
+  for (std::size_t n = 0; n < vec_Etype.size(); ++n) {
+    int type = vec_Etype.at(n);
+    if (type == 3) {
+      nHele++;
+    }
+    if (type == 1) {
+      nZele++;
+    }
+  }
+
+  int Hmuon_pt_rank = 9999999;
+  for (std::size_t n = 0; n < nmuon; ++n) {
+    int index = std::get<0>(vecmuon.at(n));
+    int type = vec_Mtype.at(index);
+    if (type == 3) {
+      Hmuon_pt_rank = n;
+    }
+  }
+  // Etype
+  // std::vector<int> vec_Etype;
+  // if(nele>=1){
+  //   for (const xAOD::TruthParticle* ithElectron: *truthElectrons){
+  //     int Etype = 0;
+  //     if(ithElectron->nParents()==0) Etype =1;
+  //     if(ithElectron->nParents()==1) {
+  //       auto parent = ithElectron->parent(0);
+  //       if(parent->pdgId()==23){
+  //         if(parent->nParents()==1){
+  //           auto gran = parent->parent(0);
+  //           if(gran->nParents()==0 && gran->pdgId()==23) Etype =2;
+  //         }
+  //       }
+  //       if(abs(parent->pdgId())==24){
+  //         if(parent->nParents()==1){
+  //           auto gran = parent->parent(0);
+  //           if(gran->nParents()==0 && abs(gran->pdgId())==24) Etype =3;
+  //           if(gran->pdgId()==25) Etype =4;
+  //           if(gran->nParents()>0 && abs(gran->pdgId())==24) {
+  //             if(gran->parent(0)->pdgId()==25) Etype =5;
+  //           }
+  //         }
+  //       }
+  //       if(abs(parent->pdgId())!=24 && abs(parent->pdgId())!=23 ){
+  //         std::cout<<"1parent_Electron_parent:"<<parent->pdgId()<<std::endl;
+  //         Etype =6;
+  //       }
+  //     }
+  //     if(ithElectron->nParents()==2){
+  //       auto parent0 = ithElectron->parent(0);
+  //       auto parent1 = ithElectron->parent(1);
+  //       std::cout<<"2parent_Electron_parent: "<<parent0->pdgId()<<"
+  //       "<<parent1->pdgId()<<std::endl; if(!(abs(parent0->pdgId())==24 &&
+  //       abs(parent1->pdgId())==24)) Etype =9; if(abs(parent0->pdgId())==24 &&
+  //       abs(parent1->pdgId())==24){
+  //         if(parent0->nParents()==1 && parent1->nParents()==1){
+  //           auto gran0 = parent0->parent(0);
+  //           auto gran1 = parent1->parent(0);
+  //           //std::cout<<"2parent_Electron_gran: "<<gran0->pdgId()<<"
+  //           "<<gran1->pdgId()<<std::endl; if(gran0->pdgId()==25 &&
+  //           gran1->pdgId()==25) Etype =8; if(abs(gran0->pdgId())==24 &&
+  //           abs(gran1->pdgId())==24){
+  //             if(gran0->nParents()==1 && gran1->nParents()==1){
+  //               if(gran0->parent(0)->pdgId()==25 &&
+  //               gran1->parent(0)->pdgId()==25) Etype =7;
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //     vec_Etype.push_back(Etype);
+  //     //std::cout<<"Etype: "<<Etype<<std::endl;
+  //   }
+  // }
+  // ANA_MSG_INFO ("construct Etype done");
+
+  // jet
+  float jet1_pt = 9999999;
+  float jet1_eta = 9999999;
+  float jet1_phi = 9999999;
+  float jet1_mass = 9999999;
+  TLorentzVector jet1_TLV;
+  if (njet >= 1) {
+    int index = std::get<0>(vecak10jet.at(0));
+    auto jet1 = truthak10jet->at(index);
+    jet1_TLV = jet1->p4();
+    jet1_pt = jet1->pt();
+    jet1_eta = jet1->eta();
+    jet1_phi = jet1->phi();
+    jet1_mass = jet1_TLV.M();
+  }
+
+  float jet2_pt = 9999999;
+  float jet2_eta = 9999999;
+  float jet2_phi = 9999999;
+  float jet2_mass = 9999999;
+  TLorentzVector jet2_TLV;
+  if (njet >= 2) {
+    int index = std::get<0>(vecak10jet.at(1));
+    auto jet2 = truthak10jet->at(index);
+    jet2_TLV = jet2->p4();
+    jet2_pt = jet2->pt();
+    jet2_eta = jet2->eta();
+    jet2_phi = jet2->phi();
+    jet2_mass = jet2_TLV.M();
+  }
+  ANA_MSG_INFO("construct jet done");
+
+  
+  ANA_MSG_INFO("construct jet done");
+
+  // ele
+  float ele1_pt = 9999999;
+  float ele1_eta = 9999999;
+  float ele1_phi = 9999999;
+  int ele1_charge = 9999999;
+  TLorentzVector ele1_TLV;
+  if (nele >= 1) {
+    int index = std::get<0>(vecele.at(0));
+    ;
+    auto ele1 = truthElectrons->at(index);
+    ele1_pt = ele1->pt();
+    ele1_eta = ele1->eta();
+    ele1_phi = ele1->phi();
+    ele1_charge = ele1->charge();
+    ele1_TLV = ele1->p4();
+  }
+
+  float ele2_pt = 9999999;
+  float ele2_eta = 9999999;
+  float ele2_phi = 9999999;
+  int ele2_charge = 9999999;
+  TLorentzVector ele2_TLV;
+  if (nele >= 2) {
+    int index = std::get<0>(vecele.at(1));
+    ;
+    auto ele2 = truthElectrons->at(index);
+    ele2_pt = ele2->pt();
+    ele2_eta = ele2->eta();
+    ele2_phi = ele2->phi();
+    ele2_charge = ele2->charge();
+    ele2_TLV = ele2->p4();
+  }
+
+  float ep1_pt = 9999999;
+  float ep1_eta = 9999999;
+  float ep1_phi = 9999999;
+  TLorentzVector ep1_TLV;
+  if (nele_p >= 1) {
+    int index = std::get<0>(vecele_p.at(0));
+    auto ep1 = truthElectrons->at(index);
+    ep1_pt = ep1->pt();
+    ep1_eta = ep1->eta();
+    ep1_phi = ep1->phi();
+    ep1_TLV = ep1->p4();
+  }
+
+  float em1_pt = 9999999;
+  float em1_eta = 9999999;
+  float em1_phi = 9999999;
+  TLorentzVector em1_TLV;
+  if (nele_m >= 1) {
+    int index = std::get<0>(vecele_m.at(0));
+    auto em1 = truthElectrons->at(index);
+    em1_pt = em1->pt();
+    em1_eta = em1->eta();
+    em1_phi = em1->phi();
+    em1_TLV = em1->p4();
+  }
+  ANA_MSG_INFO("construct ele done");
+  // muon
+  float muon1_pt = 9999999;
+  float muon1_eta = 9999999;
+  float muon1_phi = 9999999;
+  int muon1_charge = 9999999;
+  int muon1_isHmuon = 0;
+  TLorentzVector muon1_TLV;
+  if (nmuon >= 1) {
+    int index = std::get<0>(vecmuon.at(0));
+    ;
+    auto muon1 = truthMuons->at(index);
+    int type = vec_Mtype.at(index);
+    if (type == 3) {
+      muon1_isHmuon = 1;
+    }
+    muon1_pt = muon1->pt();
+    muon1_eta = muon1->eta();
+    muon1_phi = muon1->phi();
+    muon1_charge = muon1->charge();
+    muon1_TLV = muon1->p4();
+  }
+
+  float muon2_pt = 9999999;
+  float muon2_eta = 9999999;
+  float muon2_phi = 9999999;
+  int muon2_charge = 9999999;
+  TLorentzVector muon2_TLV;
+  if (nmuon >= 2) {
+    int index = std::get<0>(vecmuon.at(1));
+    ;
+    auto muon2 = truthMuons->at(index);
+    muon2_pt = muon2->pt();
+    muon2_eta = muon2->eta();
+    muon2_phi = muon2->phi();
+    muon2_charge = muon2->charge();
+    muon2_TLV = muon2->p4();
+  }
+
+  float muon3_pt = 9999999;
+  float muon3_eta = 9999999;
+  float muon3_phi = 9999999;
+  int muon3_charge = 9999999;
+  int muon3_isHmuon = 0;
+  TLorentzVector muon3_TLV;
+  if (nmuon >= 3) {
+    int index = std::get<0>(vecmuon.at(2));
+    ;
+    auto muon3 = truthMuons->at(index);
+    int type = vec_Mtype.at(index);
+    if (type == 3) {
+      muon3_isHmuon = 1;
+    }
+    muon3_pt = muon3->pt();
+    muon3_eta = muon3->eta();
+    muon3_phi = muon3->phi();
+    muon3_charge = muon3->charge();
+    muon3_TLV = muon3->p4();
+  }
+
+  TLorentzVector up1_TLV;
+  if (nmuon_p >= 1) {
+    int index = std::get<0>(vecmuon_p.at(0));
+    auto muon1_p = truthMuons->at(index);
+    up1_TLV = muon1_p->p4();
+  }
+
+  TLorentzVector up2_TLV;
+  if (nmuon_p >= 2) {
+    int index = std::get<0>(vecmuon_p.at(1));
+    auto muon2_p = truthMuons->at(index);
+    up2_TLV = muon2_p->p4();
+  }
+
+  TLorentzVector um1_TLV;
+  if (nmuon_m >= 1) {
+    int index = std::get<0>(vecmuon_m.at(0));
+    auto muon1_m = truthMuons->at(index);
+    um1_TLV = muon1_m->p4();
+  }
+
+  TLorentzVector um2_TLV;
+  if (nmuon_m >= 2) {
+    int index = std::get<0>(vecmuon_m.at(1));
+    auto muon2_m = truthMuons->at(index);
+    um2_TLV = muon2_m->p4();
+  }
+
+  ANA_MSG_INFO("construct muon done");
+  // lep
+  float lep1_pt = 9999999;
+  float lep1_eta = 9999999;
+  float lep1_phi = 9999999;
+  int lep1_charge = 9999999;
+  int lep1_flavor = 9999999;
+  TLorentzVector lep1_TLV;
+  if (nlep >= 1) {
+    auto flavor = std::get<0>(veclep.at(0));
+    int index = std::get<1>(veclep.at(0));
+    lep1_pt = std::get<2>(veclep.at(0));
+    const xAOD::TruthParticle *muon;
+    if (flavor == "muon") {
+      lep1_flavor = 0;
+      muon = truthMuons->at(index);
+      auto lep1 = muon;
+      lep1_eta = lep1->eta();
+      lep1_phi = lep1->phi();
+      lep1_charge = lep1->charge();
+      lep1_TLV = lep1->p4();
+    }
+    const xAOD::TruthParticle *ele;
+    if (flavor == "electron") {
+      lep1_flavor = 1;
+      ele = truthElectrons->at(index);
+      auto lep1 = ele;
+      lep1_eta = lep1->eta();
+      lep1_phi = lep1->phi();
+      lep1_charge = lep1->charge();
+      lep1_TLV = lep1->p4();
+    }
+  }
+
+  float lep2_pt = 9999999;
+  float lep2_eta = 9999999;
+  float lep2_phi = 9999999;
+  int lep2_charge = 9999999;
+  int lep2_flavor = 9999999;
+  TLorentzVector lep2_TLV;
+  if (nlep >= 2) {
+    auto flavor = std::get<0>(veclep.at(0));
+    int index = std::get<1>(veclep.at(0));
+    lep2_pt = std::get<2>(veclep.at(0));
+    const xAOD::TruthParticle *muon;
+    if (flavor == "muon") {
+      lep2_flavor = 0;
+      muon = truthMuons->at(index);
+      auto lep2 = muon;
+      lep2_eta = lep2->eta();
+      lep2_phi = lep2->phi();
+      lep2_charge = lep2->charge();
+      lep2_TLV = lep2->p4();
+    }
+    const xAOD::TruthParticle *ele;
+    if (flavor == "electron") {
+      lep2_flavor = 1;
+      ele = truthElectrons->at(index);
+      auto lep2 = ele;
+      lep2_eta = lep2->eta();
+      lep2_phi = lep2->phi();
+      lep2_charge = lep2->charge();
+      lep2_TLV = lep2->p4();
+    }
+  }
+
+  float lep3_pt = 9999999;
+  float lep3_eta = 9999999;
+  float lep3_phi = 9999999;
+  int lep3_charge = 9999999;
+  int lep3_flavor = 9999999;
+  TLorentzVector lep3_TLV;
+  if (nlep >= 3) {
+    auto flavor = std::get<0>(veclep.at(0));
+    int index = std::get<1>(veclep.at(0));
+    lep3_pt = std::get<2>(veclep.at(0));
+    const xAOD::TruthParticle *muon;
+    if (flavor == "muon") {
+      lep3_flavor = 0;
+      muon = truthMuons->at(index);
+      auto lep3 = muon;
+      lep3_eta = lep3->eta();
+      lep3_phi = lep3->phi();
+      lep3_charge = lep3->charge();
+      lep3_TLV = lep3->p4();
+    }
+    const xAOD::TruthParticle *ele;
+    if (flavor == "electron") {
+      lep3_flavor = 1;
+      ele = truthElectrons->at(index);
+      auto lep3 = ele;
+      lep3_eta = lep3->eta();
+      lep3_phi = lep3->phi();
+      lep3_charge = lep3->charge();
+      lep3_TLV = lep3->p4();
+    }
+  }
+  ANA_MSG_INFO("construct lep done");
+
+  // W mT
+  float W_mT_Hmuon = 9999999;
+  if (nHmuon >= 1) {
+    auto ET_lep =
+        sqrt(Hmuon_TLV.M() * Hmuon_TLV.M() + Hmuon_TLV.Pt() * Hmuon_TLV.Pt());
+    auto dPhi_l_miss = fabs(Hmuon_TLV.Phi() - METCand->phi());
+    if (dPhi_l_miss >= TMath::Pi())
+      dPhi_l_miss = 2 * TMath::Pi() - dPhi_l_miss;
+    W_mT_Hmuon = sqrt(2 * ET_lep * METCand->met() * (1 - cos(dPhi_l_miss)));
+  }
+
+  // jet1 dR,M
+  float M_jet1_Hmuon = 9999999;
+  float dR_jet1_Hmuon = 9999999;
+  float mT_jet1_Hmuon = 9999999;
+
+  float M_jet1_muon1 = 9999999;
+  float dR_jet1_muon1 = 9999999;
+  float M_jet1_muon2 = 9999999;
+  float dR_jet1_muon2 = 9999999;
+  float M_jet1_muon3 = 9999999;
+  float dR_jet1_muon3 = 9999999;
+
+  if (njet >= 1 && nHmuon >= 1) {
+    auto H_TLV = jet1_TLV + Hmuon_TLV;
+    M_jet1_Hmuon = H_TLV.M();
+    dR_jet1_Hmuon = jet1_TLV.DeltaR(Hmuon_TLV);
+
+    auto ET = sqrt(H_TLV.M() * H_TLV.M() + H_TLV.Pt() * H_TLV.Pt());
+    double deltaPhi = fabs(H_TLV.Phi() - METCand->phi());
+    if (deltaPhi >= TMath::Pi())
+      deltaPhi = 2 * TMath::Pi() - deltaPhi;
+    mT_jet1_Hmuon = sqrt(2 * ET * METCand->met() * (1 - cos(deltaPhi)));
+  }
+  if (njet >= 1 && nmuon >= 1) {
+    auto H_TLV = jet1_TLV + muon1_TLV;
+    M_jet1_muon1 = H_TLV.M();
+    dR_jet1_muon1 = jet1_TLV.DeltaR(muon1_TLV);
+  }
+  if (njet >= 1 && nmuon >= 2) {
+    auto H_TLV = jet1_TLV + muon2_TLV;
+    M_jet1_muon2 = H_TLV.M();
+    dR_jet1_muon2 = jet1_TLV.DeltaR(muon2_TLV);
+  }
+  if (njet >= 1 && nmuon >= 3) {
+    auto H_TLV = jet1_TLV + muon3_TLV;
+    M_jet1_muon3 = H_TLV.M();
+    dR_jet1_muon3 = jet1_TLV.DeltaR(muon3_TLV);
+  }
+
+  float dR_jet1_ep1 = 9999999;
+  float dR_jet1_em1 = 9999999;
+
+  if (njet >= 2 && nele_p >= 1) {
+    dR_jet1_ep1 = jet1_TLV.DeltaR(ep1_TLV);
+  }
+  if (njet >= 2 && nele_m >= 1) {
+    dR_jet1_em1 = jet1_TLV.DeltaR(em1_TLV);
+  }
+  ANA_MSG_INFO("construct jet1 dR,M done");
+  // jet2 dR,M
+  float M_jet2_Hmuon = 9999999;
+  float dR_jet2_Hmuon = 9999999;
+  float mT_jet2_Hmuon = 9999999;
+
+  float M_jet2_muon1 = 9999999;
+  float dR_jet2_muon1 = 9999999;
+  float M_jet2_muon2 = 9999999;
+  float dR_jet2_muon2 = 9999999;
+  float M_jet2_muon3 = 9999999;
+  float dR_jet2_muon3 = 9999999;
+
+  if (njet >= 2 && nHmuon >= 1) {
+    auto H_TLV = jet2_TLV + Hmuon_TLV;
+    M_jet2_Hmuon = H_TLV.M();
+    dR_jet2_Hmuon = jet2_TLV.DeltaR(Hmuon_TLV);
+
+    auto ET = sqrt(H_TLV.M() * H_TLV.M() + H_TLV.Pt() * H_TLV.Pt());
+    double deltaPhi = fabs(H_TLV.Phi() - METCand->phi());
+    if (deltaPhi >= TMath::Pi())
+      deltaPhi = 2 * TMath::Pi() - deltaPhi;
+    mT_jet2_Hmuon = sqrt(2 * ET * METCand->met() * (1 - cos(deltaPhi)));
+  }
+  if (njet >= 2 && nmuon >= 1) {
+    auto H_TLV = jet2_TLV + muon1_TLV;
+    M_jet2_muon1 = H_TLV.M();
+    dR_jet2_muon1 = jet2_TLV.DeltaR(muon1_TLV);
+  }
+  if (njet >= 2 && nmuon >= 2) {
+    auto H_TLV = jet2_TLV + muon2_TLV;
+    M_jet2_muon2 = H_TLV.M();
+    dR_jet2_muon2 = jet2_TLV.DeltaR(muon2_TLV);
+  }
+  if (njet >= 2 && nmuon >= 3) {
+    auto H_TLV = jet2_TLV + muon3_TLV;
+    M_jet2_muon3 = H_TLV.M();
+    dR_jet2_muon3 = jet2_TLV.DeltaR(muon3_TLV);
+  }
+
+  float dR_jet2_ep1 = 9999999;
+  float dR_jet2_em1 = 9999999;
+
+  if (njet >= 2 && nele_p >= 1) {
+    dR_jet2_ep1 = jet2_TLV.DeltaR(ep1_TLV);
+  }
+  if (njet >= 2 && nele_m >= 1) {
+    dR_jet2_em1 = jet2_TLV.DeltaR(em1_TLV);
+  }
+  ANA_MSG_INFO("construct jet2 dR,M done");
+
+  
+  // HuRcJet
+  float dR_HuRcJet_Hmuon = 9999999;
+  float HuRcJet_mass = 9999999;
+  TLorentzVector HuRcJet_TLV;
+  if (nHmuon >= 1 && njet >= 1) {
+    for (std::size_t i = 0; i < njet; ++i) {
+      int index = std::get<0>(vecak10jet.at(i));
+      auto jet = truthak10jet->at(index);
+      TLorentzVector jet_TLV = jet->p4();
+      float dR_jet_Hmuon = jet_TLV.DeltaR(Hmuon_TLV);
+      if (dR_jet_Hmuon < dR_HuRcJet_Hmuon) {
+        dR_HuRcJet_Hmuon = dR_jet_Hmuon;
+        HuRcJet_mass = jet_TLV.M();
+        HuRcJet_TLV = jet_TLV;
+      }
+    }
+  }
+
+  // WMcJet
+  float dR_WMcJet_Hmuon = 9999999;
+  float WMcJet_mass = 9999999;
+  float dM_WMcJet_W = 9999999;
+  TLorentzVector WMcJet_TLV;
+  if (nHmuon >= 1 && njet >= 1) {
+    for (std::size_t i = 0; i < njet; ++i) {
+      int index = std::get<0>(vecak10jet.at(i));
+      auto jet = truthak10jet->at(index);
+      TLorentzVector jet_TLV = jet->p4();
+      float dM_jet_W = fabs(jet_TLV.M() - Wmass);
+      if (dM_jet_W < dM_WMcJet_W) {
+        dM_WMcJet_W = dM_jet_W;
+        dR_WMcJet_Hmuon = jet_TLV.DeltaR(Hmuon_TLV);
+        WMcJet_mass = jet_TLV.M();
+        WMcJet_TLV = jet_TLV;
+      }
+    }
+  }
+
+  // dR_Hu_em1,dR_Hu_ep1
+  float dR_Hmuon_ep1 = 9999999;
+  float dR_Hmuon_em1 = 9999999;
+  if (nHmuon >= 1 && nele_p >= 1) {
+    dR_Hmuon_ep1 = ep1_TLV.DeltaR(Hmuon_TLV);
+  }
+  if (nHmuon >= 1 && nele_m >= 1) {
+    dR_Hmuon_em1 = em1_TLV.DeltaR(Hmuon_TLV);
+  }
+  // M_ep1em1,dR_ep1em1
+  float M_ep1em1 = 9999999;
+  float dR_ep1em1 = 9999999;
+  if (nele_p >= 1 && nele_m >= 1) {
+    auto ep1em1_TLV = ep1_TLV + em1_TLV;
+    M_ep1em1 = ep1em1_TLV.M();
+    dR_ep1em1 = ep1_TLV.DeltaR(em1_TLV);
+  }
+  // M_up1um1,dR_up1um1
+  float M_up1um1 = 9999999;
+  float dR_up1um1 = 9999999;
+  if (nmuon_p >= 1 && nmuon_m >= 1) {
+    auto up1um1_TLV = up1_TLV + um1_TLV;
+    M_up1um1 = up1um1_TLV.M();
+    dR_up1um1 = up1_TLV.DeltaR(um1_TLV);
+  }
+
+  // M_l1l2
+  float M_l1l2 = 9999999;
+  if (nlep >= 2) {
+    auto l1l2_TLV = lep1_TLV + lep2_TLV;
+    M_l1l2 = l1l2_TLV.M();
+  }
+  ANA_MSG_INFO("construct M_l1l2 done");
+  // uPair
+  std::vector<std::tuple<float, int, int>> vec_uPair;
+  for (std::size_t i = 0; i < nmuon_p; ++i) {
+    int index_p = std::get<0>(vecmuon_p.at(i));
+    auto muon_p = truthMuons->at(index_p);
+    auto muon_p_TLV = muon_p->p4();
+    for (std::size_t i = 0; i < nmuon_m; ++i) {
+      int index_m = std::get<0>(vecmuon_m.at(i));
+      auto muon_m = truthMuons->at(index_m);
+      auto muon_m_TLV = muon_m->p4();
+
+      auto uPair_TLV = muon_p_TLV + muon_m_TLV;
+      vec_uPair.push_back({uPair_TLV.M(), index_p, index_m});
+    }
+  }
+  ANA_MSG_INFO("uPair done");
+
+  // M_Zc_uPair
+  float min_mass_diff_Z_uPair = 9999999;
+  std::tuple<float, int, int> Zc_uPair;
+  float M_Zc_uPair = 9999999;
+  if (vec_uPair.size() >= 1) {
+    for (std::size_t i = 0; i < vec_uPair.size(); ++i) {
+      float M_uPair = std::get<0>(vec_uPair.at(i));
+      float mass_diff = std::abs(M_uPair - Zmass);
+      if (mass_diff < min_mass_diff_Z_uPair) {
+        min_mass_diff_Z_uPair = mass_diff;
+        Zc_uPair = vec_uPair.at(i);
+      }
+    }
+    M_Zc_uPair = std::get<0>(Zc_uPair);
+  }
+  ANA_MSG_INFO("M_Zc_uPair done");
+
+  // lep_no_Zc_uPair
+  auto veclep_no_Zc_uPair = veclep;
+  if (vec_uPair.size() >= 1) {
+    int uPair_p_index = std::get<1>(Zc_uPair);
+    int uPair_m_index = std::get<2>(Zc_uPair);
+
+    int uPair_p_posi = 0;
+    int uPair_m_posi = 0;
+    if (nmuon_p >= 1 && nmuon_m >= 1 && nlep >= 3) {
+      for (std::size_t i = 0; i < nlep; ++i) {
+        auto flavor = std::get<0>(veclep.at(i));
+        int index = std::get<1>(veclep.at(i));
+        if (flavor == "muon" && index == uPair_p_index) {
+          uPair_p_posi = i;
+        }
+        if (flavor == "muon" && index == uPair_m_index) {
+          uPair_m_posi = i;
+        }
+      }
+      if (uPair_p_posi > uPair_m_posi) {
+        veclep_no_Zc_uPair.erase(veclep_no_Zc_uPair.begin() + uPair_p_posi);
+        veclep_no_Zc_uPair.erase(veclep_no_Zc_uPair.begin() + uPair_m_posi);
+      }
+      if (uPair_p_posi < uPair_m_posi) {
+        veclep_no_Zc_uPair.erase(veclep_no_Zc_uPair.begin() + uPair_m_posi);
+        veclep_no_Zc_uPair.erase(veclep_no_Zc_uPair.begin() + uPair_p_posi);
+      }
+    }
+  }
+  ANA_MSG_INFO("lep_no_Zc_uPair done");
+  // noZcUpair_Hlep
+  TLorentzVector noZcUpair_Hlep_TLV;
+  int noZcUpair_Hlep_isHmuon = 0;
+  if (vec_uPair.size() >= 1) {
+    auto flavor = std::get<0>(veclep_no_Zc_uPair.at(0));
+    int index = std::get<1>(veclep_no_Zc_uPair.at(0));
+
+    if (flavor == "muon") {
+      auto muon = truthMuons->at(index);
+      int type = vec_Mtype.at(index);
+      noZcUpair_Hlep_TLV = muon->p4();
+      if (type == 3) {
+        noZcUpair_Hlep_isHmuon = 1;
+      }
+    }
+    if (flavor == "electron") {
+      auto ele = truthElectrons->at(index);
+      noZcUpair_Hlep_TLV = ele->p4();
+    }
+  }
+
+  // M_jet1_noZcUpair_Hlep
+  float M_jet1_noZcUpair_Hlep = 9999999;
+  float dR_jet1_noZcUpair_Hlep = 9999999;
+  if (vec_uPair.size() >= 1) {
+    TLorentzVector jet1_noZcUpair_Hlep_TLV = jet1_TLV + noZcUpair_Hlep_TLV;
+    M_jet1_noZcUpair_Hlep = jet1_noZcUpair_Hlep_TLV.M();
+    dR_jet1_noZcUpair_Hlep = jet1_TLV.DeltaR(noZcUpair_Hlep_TLV);
+  }
+
+  // qdW jet1
+  float qdW_mass = 9999999;
+  float qdW_pt = 9999999;
+  float dR_jet1_qdW = 9999999;
+  if (n_qdW >= 1) {
+    qdW_mass = qdW_TLV.M();
+    qdW_pt = qdW_TLV.Pt();
+  }
+  if (n_qdW >= 1 && njet >= 1) {
+    dR_jet1_qdW = jet1_TLV.DeltaR(qdW_TLV);
+  }
+  hist("qdW_mass")->Fill(qdW_mass * 0.001, weight);
+  hist("qdW_pt")->Fill(qdW_pt * 0.001, weight);
+  hist("dR_jet1_qdW")->Fill(dR_jet1_qdW, weight);
+
+  // qdW FJWRcJet
+  float dR_FJWRcJet_qdW = 9999999;
+  float FJWRcJet_mass = 9999999;
+  float FJWRcJet_pt = 9999999;
+  TLorentzVector FJWRcJet_TLV;
+  if (n_qdW >= 1 && njet >= 1) {
+    for (std::size_t i = 0; i < njet; ++i) {
+      int index = std::get<0>(vecak10jet.at(i));
+      auto jet = truthak10jet->at(index);
+      TLorentzVector jet_TLV = jet->p4();
+      float dR_jet_qdW = jet_TLV.DeltaR(qdW_TLV);
+      if (dR_jet_qdW < dR_FJWRcJet_qdW) {
+        dR_FJWRcJet_qdW = dR_jet_qdW;
+        FJWRcJet_mass = jet_TLV.M();
+        FJWRcJet_TLV = jet_TLV;
+        FJWRcJet_pt = FJWRcJet_TLV.Pt();
+      }
+    }
+  }
+
+  hist("FJWRcJet_mass")->Fill(FJWRcJet_mass * 0.001, weight);
+  hist("FJWRcJet_pt")->Fill(FJWRcJet_pt * 0.001, weight);
+  hist("dR_FJWRcJet_qdW")->Fill(dR_FJWRcJet_qdW, weight);
+
+  // FJWRcJet Hmuon
+  float M_FJWRcJet_Hmuon = 9999999;
+  float dR_FJWRcJet_Hmuon = 9999999;
+  float mT_FJWRcJet_Hmuon = 9999999;
+  if (njet >= 1 && nHmuon >= 1) {
+    auto H_TLV = FJWRcJet_TLV + Hmuon_TLV;
+    M_FJWRcJet_Hmuon = H_TLV.M();
+    dR_FJWRcJet_Hmuon = FJWRcJet_TLV.DeltaR(Hmuon_TLV);
+
+    auto ET = sqrt(H_TLV.M() * H_TLV.M() + H_TLV.Pt() * H_TLV.Pt());
+    double deltaPhi = fabs(H_TLV.Phi() - METCand->phi());
+    if (deltaPhi >= TMath::Pi())
+      deltaPhi = 2 * TMath::Pi() - deltaPhi;
+    mT_FJWRcJet_Hmuon = sqrt(2 * ET * METCand->met() * (1 - cos(deltaPhi)));
+  }
+
+  hist("M_FJWRcJet_Hmuon")->Fill(M_FJWRcJet_Hmuon * 0.001, weight);
+  hist("dR_FJWRcJet_Hmuon")->Fill(dR_FJWRcJet_Hmuon, weight);
+  hist("mT_FJWRcJet_Hmuon")->Fill(mT_FJWRcJet_Hmuon * 0.001, weight);
+
+  // qdW Hmuon
+  float M_qdW_Hmuon = 9999999;
+  float dR_qdW_Hmuon = 9999999;
+  float mT_qdW_Hmuon = 9999999;
+  if (njet >= 1 && nHmuon >= 1) {
+    auto H_TLV = qdW_TLV + Hmuon_TLV;
+    M_qdW_Hmuon = H_TLV.M();
+    dR_qdW_Hmuon = qdW_TLV.DeltaR(Hmuon_TLV);
+
+    auto ET = sqrt(H_TLV.M() * H_TLV.M() + H_TLV.Pt() * H_TLV.Pt());
+    double deltaPhi = fabs(H_TLV.Phi() - METCand->phi());
+    if (deltaPhi >= TMath::Pi())
+      deltaPhi = 2 * TMath::Pi() - deltaPhi;
+    mT_qdW_Hmuon = sqrt(2 * ET * METCand->met() * (1 - cos(deltaPhi)));
+  }
+
+  hist("M_qdW_Hmuon")->Fill(M_qdW_Hmuon * 0.001, weight);
+  hist("dR_qdW_Hmuon")->Fill(dR_qdW_Hmuon, weight);
+  hist("mT_qdW_Hmuon")->Fill(mT_qdW_Hmuon * 0.001, weight);
+
+  float dR_muon1_RfldW =-9999999;
+  if (nmuon >= 1 && n_ldW >= 1) {
+    for (int i = 0; i < n_ldW; ++i) {
+      TLorentzVector ldW_TLV = vec_ldW.at(i);
+      float dR_muon1_ldW = muon1_TLV.DeltaR(ldW_TLV);
+      if (dR_muon1_ldW > dR_muon1_RfldW) {
+        dR_muon1_RfldW = dR_muon1_ldW;
+      }
+    }
+  }
+
+  // selection
+  std::set<int> selection_passed;
+
+  selection_passed.insert(0);
+  // selection 1
+  if (nlep >= 1) {
+    if (lep1_pt > 27000) {
+      selection_passed.insert(1);
+      ANA_MSG_INFO("selection_passed:1");
+    }
+  }
+
+  // //selection 2
+  if (nmuon >= 1) {
+    if (abs(muon1_eta) < 2.5) {
+      selection_passed.insert(2);
+      ANA_MSG_INFO("selection_passed:2");
+    }
+  }
+  if (nele >= 1) {
+    if (abs(ele1_eta) < 1.37 ||
+        (abs(ele1_eta) > 1.52 && abs(ele1_eta) < 2.47)) {
+      selection_passed.insert(2);
+      ANA_MSG_INFO("selection_passed:2");
+    }
+  }
+
+  // //selection 3
+  if (njet >= 1) {
+    if (jet1_mass > 40000) {
+      selection_passed.insert(3);
+      ANA_MSG_INFO("selection_passed:3");
+    }
+  }
+
+  // //selection 4
+  if (nmuon == 3 && nmuon_p >= 1 && nmuon_m >= 1) {
+    selection_passed.insert(4);
+    ANA_MSG_INFO("selection_passed:4");
+  }
+
+  // //selection 5
+  if (fabs(M_Zc_uPair - Zmass) < 15000) {
+    selection_passed.insert(5);
+    ANA_MSG_INFO("selection_passed:5");
+  }
+
+  // //selection 6
+  if (nmuon == 1 && nele_p == 1 && nele_m == 1) {
+    selection_passed.insert(6);
+    ANA_MSG_INFO("selection_passed:6");
+  }
+
+  // //selection 7
+  if (fabs(M_ep1em1 - Zmass) < 15000) {
+    selection_passed.insert(7);
+    ANA_MSG_INFO("selection_passed:7");
+  }
+
+  // //selection 8(all jet pt >200)
+  if (njet >= 1) {
+    int index = std::get<0>(vecak10jet.at(njet - 1)); // take the pt smallest
+                                                      // jet
+    auto jet = truthak10jet->at(index);
+    if ((jet->pt()) / 1000 > 200) {
+      selection_passed.insert(8);
+      ANA_MSG_INFO("selection_passed:8");
+    }
+  }
+
+  // method3,selection 9
+  TLorentzVector method3_muon_TLV;
+  int method3_muon_isHmuon = 0;
+  int n_method3_match = 0;
+  float dR_pt200jet_up1 = 99999;
+  float dR_pt200jet_up2 = 99999;
+  if (nmuon_p == 2 && nmuon_m == 1) {
+    for (std::size_t i = 0; i < njet; ++i) {
+      int index = std::get<0>(vecak10jet.at(i));
+      auto jet = truthak10jet->at(index);
+      TLorentzVector jet_TLV = jet->p4();
+      if (jet_TLV.Pt() / 1000 > 200) {
+        float dR_jet_up1 = jet_TLV.DeltaR(up1_TLV);
+        float dR_jet_up2 = jet_TLV.DeltaR(up2_TLV);
+        if (dR_jet_up1 < dR_pt200jet_up1)
+          dR_pt200jet_up1 = dR_jet_up1;
+        if (dR_jet_up2 < dR_pt200jet_up2)
+          dR_pt200jet_up2 = dR_jet_up2;
+        if (dR_jet_up1 < 1)
+          n_method3_match++;
+        if (dR_jet_up2 < 1)
+          n_method3_match++;
+      }
+    }
+
+    if (n_method3_match > 1) {
+      method3_muon_TLV = noZcUpair_Hlep_TLV;
+      method3_muon_isHmuon = noZcUpair_Hlep_isHmuon;
+
+      selection_passed.insert(9);
+      ANA_MSG_INFO("selection_passed:9");
+    }
+    if (n_method3_match == 1) {
+      if (dR_pt200jet_up1 < 1) {
+        method3_muon_TLV = up1_TLV;
+        int index = std::get<0>(vecmuon_p.at(0));
+        int type = vec_Mtype.at(index);
+        if (type == 3) {
+          method3_muon_isHmuon = 1;
+        }
+      }
+      if (dR_pt200jet_up2 < 1) {
+        method3_muon_TLV = up2_TLV;
+        int index = std::get<0>(vecmuon_p.at(1));
+        int type = vec_Mtype.at(index);
+        if (type == 3) {
+          method3_muon_isHmuon = 1;
+        }
+      }
+      selection_passed.insert(9);
+      ANA_MSG_INFO("selection_passed:9");
+    }
+  }
+
+  float dR_pt200jet_um1 = 99999;
+  float dR_pt200jet_um2 = 99999;
+  if (nmuon_m == 2 && nmuon_p == 1) {
+    for (std::size_t i = 0; i < njet; ++i) {
+      int index = std::get<0>(vecak10jet.at(i));
+      auto jet = truthak10jet->at(index);
+      TLorentzVector jet_TLV = jet->p4();
+      if (jet_TLV.Pt() / 1000 > 200) {
+        float dR_jet_um1 = jet_TLV.DeltaR(um1_TLV);
+        float dR_jet_um2 = jet_TLV.DeltaR(um2_TLV);
+        if (dR_jet_um1 < dR_pt200jet_um1)
+          dR_pt200jet_um1 = dR_jet_um1;
+        if (dR_jet_um2 < dR_pt200jet_um2)
+          dR_pt200jet_um2 = dR_jet_um2;
+        if (dR_jet_um1 < 1)
+          n_method3_match++;
+        if (dR_jet_um2 < 1)
+          n_method3_match++;
+      }
+    }
+
+    if (n_method3_match > 1) {
+      method3_muon_TLV = noZcUpair_Hlep_TLV;
+      method3_muon_isHmuon = noZcUpair_Hlep_isHmuon;
+
+      selection_passed.insert(9);
+      ANA_MSG_INFO("selection_passed:9");
+    }
+    if (n_method3_match == 1) {
+      if (dR_pt200jet_um1 < 1) {
+        method3_muon_TLV = um1_TLV;
+        int index = std::get<0>(vecmuon_m.at(0));
+        int type = vec_Mtype.at(index);
+        if (type == 3) {
+          method3_muon_isHmuon = 1;
+        }
+      }
+      if (dR_pt200jet_um2 < 1) {
+        method3_muon_TLV = um2_TLV;
+        int index = std::get<0>(vecmuon_m.at(1));
+        int type = vec_Mtype.at(index);
+        if (type == 3) {
+          method3_muon_isHmuon = 1;
+        }
+      }
+      selection_passed.insert(9);
+      ANA_MSG_INFO("selection_passed:9");
+    }
+  }
+
+  // //selection 10
+  if (njet >= 1) {
+    int index = std::get<0>(vecak10jet.at(0)); // take the pt largest jet
+    auto jet = truthak10jet->at(index);
+    if ((jet->pt()) / 1000 > 200) {
+      selection_passed.insert(10);
+      ANA_MSG_INFO("selection_passed:10");
+    }
+  }
+
+  // //selection 11
+  if (n_Higgs >= 1 && Higgs_pt / 1000 > 200) {
+    selection_passed.insert(11);
+    ANA_MSG_INFO("selection_passed:11");
+  }
+
+  // //selection 12
+  if (nmuon == 2) {
+    selection_passed.insert(12);
+  }
+
+  // dPt_e1e2,dEta_e1e2,dPhi_e1e2
+  float dPt_e1e2 = fabs(ele1_pt - ele2_pt);
+  float dEta_e1e2 = fabs(ele1_eta - ele2_eta);
+  float dPhi_e1e2 = fabs(ele1_phi - ele2_phi);
+  float dPt_ep1em1 = fabs(ep1_pt - em1_pt);
+  float dEta_ep1em1 = fabs(ep1_eta - em1_eta);
+  float dPhi_ep1em1 = fabs(ep1_phi - em1_phi);
+
+  // selection_used{0,1,2,3,4,5};  (Zuu)
+  // selection_used{0,1,2,3,4,5,9};  (Zuu) method3
+  // selection_used{0,1,2,3,6,7};  (Zee)
+  std::set<int> selection_used{0, 1, 2, 3, 12};
+
+  // selection  jet1 eta <2 and lep1 eta <2.5
+  // nHmuon==1 && nele_p==1 && nele_m==1 && nZele==2 && njet>=1(Zee)
+  // nHmuon==1 && nmuon_p>=1 && nmuon_m>=1 && nZmuon==2 && njet>=1(Zuu)
+  // nmuon>=3 && nmuon_p>=1 && nmuon_m>=1 && njet>=1(Zuu reco)
+  //(nHmuon>=1 || nHele>=1 ) && njet>=1(WH)
+  // std::includes(selection_passed.begin(), selection_passed.end(),
+  // selection_used.begin(), selection_used.end())
+  if (std::includes(selection_passed.begin(), selection_passed.end(),
+                    selection_used.begin(), selection_used.end())) {
+    hist("njet")->Fill(njet, weight);
+    hist("nlep")->Fill(nlep, weight);
+    hist("nmuon")->Fill(nmuon, weight);
+    hist("nHmuon")->Fill(nHmuon, weight);
+    hist("nZmuon")->Fill(nZmuon, weight);
+    hist("nHele")->Fill(nHele, weight);
+    hist("nZele")->Fill(nZele, weight);
+    hist("nmuon_p")->Fill(nmuon_p, weight);
+    hist("nmuon_m")->Fill(nmuon_m, weight);
+    hist("nele")->Fill(nele, weight);
+    hist("nele_p")->Fill(nele_p, weight);
+    hist("nele_m")->Fill(nele_m, weight);
+
+    hist("dR_jet1_muon1")->Fill(dR_jet1_muon1, weight);
+    hist("dR_jet1_muon2")->Fill(dR_jet1_muon2, weight);
+    hist("dR_jet1_muon3")->Fill(dR_jet1_muon3, weight);
+
+    hist("M_jet1_muon1")->Fill(M_jet1_muon1 * 0.001, weight);
+    hist("M_jet1_muon2")->Fill(M_jet1_muon2 * 0.001, weight);
+    hist("M_jet1_muon3")->Fill(M_jet1_muon3 * 0.001, weight);
+
+    hist("dR_jet2_muon1")->Fill(dR_jet2_muon1, weight);
+    hist("dR_jet2_muon2")->Fill(dR_jet2_muon2, weight);
+    hist("dR_jet2_muon3")->Fill(dR_jet2_muon3, weight);
+
+    hist("M_jet2_muon1")->Fill(M_jet2_muon1 * 0.001, weight);
+    hist("M_jet2_muon2")->Fill(M_jet2_muon2 * 0.001, weight);
+    hist("M_jet2_muon3")->Fill(M_jet2_muon3 * 0.001, weight);
+
+    hist("dR_jet1_ep1")->Fill(dR_jet1_ep1, weight);
+    hist("dR_jet1_em1")->Fill(dR_jet1_em1, weight);
+    hist("dR_jet2_ep1")->Fill(dR_jet2_ep1, weight);
+    hist("dR_jet2_em1")->Fill(dR_jet2_em1, weight);
+
+
+    hist("dR_ep1em1")->Fill(dR_ep1em1, weight);
+    hist("dR_up1um1")->Fill(dR_up1um1, weight);
+    hist("dR_Hmuon_ep1")->Fill(dR_Hmuon_ep1, weight);
+    hist("dR_Hmuon_em1")->Fill(dR_Hmuon_em1, weight);
+
+    hist("M_ep1em1")->Fill(M_ep1em1 * 0.001, weight);
+    hist("M_up1um1")->Fill(M_up1um1 * 0.001, weight);
+    // hist ("M_l1l2")->Fill (M_l1l2*0.001,weight);
+
+    hist("Hmuon_pt_rank")->Fill(Hmuon_pt_rank, weight);
+    hist("Hmuon_pt")->Fill(Hmuon_pt * 0.001, weight);
+    hist("Hmuon_eta")->Fill(Hmuon_eta, weight);
+    hist("Hmuon_phi")->Fill(Hmuon_phi, weight);
+    hist("Hmuon_charge")->Fill(Hmuon_charge, weight);
+
+    // hist ("muon1_pt")->Fill (muon1_pt*0.001,weight);
+    // hist ("muon1_eta")->Fill (muon1_eta,weight);
+    // hist ("muon1_phi")->Fill (muon1_phi,weight);
+    // hist ("muon1_charge")->Fill (muon1_charge,weight);
+
+    hist("MET")->Fill(MET * 0.001, weight);
+    hist("W_mT_Hmuon")->Fill(W_mT_Hmuon * 0.001, weight);
+
+    hist("M_jet1_Hmuon")->Fill(M_jet1_Hmuon * 0.001, weight);
+    hist("M_jet2_Hmuon")->Fill(M_jet2_Hmuon * 0.001, weight);
+    hist("mT_jet1_Hmuon")->Fill(mT_jet1_Hmuon * 0.001, weight);
+    hist("mT_jet2_Hmuon")->Fill(mT_jet2_Hmuon * 0.001, weight);
+
+    hist("M_Zc_uPair")->Fill(M_Zc_uPair * 0.001, weight);
+    hist("dR_jet1_noZcUpair_Hlep")->Fill(dR_jet1_noZcUpair_Hlep, weight);
+    hist("M_jet1_noZcUpair_Hlep")->Fill(M_jet1_noZcUpair_Hlep * 0.001, weight);
+    hist("noZcUpair_Hlep_isHmuon")->Fill(noZcUpair_Hlep_isHmuon, weight);
+
+    hist("muon3_isHmuon")->Fill(muon3_isHmuon, weight);
+    hist("muon1_isHmuon")->Fill(muon1_isHmuon, weight);
+    hist("method3_muon_isHmuon")->Fill(method3_muon_isHmuon, weight);
+
+    hist("dR_jet1_Hmuon")->Fill(dR_jet1_Hmuon, weight);
+    hist("dR_jet2_Hmuon")->Fill(dR_jet2_Hmuon, weight);
+    hist("dR_HuRcJet_Hmuon")->Fill(dR_HuRcJet_Hmuon, weight);
+    hist("dR_WMcJet_Hmuon")->Fill(dR_WMcJet_Hmuon, weight);
+
+    hist("jet1_mass")->Fill(jet1_mass * 0.001, weight);
+    hist("jet2_mass")->Fill(jet2_mass * 0.001, weight);
+    hist("HuRcJet_mass")->Fill(HuRcJet_mass * 0.001, weight);
+    hist("WMcJet_mass")->Fill(WMcJet_mass * 0.001, weight);
+    hist("jet1_pt")->Fill(jet1_pt * 0.001, weight);
+    hist("jet2_pt")->Fill(jet2_pt * 0.001, weight);
+
+    hist("n_method3_match")->Fill(n_method3_match, weight);
+
+    hist("dR_muon1_RfldW")->Fill(dR_muon1_RfldW, weight);
+    hist("dR_muon2_qdW")->Fill(muon2_TLV.DeltaR(qdW_TLV), weight);
+    
+
+    // hist ("ep1_pt")->Fill (ep1_pt*0.001,weight);
+    // hist ("ep1_eta")->Fill (ep1_eta,weight);
+    // hist ("ep1_phi")->Fill (ep1_phi,weight);
+
+    // hist ("em1_pt")->Fill (em1_pt*0.001,weight);
+    // hist ("em1_eta")->Fill (em1_eta,weight);
+    // hist ("em1_phi")->Fill (em1_phi,weight);
+
+    // hist ("dPt_ep1em1")->Fill (dPt_ep1em1*0.001,weight);
+    // hist ("dEta_ep1em1")->Fill (dEta_ep1em1,weight);
+    // hist ("dPhi_ep1em1")->Fill (dPhi_ep1em1,weight);
+  }
+  ANA_MSG_INFO("construct selection done");
+  std::cout << "end event----------------------" << std::endl;
+  return StatusCode::SUCCESS;
+}
+
+StatusCode MyxAODAnalysis ::finalize() {
+  // This method is the mirror image of initialize(), meaning it gets
+  // called after the last event has been processed on the worker node
+  // and allows you to finish up any objects you created in
+  // initialize() before they are written to disk.  This is actually
+  // fairly rare, since this happens separately for each worker node.
+  // Most of the time you want to do your post-processing on the
+  // submission node after all your histogram outputs have been
+  // merged.
+  ATH_MSG_DEBUG("Finalizing " << name() << "...");
+
+  // Release the needed tools
+
+  return StatusCode::SUCCESS;
+}
+
+bool MyxAODAnalysis ::cmp1(std::tuple<int, float> a, std::tuple<int, float> b) {
+  return std::get<1>(a) > std::get<1>(b);
+}
+
+bool MyxAODAnalysis ::cmp2(std::tuple<std::string, int, float> a,
+                           std::tuple<std::string, int, float> b) {
+  return std::get<2>(a) > std::get<2>(b);
+}
+
+bool MyxAODAnalysis ::cmp3(TLorentzVector a,
+                           TLorentzVector b) {
+  return a.Pt() > b.Pt();
+}

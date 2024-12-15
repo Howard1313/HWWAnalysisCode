@@ -1,0 +1,57 @@
+# Define branches
+
+#skim: int run_number << EventInfo.runNumber(), unsigned long long int event_number << EventInfo.eventNumber(), float dPhi_lep1_lep2<<[VecAT(Zmass,65)], float dPhi_jet1_lep1<<[VecAT(Zmass,51)], float dPhi_jet1_lep2<<[VecAT(Zmass,52)];
+
+#skim: float lep0_pt << $(lep0).pt(), float lep0_phi <<$(lep0).phi(), float lep0_eta << $(lep0).eta();
+
+skim_3lep:float MET<<[MET], float nSRjet<<[nSRjet], float sumPt_SRjet<<[sumPt_SRjet], float sumPt_lep<<[sumPt_lep], float sumPt_ZHl<<[sumPt_ZHl], float sumPt_VH<<[sumPt_VH], float  lep1_pt<<[ lep1_pt], float lep1_eta<<[lep1_eta], float lep1_e<<[lep1_e], float  lep2_pt<<[ lep2_pt], float lep2_eta<<[lep2_eta], float lep2_e<<[lep2_e], float  lep3_pt<<[ lep3_pt], float lep3_eta<<[lep3_eta], float lep3_e<<[lep3_e], float  SRjet1_pt<<[ SRjet1_pt], float SRjet1_eta<<[SRjet1_eta],float SRjet1_e<<[SRjet1_e], float SRjet1_m<<[SRjet1_m], float  SRjet2_pt<<[ SRjet2_pt], float SRjet2_eta<<[SRjet2_eta], float SRjet2_e<<[SRjet2_e], float SRjet2_m<<[SRjet2_m], float  SRjet3_pt<<[ SRjet3_pt], float SRjet3_eta<<[SRjet3_eta], float SRjet3_e<<[SRjet3_e], float SRjet3_m<<[SRjet3_m], float  jet1_pt<<[ jet1_pt], float jet1_eta<<[jet1_eta], float jet1_e<<[jet1_e], float jet1_m<<[jet1_m], float  Hlep_pt<<[ Hlep_pt], float Hlep_eta<<[Hlep_eta], float Hlep_e<<[Hlep_e], float  Zlep1_pt<<[ Zlep1_pt], float Zlep1_eta<<[Zlep1_eta], float Zlep1_e<<[Zlep1_e], float  Zlep2_pt<<[ Zlep2_pt], float Zlep2_eta<<[Zlep2_eta], float Zlep2_e<<[Zlep2_e], float  ZBoson_pt<<[ ZBoson_pt], float ZBoson_eta<<[ZBoson_eta], float ZBoson_e<<[ZBoson_e], float ZBoson_m<<[ZBoson_m], float  HWjj_pt<<[ HWjj_pt], float HWjj_eta<<[HWjj_eta], float HWjj_e<<[HWjj_e], float HWjj_m<<[HWjj_m], float  SRjet1_Hl_pt<<[ SRjet1_Hl_pt], float SRjet1_Hl_eta<<[SRjet1_Hl_eta], float SRjet1_Hl_e<<[SRjet1_Hl_e], float SRjet1_Hl_m<<[SRjet1_Hl_m], float  SRjet2_Hl_pt<<[ SRjet2_Hl_pt], float SRjet2_Hl_eta<<[SRjet2_Hl_eta], float SRjet2_Hl_e<<[SRjet2_Hl_e], float SRjet2_Hl_m<<[SRjet2_Hl_m], float  VWjj_pt<<[ VWjj_pt], float VWjj_eta<<[VWjj_eta], float VWjj_e<<[VWjj_e], float VWjj_m<<[VWjj_m], float  SRjet1_Vl_pt<<[ SRjet1_Vl_pt], float SRjet1_Vl_eta<<[SRjet1_Vl_eta], float SRjet1_Vl_e<<[SRjet1_Vl_e], float SRjet1_Vl_m<<[SRjet1_Vl_m], float  SRjet2_Vl_pt<<[ SRjet2_Vl_pt], float SRjet2_Vl_eta<<[SRjet2_Vl_eta], float SRjet2_Vl_e<<[SRjet2_Vl_e], float SRjet2_Vl_m<<[SRjet2_Vl_m], float  HBoson_pt<<[ HBoson_pt], float HBoson_eta<<[HBoson_eta], float HBoson_e<<[HBoson_e], float HBoson_m<<[HBoson_m], float  all_vis_pt<<[ all_vis_pt], float all_vis_eta<<[all_vis_eta], float all_vis_e<<[all_vis_e], float all_vis_m<<[all_vis_m], float  Hlep_mT<<[ Hlep_mT], float HBoson_mT<<[HBoson_mT], float  dR_HlVl<<[ dR_HlVl], float dR_HfHl<<[dR_HfHl], float dR_HfVl<<[dR_HfVl], float dR_HjjHl<<[dR_HjjHl], float dR_HjjVl<<[dR_HjjVl], float dR_HjjHf<<[dR_HjjHf], float dR_HbVl<<[dR_HbVl], float dR_AvMiss<<[dR_AvMiss], float  dR_Zl12<<[ dR_Zl12], float dR_HlZl1<<[dR_HlZl1], float dR_HlZl2<<[dR_HlZl2], float dR_HfZl1<<[dR_HfZl1], float dR_HfZl2<<[dR_HfZl2], float dR_HjjZl1<<[dR_HjjZl1], float dR_HjjZl2<<[dR_HjjZl2], float  dR_cand_Zl12<<[ dR_cand_Zl12], float dR_cand_HlZl1<<[dR_cand_HlZl1], float dR_cand_HlZl2<<[dR_cand_HlZl2], float dR_cand_HfZl1<<[dR_cand_HfZl1], float dR_cand_HfZl2<<[dR_cand_HfZl2], float dR_cand_HfHl<<[dR_cand_HfHl], float  dR_Hl_SRjet1_Hl<<[ dR_Hl_SRjet1_Hl], float dR_Hl_SRjet2_Hl<<[dR_Hl_SRjet2_Hl], float dR_SRjet12_Hl<<[dR_SRjet12_Hl], float dR_Vl_SRjet1_Vl<<[dR_Vl_SRjet1_Vl], float dR_Vl_SRjet2_Vl<<[dR_Vl_SRjet2_Vl], float dR_SRjet12_Vl<<[dR_SRjet12_Vl], float  dR_Hl_SRjet1_Vl<<[ dR_Hl_SRjet1_Vl], float dR_Hl_SRjet2_Vl<<[dR_Hl_SRjet2_Vl], float dR_Vl_SRjet1_Hl<<[dR_Vl_SRjet1_Hl], float dR_Vl_SRjet2_Hl<<[dR_Vl_SRjet2_Hl];
+
+skim_2lep:float MET<<[MET], float nSRjet<<[nSRjet], float sumPt_SRjet<<[sumPt_SRjet], float sumPt_lep<<[sumPt_lep], float sumPt_ZHl<<[sumPt_ZHl], float sumPt_VH<<[sumPt_VH], float  lep1_pt<<[ lep1_pt], float lep1_eta<<[lep1_eta], float lep1_e<<[lep1_e], float  lep2_pt<<[ lep2_pt], float lep2_eta<<[lep2_eta], float lep2_e<<[lep2_e], float  lep3_pt<<[ lep3_pt], float lep3_eta<<[lep3_eta], float lep3_e<<[lep3_e], float  SRjet1_pt<<[ SRjet1_pt], float SRjet1_eta<<[SRjet1_eta], float SRjet1_e<<[SRjet1_e], float SRjet1_m<<[SRjet1_m], float  SRjet2_pt<<[ SRjet2_pt], float SRjet2_eta<<[SRjet2_eta], float SRjet2_e<<[SRjet2_e], float SRjet2_m<<[SRjet2_m], float  SRjet3_pt<<[ SRjet3_pt], float SRjet3_eta<<[SRjet3_eta], float SRjet3_e<<[SRjet3_e], float SRjet3_m<<[SRjet3_m], float  jet1_pt<<[ jet1_pt], float jet1_eta<<[jet1_eta], float jet1_e<<[jet1_e], float jet1_m<<[jet1_m], float  Hlep_pt<<[ Hlep_pt], float Hlep_eta<<[Hlep_eta], float Hlep_e<<[Hlep_e], float  Vlep_pt<<[ Vlep_pt], float Vlep_eta<<[Vlep_eta], float Vlep_e<<[Vlep_e], float  HWjj_pt<<[ HWjj_pt], float HWjj_eta<<[HWjj_eta], float HWjj_e<<[HWjj_e], float HWjj_m<<[HWjj_m], float  SRjet1_Hl_pt<<[ SRjet1_Hl_pt], float SRjet1_Hl_eta<<[SRjet1_Hl_eta], float SRjet1_Hl_e<<[SRjet1_Hl_e], float SRjet1_Hl_m<<[SRjet1_Hl_m], float  SRjet2_Hl_pt<<[ SRjet2_Hl_pt], float SRjet2_Hl_eta<<[SRjet2_Hl_eta], float SRjet2_Hl_e<<[SRjet2_Hl_e], float SRjet2_Hl_m<<[SRjet2_Hl_m], float  VWjj_pt<<[ VWjj_pt], float VWjj_eta<<[VWjj_eta], float VWjj_e<<[VWjj_e], float VWjj_m<<[VWjj_m], float  SRjet1_Vl_pt<<[ SRjet1_Vl_pt], float SRjet1_Vl_eta<<[SRjet1_Vl_eta], float SRjet1_Vl_e<<[SRjet1_Vl_e], float SRjet1_Vl_m<<[SRjet1_Vl_m], float  SRjet2_Vl_pt<<[ SRjet2_Vl_pt], float SRjet2_Vl_eta<<[SRjet2_Vl_eta], float SRjet2_Vl_e<<[SRjet2_Vl_e], float SRjet2_Vl_m<<[SRjet2_Vl_m], float  HBoson_pt<<[ HBoson_pt], float HBoson_eta<<[HBoson_eta], float HBoson_e<<[HBoson_e], float HBoson_m<<[HBoson_m], float  all_vis_pt<<[ all_vis_pt], float all_vis_eta<<[all_vis_eta], float all_vis_e<<[all_vis_e], float all_vis_m<<[all_vis_m], float  dR_HlVl<<[ dR_HlVl], float dR_HfHl<<[dR_HfHl], float dR_HfVl<<[dR_HfVl], float dR_HjjHl<<[dR_HjjHl], float dR_HjjVl<<[dR_HjjVl], float dR_HjjHf<<[dR_HjjHf], float dR_HbVl<<[dR_HbVl], float dR_AvMiss<<[dR_AvMiss], float  dR_Hl_SRjet1_Hl<<[ dR_Hl_SRjet1_Hl], float dR_Hl_SRjet2_Hl<<[dR_Hl_SRjet2_Hl], float dR_SRjet12_Hl<<[dR_SRjet12_Hl], float dR_Vl_SRjet1_Vl<<[dR_Vl_SRjet1_Vl], float dR_Vl_SRjet2_Vl<<[dR_Vl_SRjet2_Vl], float dR_SRjet12_Vl<<[dR_SRjet12_Vl], float  dR_Hl_SRjet1_Vl<<[ dR_Hl_SRjet1_Vl], float dR_Hl_SRjet2_Vl<<[dR_Hl_SRjet2_Vl], float dR_Vl_SRjet1_Hl<<[dR_Vl_SRjet1_Hl], float dR_Vl_SRjet2_Hl<<[dR_Vl_SRjet2_Hl];
+
+# Book at cut
+
+@Cut_2u0e_Lep2ID:skim_2lep >> dump/ntuple_2u0e_Lep2ID_$(jobID).root:$(channel)
+@Cut_2u0e_Same_Charge:skim_2lep >> dump/ntuple_2u0e_Same_Charge_$(jobID).root:$(channel)
+###
+@Cut_1u1e_Lep2ID_ML:skim_2lep >> dump/ntuple_1u1e_Lep2ID_$(jobID).root:$(channel)
+@Cut_1u1e_Same_Charge_ML:skim_2lep >> dump/ntuple_1u1e_Same_Charge_$(jobID).root:$(channel)
+###
+@Cut_2u1e_Ele1ID:skim_3lep >> dump/ntuple_2u1e_Ele1ID_$(jobID).root:$(channel)
+###
+@Cut_3u_Muon3ID:skim_3lep >> dump/ntuple_3u_Muon3ID_$(jobID).root:$(channel)
+@Cut_3u_Muon2ID:skim_3lep >> dump/ntuple_3u_Muon2ID_$(jobID).root:$(channel)
+###
+@Cut_1u2e_Ele2ID:skim_3lep >> dump/ntuple_1u2e_Ele2ID_$(jobID).root:$(channel)
+@Cut_1u2e_Muon1ID:skim_3lep >> dump/ntuple_1u2e_Muon1ID_$(jobID).root:$(channel)
+
+
+
+# "nSRjet","sumPt_SRjet","MET","miss_phi",
+# "Hlep_pt","Hlep_eta","Hlep_phi","Hlep_e",
+# "Zlep1_pt","Zlep1_eta","Zlep1_phi","Zlep1_e",
+# "Zlep2_pt","Zlep2_eta","Zlep2_phi","Zlep2_e",
+# "ZBoson_pt","ZBoson_eta","ZBoson_phi","ZBoson_e","ZBoson_m",
+# "Hfatjet_pt","Hfatjet_eta","Hfatjet_phi","Hfatjet_e","Hfatjet_m",
+# "HBoson_pt","HBoson_eta","HBoson_phi","HBoson_e","HBoson_m",
+# "all_vis_pt","all_vis_eta","all_vis_phi","all_vis_e","all_vis_m",
+# "Hlep_mT","HBoson_mT",
+# "dR_Zl12","dR_HlZl1","dR_HlZl2","dR_HfHl","dR_HfZl1","dR_HfZl2","dR_ZbHl","dR_ZbHf","dR_ZbHb","dR_AvMiss",
+# "dR_Hl_SRjet1_l2","dR_Hl_SRjet2_l2","dR_SRjet12_l2",
+# "l2Wjj_pt","l2Wjj_eta","l2Wjj_e","l2Wjj_m",
+# "SRjet1_l2_pt","SRjet1_l2_eta","SRjet1_l2_e","SRjet1_l2_m",
+# "SRjet2_l2_pt","SRjet2_l2_eta","SRjet2_l2_e","SRjet2_l2_m",
+
+# "nSRjet","sumPt_SRjet","MET","miss_phi",
+# "Hlep_pt","Hlep_eta","Hlep_phi","Hlep_e",
+# "Vlep_pt","Vlep_eta","Vlep_phi","Vlep_e",
+# "Hfatjet_pt","Hfatjet_eta","Hfatjet_phi","Hfatjet_e","Hfatjet_m",
+# "HBoson_pt","HBoson_eta","HBoson_phi","HBoson_e","HBoson_m",
+# "all_vis_pt","all_vis_eta","all_vis_phi","all_vis_e","all_vis_m",
+# "dR_HlVl","dR_HfHl","dR_HfVl","dR_HbVl","dR_AvMiss",
+# "dR_Hl_SRjet1_l2","dR_Hl_SRjet2_l2","dR_SRjet12_l2","dR_Vl_SRjet1_l1","dR_Vl_SRjet2_l1","dR_SRjet12_l1",
+# "l1Wjj_pt","l1Wjj_eta","l1Wjj_e","l1Wjj_m",
+# "SRjet1_l1_pt","SRjet1_l1_eta","SRjet1_l1_e","SRjet1_l1_m",
+# "SRjet2_l1_pt","SRjet2_l1_eta","SRjet2_l1_e","SRjet2_l1_m",
+# "l2Wjj_pt","l2Wjj_eta","l2Wjj_e","l2Wjj_m",
+# "SRjet1_l2_pt","SRjet1_l2_eta","SRjet1_l2_e","SRjet1_l2_m",
+# "SRjet2_l2_pt","SRjet2_l2_eta","SRjet2_l2_e","SRjet2_l2_m",

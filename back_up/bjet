@@ -1,0 +1,290 @@
+.name="CutChannels"
+.name="CutTruthMatchSignal"
+.name="CutSTXS"
+.name="CutJetCleaning"
+.name="CutTrigger"
+.name="CutBJetVeto"
+
+.name = "||"
+.name = "Cut_1lep_1u"
+.name = "|"
+.name = "Cut_1u_Muon1ID"
+
+.name = "||"
+.name = "Cut_2lep_2u0e"
+.name = "|"
+.name = "Cut_2u0e_Same_Charge"
+.name = "Cut_2u0e_Lep1ID"
+.name = "Cut_2u0e_Lep2ID_ML"
+.name = "Cut_2u0e_all_BDTG"
+.name = "Cut_2u0e_all_DNN"
+.name = "|"
+.name = "Cut_2u0e_Lep2ID_1SRjet_ML"
+.name = "Cut_2u0e_1SRjet_BDTG"
+.name = "Cut_2u0e_1SRjet_DNN"
+.name = "|"
+.name = "Cut_2u0e_Lep2ID_2SRjet_ML"
+.name = "Cut_2u0e_2SRjet_BDTG"
+.name = "Cut_2u0e_2SRjet_DNN"
+.name = "|"
+.name = "Cut_2u0e_Lep2ID_3SRjet_ML"
+.name = "Cut_2u0e_3SRjet_BDTG"
+.name = "Cut_2u0e_3SRjet_DNN"
+.name = "|"
+.name = "Cut_2u0e_Lep2ID_4SRjet_ML"
+.name = "Cut_2u0e_4SRjet_BDTG"
+.name = "Cut_2u0e_4SRjet_DNN"
+.name = "|"
+.name = "Cut_2u0e_lep2_pt_ML"
+.name = "Cut_2u0e_AfterCut_BDTG"
+.name = "Cut_2u0e_AfterCut_DNN"
+
+.name = "|"
+.name = "Cut_2u0e_Opposite_Charge"
+.name = "Cut_2u0e_Lep1ID_OC"
+.name = "Cut_2u0e_Lep2ID_OC"
+
+.name = "||"
+.name = "Cut_2lep_1u1e"
+.name = "|"
+.name = "Cut_1u1e_Same_Charge"
+.name = "Cut_1u1e_Lep1ID"
+.name = "Cut_1u1e_Lep2ID_ML"
+.name = "Cut_1u1e_all_BDTG"
+.name = "Cut_1u1e_all_DNN"
+.name = "|"
+.name = "Cut_1u1e_Lep2ID_1SRjet_ML"
+.name = "Cut_1u1e_1SRjet_BDTG"
+.name = "Cut_1u1e_1SRjet_DNN"
+.name = "|"
+.name = "Cut_1u1e_Lep2ID_2SRjet_ML"
+.name = "Cut_1u1e_2SRjet_BDTG"
+.name = "Cut_1u1e_2SRjet_DNN"
+.name = "|"
+.name = "Cut_1u1e_Lep2ID_3SRjet_ML"
+.name = "Cut_1u1e_3SRjet_BDTG"
+.name = "Cut_1u1e_3SRjet_DNN"
+.name = "|"
+.name = "Cut_1u1e_Lep2ID_4SRjet_ML"
+.name = "Cut_1u1e_4SRjet_BDTG"
+.name = "Cut_1u1e_4SRjet_DNN"
+.name = "|"
+.name = "Cut_1u1e_lep2_pt_ML"
+.name = "Cut_1u1e_AfterCut_BDTG"
+.name = "Cut_1u1e_AfterCut_DNN"
+
+.name = "|"
+.name = "Cut_1u1e_Opposite_Charge"
+.name = "Cut_1u1e_Lep1ID_OC"
+.name = "Cut_1u1e_Lep2ID_OC"
+
+.name = "||"
+.name = "Cut_3lep_2u1e"
+.name = "|"
+.name = "Cut_2u1e_Muon1ID"
+.name = "Cut_2u1e_Muon2ID"
+.name = "Cut_2u1e_Ele1ID_ML"
+.name = "Cut_2u1e_all_BDTG"
+.name = "Cut_2u1e_all_DNN"
+.name = "|"
+.name = "Cut_2u1e_Ele1ID_1SRjet_ML"
+.name = "Cut_2u1e_1SRjet_BDTG"
+.name = "Cut_2u1e_1SRjet_DNN"
+.name = "|"
+.name = "Cut_2u1e_Ele1ID_2SRjet_ML"
+.name = "Cut_2u1e_2SRjet_BDTG"
+.name = "Cut_2u1e_2SRjet_DNN"
+.name = "|"
+.name = "Cut_2u1e_Ele1ID_3SRjet_ML"
+.name = "Cut_2u1e_3SRjet_BDTG"
+.name = "Cut_2u1e_3SRjet_DNN"
+.name = "|"
+.name = "Cut_2u1e_Ele1ID_4SRjet_ML"
+.name = "Cut_2u1e_4SRjet_BDTG"
+.name = "Cut_2u1e_4SRjet_DNN"
+.name = "||"
+.name = "Cut_2u1e_Hlep_pt"
+.name = "Cut_2u1e_ZBoson_m_ML"
+.name = "Cut_2u1e_AfterCut_BDTG"
+.name = "Cut_2u1e_AfterCut_DNN"
+.name = "|"
+
+.name = "||"
+.name = "Cut_3lep_3u"
+.name = "|"
+.name = "Cut_3u_Muon1ID"
+.name = "Cut_3u_Muon2ID"
+.name = "Cut_3u_Muon3ID_ML"
+.name = "Cut_3u_all_BDTG"
+.name = "Cut_3u_all_DNN"
+.name = "|"
+.name = "Cut_3u_Muon3ID_1SRjet_ML"
+.name = "Cut_3u_1SRjet_BDTG"
+.name = "Cut_3u_1SRjet_DNN"
+.name = "|"
+.name = "Cut_3u_Muon3ID_2SRjet_ML"
+.name = "Cut_3u_2SRjet_BDTG"
+.name = "Cut_3u_2SRjet_DNN"
+.name = "|"
+.name = "Cut_3u_Muon3ID_3SRjet_ML"
+.name = "Cut_3u_3SRjet_BDTG"
+.name = "Cut_3u_3SRjet_DNN"
+.name = "|"
+.name = "Cut_3u_Muon3ID_4SRjet_ML"
+.name = "Cut_3u_4SRjet_BDTG"
+.name = "Cut_3u_4SRjet_DNN"
+.name = "||"
+.name = "Cut_3u_Hlep_pt"
+.name = "Cut_3u_ZBoson_m_ML"
+.name = "Cut_3u_AfterCut_BDTG"
+.name = "Cut_3u_AfterCut_DNN"
+.name = "|"
+
+.name = "||"
+.name = "Cut_3lep_1u2e"
+.name = "|"
+.name = "Cut_1u2e_Muon1ID"
+.name = "Cut_1u2e_Ele1ID"
+.name = "Cut_1u2e_Ele2ID_ML"
+.name = "Cut_1u2e_all_BDTG"
+.name = "Cut_1u2e_all_DNN"
+.name = "|"
+.name = "Cut_1u2e_Ele2ID_1SRjet_ML"
+.name = "Cut_1u2e_1SRjet_BDTG"
+.name = "Cut_1u2e_1SRjet_DNN"
+.name = "|"
+.name = "Cut_1u2e_Ele2ID_2SRjet_ML"
+.name = "Cut_1u2e_2SRjet_BDTG"
+.name = "Cut_1u2e_2SRjet_DNN"
+.name = "|"
+.name = "Cut_1u2e_Ele2ID_3SRjet_ML"
+.name = "Cut_1u2e_3SRjet_BDTG"
+.name = "Cut_1u2e_3SRjet_DNN"
+.name = "|"
+.name = "Cut_1u2e_Ele2ID_4SRjet_ML"
+.name = "Cut_1u2e_4SRjet_BDTG"
+.name = "Cut_1u2e_4SRjet_DNN"
+.name = "||"
+.name = "Cut_1u2e_epem_pt"
+.name = "Cut_1u2e_ZBoson_pt"
+.name = "Cut_1u2e_ZBoson_m_ML"
+.name = "Cut_1u2e_AfterCut_BDTG"
+.name = "Cut_1u2e_AfterCut_DNN"
+.name = "|"
+
+@*/Cut_*1u1e*_ML{
+  +Cut_$(nLep_name)_$(nSRjet)_BDTG{
+    <.cutExpression = "$(BDTG_1u1e)>0", .title="BDTG_1u1e>0">
+  }
+  +Cut_$(nLep_name)_$(nSRjet)_DNN{
+    <.cutExpression = "$(DNN_CPU_1u1e)>0.5", .title="DNN_1u1e>0.5">
+  }
+}
+
+@*/Cut_*2u0e*_ML{
+  +Cut_$(nLep_name)_$(nSRjet)_BDTG{
+    <.cutExpression = "$(BDTG_2u0e)>0", .title="BDTG_2u0e>0">
+  }
+  +Cut_$(nLep_name)_$(nSRjet)_DNN{
+    <.cutExpression = "$(DNN_CPU_2u0e)>0.5", .title="DNN_2u0e>0.5">
+  }
+}
+
+@*/Cut_*3u*_ML{
+  +Cut_$(nLep_name)_$(nSRjet)_BDTG{
+    <.cutExpression = "$(BDTG_3u)>0", .title="BDTG_3u>0">
+  }
+  +Cut_$(nLep_name)_$(nSRjet)_DNN{
+    <.cutExpression = "$(DNN_CPU_3u)>0.5", .title="DNN_3u>0.5">
+  }
+}
+
+@*/Cut_*2u1e*_ML{
+  +Cut_$(nLep_name)_$(nSRjet)_BDTG{
+    <.cutExpression = "$(BDTG_2u1e)>0", .title="BDTG_2u1e>0">
+  }
+  +Cut_$(nLep_name)_$(nSRjet)_DNN{
+    <.cutExpression = "$(DNN_CPU_2u1e)>0.5", .title="DNN_2u1e>0.5">
+  }
+}
+
+@*/Cut_*1u2e*_ML{
+  +Cut_$(nLep_name)_$(nSRjet)_BDTG{
+    <.cutExpression = "$(BDTG_1u2e)>0", .title="BDTG_1u2e>0">
+  }
+  +Cut_$(nLep_name)_$(nSRjet)_DNN{
+    <.cutExpression = "$(DNN_CPU_1u2e)>0.5", .title="DNN_1u2e>0.5">
+  }
+}
+
+.name="CutChannels"
+.name="CutTruthMatchSignal"
+.name="CutSTXS"
+.name="CutJetCleaning"
+.name="CutTrigger"
+.name="CutBJetVeto"
+
+.name = "||"
+.name = "Cut_1lep_1u"
+.name = "|"
+.name = "Cut_1u_Muon1ID"
+
+.name = "||"
+.name = "Cut_2lep_2u0e"
+.name = "|"
+.name = "Cut_2u0e_Same_Charge"
+.name = "Cut_2u0e_Lep1ID"
+.name = "Cut_2u0e_Lep2ID_ML"
+.name = "Cut_2u0e_lep2_pt_ML"
+.name = "|"
+.name = "Cut_2u0e_Opposite_Charge"
+.name = "Cut_2u0e_Lep1ID_OC"
+.name = "Cut_2u0e_Lep2ID_OC"
+
+.name = "||"
+.name = "Cut_2lep_1u1e"
+.name = "|"
+.name = "Cut_1u1e_Same_Charge"
+.name = "Cut_1u1e_Lep1ID"
+.name = "Cut_1u1e_Lep2ID_ML"
+.name = "Cut_1u1e_lep2_pt_ML"
+.name = "|"
+.name = "Cut_1u1e_Opposite_Charge"
+.name = "Cut_1u1e_Lep1ID_OC"
+.name = "Cut_1u1e_Lep2ID_OC"
+
+.name = "||"
+.name = "Cut_3lep_2u1e"
+.name = "|"
+.name = "Cut_2u1e_Muon1ID"
+.name = "Cut_2u1e_Muon2ID"
+.name = "Cut_2u1e_Ele1ID_ML"
+.name = "Cut_2u1e_Hlep_pt"
+.name = "Cut_2u1e_ZBoson_m_ML"
+.name = "|"
+
+.name = "||"
+.name = "Cut_3lep_3u"
+.name = "|"
+.name = "Cut_3u_Muon1ID"
+.name = "Cut_3u_Muon2ID"
+.name = "Cut_3u_Muon3ID_ML"
+.name = "Cut_3u_Hlep_pt"
+.name = "Cut_3u_ZBoson_m_ML"
+.name = "|"
+
+.name = "||"
+.name = "Cut_3lep_1u2e"
+.name = "|"
+.name = "Cut_1u2e_Muon1ID"
+.name = "Cut_1u2e_Ele1ID"
+.name = "Cut_1u2e_Ele2ID_ML"
+.name = "Cut_1u2e_epem_pt"
+.name = "Cut_1u2e_ZBoson_pt"
+.name = "Cut_1u2e_ZBoson_m_ML"
+.name = "|"
+
+
+
+
+

@@ -1,0 +1,66 @@
+.path = "||"
+.path = "sig/$(channel)/$(campaign)/mh125/ggf", .name = "ggf", .isSignal = true,  .showRaw = true
+.path = "sig/$(channel)/$(campaign)/mh125/vbf", .name = "vbf", .isSignal = true,  .showRaw = true
+
+#.path = "sig/$(channel)/$(campaign)/mh125/vh", .name = "vh", .isSignal = true,  .showRaw = true
+
+#.path = "sig/$(channel)/$(campaign)/mh125/vh/zh/qqZee/341450_1L", .name = "qqZeeHlvqq", .isSignal = true, .showRaw = true
+#.path = "sig/$(channel)/$(campaign)/mh125/vh/zh/ggZee/601408_1L", .name = "ggZeeHlvqq", .isSignal = true, .showRaw = true
+.path = "sig/$(channel)/$(campaign)/mh125/vh/zh/[qqZee+ggZee]", .name = "ZeeHlvqq", .isSignal = true, .showRaw = true
+
+
+#.path = "sig/$(channel)/$(campaign)/mh125/vh/zh/qqZmumu/341452_1L", .name = "qqZmumuHlvqq", .isSignal = true , .showRaw = true
+#.path = "sig/$(channel)/$(campaign)/mh125/vh/zh/ggZmumu/601409_1L", .name = "ggZmumuHlvqq", .isSignal = true, .showRaw = true
+.path = "sig/$(channel)/$(campaign)/mh125/vh/zh/[qqZmumu+ggZmumu]", .name = "ZmumuHlvqq", .isSignal = true, .showRaw = true
+#.path = "/sig/$(channel)/$(campaign)/mh125/vh/zh/ggZtautau/601410_1L", .name = "ggZttHlvqq", .isSignal = true
+
+#.path = "sig/$(channel)/$(campaign)/mh125/vh/wh/346560_1L", .name = "WmHlvqq", .isSignal = true , .showRaw = true
+#.path = "sig/$(channel)/$(campaign)/mh125/vh/wh/346561_1L", .name = "WpHlvqq", .isSignal = true , .showRaw = true
+.path = "sig/$(channel)/$(campaign)/mh125/vh/wh", .name = "WHlvqq", .isSignal = true , .showRaw = true
+
+#.path = "sig/$(channel)/$(campaign)/mh125/vh", .name = "VHlvqq", .isSignal = true , .showRaw = true
+
+#.path = "sig/$(channel)/$(campaign)/mh125/vh/tautau/345211_s", .name = "WmHtautau", .isSignal = true 
+#.path = "sig/$(channel)/$(campaign)/mh125/vh/tautau/345212_s", .name = "WpHtautau", .isSignal = true 
+#.path = "sig/$(channel)/$(campaign)/mh125/vh/tautau/345217_s", .name = "ZHtautau", .isSignal = true 
+.path = "|"
+
+.path = "bkg/$(channel)/$(campaign)/diboson", .name = "diboson", .isBackground = true, .showRaw = true
+#.path = "bkg/$(channel)/$(campaign)/diboson/WW", .name = "diboson_WW", .isBackground = true, .showRaw = true
+#.path = "bkg/$(channel)/$(campaign)/diboson/NonWW", .name = "diboson_NonWW", .isBackground = true, .showRaw = true
+
+.path = "bkg/$(channel)/$(campaign)/top", .name = "top", .isBackground = true, .showRaw = true
+#.path = "bkg/$(channel)/$(campaign)/top/ttbar", .name = "top_ttbar", .isBackground = true, .showRaw = true
+#.path = "bkg/$(channel)/$(campaign)/top/singletop", .name = "top_singletop", .isBackground = true, .showRaw = true
+
+.path = "bkg/$(channel)/$(campaign)/Wjets", .name = "Wjets", .isBackground = true, .showRaw = true
+.path = "bkg/$(channel)/$(campaign)/Zjets", .name = "Zjets", .isBackground = true, .showRaw = true
+#.path = "bkg/$(channel)/$(campaign)/Zjets/Sherpa2p2p1/Nom/tt/", .name = "Zjets_Ztt", .isBackground = true, .showRaw = true
+
+.path = "bkg/$(channel)/$(campaign)/[diboson+top+Wjets+Zjets]", .name = "total bkg", .isBackground = true, .showRaw = true
+.path = "|"
+#.title = "Sig[ggf]/Bkg [%]", .path1 = "100*sig/$(channel)/$(campaign)/mh125/ggf", .path2="bkg/$(channel)/$(campaign)", .special="ratio"
+#.title = "Sig[vbf]/Bkg [%]", .path1 = "100*sig/$(channel)/$(campaign)/mh125/vbf", .path2="bkg/$(channel)/$(campaign)", .special="ratio"
+#.title = "Sig[qqZee]/Bkg [%]", .path1 = "100*sig/$(channel)/$(campaign)/mh125/vh/zh/qqZee/341450_1L", .path2="bkg/$(channel)/$(campaign)", .special="ratio"
+#.title = "Sig[ggZee]/Bkg [%]", .path1 = "100*sig/$(channel)/$(campaign)/mh125/vh/zh/ggZee/601408_1L", .path2="bkg/$(channel)/$(campaign)", .special="ratio"
+
+#.title = "Significance[qqZee]", .path1 = "sig/$(channel)/$(campaign)/mh125/vh/zh/qqZee/341450_1L", .path2="bkg/$(channel)/$(campaign)", .special="significance"
+#.title = "Significance[ggZee]", .path1 = "sig/$(channel)/$(campaign)/mh125/vh/zh/ggZee/601408_1L", .path2="bkg/$(channel)/$(campaign)", .special="significance"
+.title = "Significance[ZH(Zee)]", .path1 = "sig/$(channel)/$(campaign)/mh125/vh/zh/[qqZee+ggZee]", .path2="bkg/$(channel)/$(campaign)", .special="significance"
+.path = "|"
+
+#.title = "Sig[qqZmumu]/Bkg [%]", .path1 = "100*sig/$(channel)/$(campaign)/mh125/vh/zh/qqZmumu/341452_1L", .path2="bkg/$(channel)/$(campaign)", .special="ratio"
+#.title = "Sig[ggZmumu]/Bkg [%]", .path1 = "100*sig/$(channel)/$(campaign)/mh125/vh/zh/ggZmumu/601409_1L", .path2="bkg/$(channel)/$(campaign)", .special="ratio"
+
+#.title = "Significance[qqZmumu]", .path1 = "sig/$(channel)/$(campaign)/mh125/vh/zh/qqZmumu/341452_1L", .path2="bkg/$(channel)/$(campaign)", .special="significance"
+#.title = "Significance[ggZmumu]", .path1 = "sig/$(channel)/$(campaign)/mh125/vh/zh/ggZmumu/601409_1L", .path2="bkg/$(channel)/$(campaign)", .special="significance"
+.title = "Significance[ZH(Zmumu)]", .path1 = "sig/$(channel)/$(campaign)/mh125/vh/zh/[ggZmumu+qqZmumu]", .path2="bkg/$(channel)/$(campaign)", .special="significance"
+.path = "|"
+
+#.title = "Sig[wh]/Bkg [%]", .path1 = "100*sig/$(channel)/$(campaign)/mh125/vh/wh", .path2="bkg/$(channel)/$(campaign)", .special="ratio"
+
+.title = "Significance[WH]", .path1 = "sig/$(channel)/$(campaign)/mh125/vh/wh", .path2="bkg/$(channel)/$(campaign)", .special="significance"
+.path = "|"
+#.title = "Significance[VH]", .path1 = "sig/$(channel)/$(campaign)/mh125/vh", .path2="bkg/$(channel)/$(campaign)", .special="significance"
+
+.path = "data/$(channel)/$(campaign)", .name = "data", .isData = true

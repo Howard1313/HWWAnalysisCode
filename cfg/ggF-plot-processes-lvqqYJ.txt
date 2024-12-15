@@ -1,0 +1,29 @@
+.path = "sig/$(channel)/$(campaign)/mh125/vh/wh", .name = "WH", .title="WH", .isSignal = true, .stack=False, histFillStyle = 0, histLineColor = kRed, histLineWidth = 3, histLineStyle = 1, normalizeToTotalBkg = true,
+
+#.path = "sig/$(channel)/$(campaign)/mh125/vh/zh/qqZee/341450_1L", .name = "qqZeeH", .title="qqZeeH", .isSignal = true, .stack=False, histFillStyle = 0, histLineColor = kRed, histLineWidth = 3, histLineStyle = 1, normalizeToTotalBkg = true, stack = false,
+#.path = "sig/$(channel)/$(campaign)/mh125/vh/zh/ggZee/601408_1L", .name = "ggZeeH", .title="ggZeeH", .isSignal = true, .stack=False, histFillStyle = 0, histLineColor = kBlack, histLineWidth = 3, histLineStyle = 1, normalizeToTotalBkg = true, 
+
+
+#.path = "sig/$(channel)/$(campaign)/mh125/vh/zh/qqZmumu/341452_1L", .name = "qqZmumuH", .title="qqZmumuH", .isSignal = true, .stack=False, histFillStyle = 0, histLineColor = kRed, histLineWidth = 3, histLineStyle = 1, normalizeToTotalBkg = true, 
+#.path = "sig/$(channel)/$(campaign)/mh125/vh/zh/ggZmumu/601409_1L", .name = "ggZmumuH", .title="ggZmumuH", .isSignal = true, .stack=False, histFillStyle = 0, histLineColor = kBlack, histLineWidth = 3, histLineStyle = 1, normalizeToTotalBkg = true, 
+
+
+.path = "bkg/$(channel)/$(campaign)/diboson", .name = "diboson", .title="diboson", .isBackground = true, stack = true, histFillStyle = 0, histLineColor = 211, histLineWidth = 3, histLineStyle = 1
+.path = "bkg/$(channel)/$(campaign)/Zjets", .name = "Zjets", .title="Zjets", .isBackground = true, stack = true, histFillStyle = 0, histLineColor = kMagenta, histLineWidth = 3, histLineStyle = 1
+.path = "bkg/$(channel)/$(campaign)/Wjets", .name = "Wjets", .title="Wjets", .isBackground = true, stack = true, histFillStyle = 0, histLineColor = kViolet, histLineWidth = 3, histLineStyle = 1
+.path = "bkg/$(channel)/$(campaign)/top", .name = "top", .title="top", .isBackground = true, stack = true, histFillStyle = 0, histLineColor = kBlue, histLineWidth = 3, histLineStyle = 1
+
+.path = "data/$(datachannel)/$(campaign)", .name = "data", .isData = true
+
+
+
+
+
+
+
+
+
+
+
+
+

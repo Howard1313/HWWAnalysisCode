@@ -1,0 +1,20 @@
+@sig/?/?/mh125 {
+
+  # ignore for skimming
+  $ignore(){
+    $copy(ggf>>::ggfTruthMatched);
+    <doTruthMatch=true> @ ggfTruthMatched;
+  }
+  <doTruthMatch=false> @/.;
+}
+
+ @? {
+  $escape(info);
+  #$copy(eJ>>::ePlusJ);
+  #$move(eJ>>::eMinusJ);
+  #$copy(mJ>>::mPlusJ);
+  #$move(mJ>>::mMinusJ);
+  <lepCharge=1> @ *PlusJ;
+  <lepCharge=-1> @ *MinusJ;
+  @? {<channel=$(BASEFOLDERNAME)>}
+}
